@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Lunetune Selective</title>
+</head>
+<body>
+  <script>
+    const query = window.location.search.substring(1);
+    const params = query.split("&").map(Number);
+
+    if (params.length !== 3 || params.some(isNaN)) {
+      document.body.innerText = "Hatalı parametre! Lütfen şu formatta gönderin: ?1&10&5";
+    } else {
+      const [start, end, exclude] = params;
+      const validNumbers = [];
+      for (let i = start; i <= end; i++) {
+        if (i !== exclude) {
+          validNumbers.push(i);
+        }
+      }
+
+      if (validNumbers.length === 0) {
+        document.body.innerText = "Geçerli bir sayı bulunamadı.";
+      } else {
+        const selected = validNumbers[Math.floor(Math.random() * validNumbers.length)];
+        const resultUrl = `${window.location.origin}${window.location.pathname}?selected=${selected}`;
+        document.body.innerHTML = `<p>Seçilen Sayı: <strong>${selected}</strong></p>
+                                   <p>URL: <a href="${resultUrl}">${resultUrl}</a></p>`;
+      }
+    }
+  </script>
+</body>
+</html>
