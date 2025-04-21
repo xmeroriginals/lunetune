@@ -9,8 +9,15 @@
     const query = window.location.search.substring(1);
     const params = query.split("&").map(Number);
 
+    function sendJson(obj) {
+      const pre = document.createElement("pre");
+      pre.textContent = JSON.stringify(obj);
+      document.body.innerHTML = "";
+      document.body.appendChild(pre);
+    }
+
     if (params.length !== 3 || params.some(isNaN)) {
-      document.body.innerText = "";
+      sendJson({ error: "Invalid" });
     } else {
       const [start, end, exclude] = params;
       const validNumbers = [];
@@ -22,10 +29,10 @@
       }
 
       if (validNumbers.length === 0) {
-        document.body.innerText = "";
+        sendJson({ error: "Error" });
       } else {
         const selected = validNumbers[Math.floor(Math.random() * validNumbers.length)];
-        document.body.innerText = selected;
+        sendJson({ selected });
       }
     }
   </script>
