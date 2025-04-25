@@ -10,10 +10,16 @@
     const params = query.split("&").map(Number);
 
     function sendJson(obj) {
+      const json = JSON.stringify(obj);
       const pre = document.createElement("pre");
-      pre.textContent = JSON.stringify(obj);
+      pre.textContent = json;
       document.body.innerHTML = "";
       document.body.appendChild(pre);
+      window.parent.postMessage({
+        type: 'iframeContent',
+        uid: window.uid || null,
+        content: json
+      }, '*');
     }
 
     if (params.length !== 3 || params.some(isNaN)) {
@@ -35,6 +41,11 @@
         sendJson({ selected });
       }
     }
+    window.addEventListener('message', (event) => {
+      if (event.data?.type === 'requestContent') {
+        window.uid = event.data.uid;
+      }
+    });
   </script>
 </body>
 </html>
