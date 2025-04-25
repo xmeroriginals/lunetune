@@ -1,4 +1,4 @@
-const start = 999, end = 9999, exclude = 99999;
+const start = 1, end = {SELECTLIMIT*}, exclude = {NOTSELECT*};
 
 const getResult = () => {
   if ([start, end, exclude].some(isNaN) || start > end) {
