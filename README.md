@@ -1,2 +1,2 @@
-# lunetune
-Music Player
+# Lunetune - Free Web Player [Soon 🚧]
+**Ready for the ultimate music listening experience in your browser? And it's completely free! Upload your own music, upload your own music to the New Artists library in Lunetune Library, add songs from authorized singers to your playlist and listen to them, or upload local music files and listen to them as you like, unlimited and ad-free. Synchronize your music between your accounts, share music with your friends in Music rooms!**
