@@ -1,19 +1,17 @@
-const start = 1, end = 10, exclude = 5;
+const start = 999, end = 9999, exclude = 99999;
 
-const getJsonResult = () => {
-  const sendJson = obj => JSON.stringify(obj);
-
+const getResult = () => {
   if ([start, end, exclude].some(isNaN) || start > end) {
-    return sendJson({ error: "Invalid" });
+    return "Invalid";
   } else {
     const validNumbers = [];
     for (let i = start; i <= end; i++) {
       if (i !== exclude) validNumbers.push(i);
     }
     return validNumbers.length === 0
-      ? sendJson({ error: "Error" })
-      : sendJson({ selected: validNumbers[Math.floor(Math.random() * validNumbers.length)] });
+      ? "Error"
+      : validNumbers[Math.floor(Math.random() * validNumbers.length)];
   }
 };
 
-console.log(getJsonResult());
+console.log(getResult());
