@@ -220,6 +220,16 @@ document.addEventListener("DOMContentLoaded", () => {
       silentPlayer.pause();
     }
   }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      spinningLogo.classList.remove("playing");
+    } else {
+      if (isPlaying) {
+        spinningLogo.classList.add("playing");
+      }
+    }
+  });
   const APP_VERSION = "1.1.2";
   const JAMENDO_CLIENT_ID = "d63aca13";
   let activeMusicStoreTab = "lunetune";
@@ -1093,8 +1103,6 @@ document.addEventListener("DOMContentLoaded", () => {
      isChangingTrack = true;
     activateSurvivalMode();
     audioPlayer.pause();
-    
-    setTimeout(() => { isChangingTrack = false; }, 2000);
 
     const playbackList = isShuffle ? shuffledPlaylist : currentPlaylist;
     if (isLiveMode) exitLiveMode();
@@ -1336,8 +1344,9 @@ document.addEventListener("DOMContentLoaded", () => {
       .then(() => {
         keepAliveVideo.play().catch(() => { });
         isPlaying = true;
+        activateSurvivalMode(); 
         playPauseIcon.textContent = "pause_circle";
-        spinningLogo.classList.add("playing");
+        if (!document.hidden) spinningLogo.classList.add("playing");
         if ("mediaSession" in navigator) {
           navigator.mediaSession.playbackState = "playing";
         }
@@ -1492,6 +1501,7 @@ document.addEventListener("DOMContentLoaded", () => {
       currentTimeDisplay.textContent = "";
       return;
     }
+    if (document.hidden) return;
     if (audioPlayer.duration) {
       const progressPercent =
         (audioPlayer.currentTime / audioPlayer.duration) * 100;
@@ -4391,7 +4401,6 @@ document.addEventListener("DOMContentLoaded", () => {
   audioPlayer.addEventListener("ended", handleSongEnd);
   audioPlayer.addEventListener("playing", () => {
     isChangingTrack = false;
-    deactivateSurvivalMode();
     updateMediaSessionPositionState();
   });
    audioPlayer.addEventListener("pause", () => {
