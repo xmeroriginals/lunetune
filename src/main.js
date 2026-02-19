@@ -1151,11 +1151,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const tempSongId = playbackList[trackIndex];
     const tempTrack = masterSongLibrary[tempSongId];
-    if (!navigator.onLine && tempTrack && !tempTrack.isLocal && !offlineSongsMap[tempTrack.id]) {
+    const isIndirili = tempTrack && (offlineSongsMap[tempTrack.id] || (tempTrack.url && offlineSongsMap[tempTrack.url]));
+    if (!navigator.onLine && tempTrack && !tempTrack.isLocal && !isIndirili) {
       let foundIndex = -1;
       for (let i = trackIndex + 1; i < playbackList.length; i++) {
         const s = masterSongLibrary[playbackList[i]];
-        if (s && (s.isLocal || offlineSongsMap[s.id])) {
+        const isSIndirili = s && (offlineSongsMap[s.id] || (s.url && offlineSongsMap[s.url]));
+        if (s && (s.isLocal || isSIndirili)) {
           foundIndex = i;
           break;
         }
@@ -1163,7 +1165,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (foundIndex === -1) {
         for (let i = 0; i < trackIndex; i++) {
           const s = masterSongLibrary[playbackList[i]];
-          if (s && (s.isLocal || offlineSongsMap[s.id])) {
+          const isSIndirili = s && (offlineSongsMap[s.id] || (s.url && offlineSongsMap[s.url]));
+          if (s && (s.isLocal || isSIndirili)) {
             foundIndex = i;
             break;
           }
@@ -2568,8 +2571,9 @@ document.addEventListener("DOMContentLoaded", () => {
     let songBlob;
     if (song.fileBlob) {
       songBlob = song.fileBlob;
-    } else if (offlineSongsMap[song.id]) {
-      songBlob = offlineSongsMap[song.id].blob;
+    } else if (offlineSongsMap[song.id] || (song.url && offlineSongsMap[song.url])) {
+      const offlineData = offlineSongsMap[song.id] || offlineSongsMap[song.url];
+      songBlob = offlineData.blob;
     } else if (sourceUrl) {
       try {
         showNotification(`${song.title} indiriliyor...`, "info", 4000);
@@ -4813,9 +4817,12 @@ document.addEventListener("DOMContentLoaded", () => {
           if (song.fileBlob && !song.url) {
             songExportData.fileBase64 = await blobToBase64(song.fileBlob);
             songExportData.mimeType = song.fileBlob.type;
-          } else if (offlineSongsMap[songId]) {
-            songExportData.fileBase64 = await blobToBase64(offlineSongsMap[songId].blob);
-            songExportData.mimeType = offlineSongsMap[songId].blob.type;
+          } else {
+            const offlineData = offlineSongsMap[songId] || (song.url && offlineSongsMap[song.url]);
+            if (offlineData) {
+              songExportData.fileBase64 = await blobToBase64(offlineData.blob);
+              songExportData.mimeType = offlineData.blob.type;
+            }
           }
 
           return songExportData;
@@ -4878,10 +4885,13 @@ document.addEventListener("DOMContentLoaded", () => {
           if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
           currentObjectUrl = URL.createObjectURL(song.fileBlob);
           previewUrl = currentObjectUrl;
-        } else if (offlineSongsMap[songId]) {
-          if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
-          currentObjectUrl = URL.createObjectURL(offlineSongsMap[songId].blob);
-          previewUrl = currentObjectUrl;
+        } else {
+          const offlineData = offlineSongsMap[songId] || (song && song.url && offlineSongsMap[song.url]);
+          if (offlineData) {
+            if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
+            currentObjectUrl = URL.createObjectURL(offlineData.blob);
+            previewUrl = currentObjectUrl;
+          }
         }
       }
       if (!previewUrl) {
@@ -5015,10 +5025,11 @@ document.addEventListener("DOMContentLoaded", () => {
         song.id.startsWith("user_") || song.id.startsWith("jamendo_");
       contextEditBtn.style.display = isUserSong ? "flex" : "none";
       contextDeleteBtn.style.display = isUserSong ? "flex" : "none";
-      const isDownloadable = (song.isLocal && song.fileBlob) || song.url || offlineSongsMap[song.id];
+      const isIndirili = offlineSongsMap[song.id] || (song.url && offlineSongsMap[song.url]);
+      const isDownloadable = (song.isLocal && song.fileBlob) || song.url || isIndirili;
       contextDownloadBtn.style.display = isDownloadable ? "flex" : "none";
       showContextMenu(songContextMenu, e.clientX, e.clientY);
-      const isShareable = (song.isLocal && song.fileBlob) || song.url || offlineSongsMap[song.id];
+      const isShareable = (song.isLocal && song.fileBlob) || song.url || isIndirili;
       contextShareSongBtn.style.display = isShareable ? "flex" : "none";
       showContextMenu(songContextMenu, e.clientX, e.clientY);
     }
@@ -5036,7 +5047,8 @@ document.addEventListener("DOMContentLoaded", () => {
           song.id.startsWith("user_") || song.id.startsWith("jamendo_");
         contextEditBtn.style.display = isUserSong ? "flex" : "none";
         contextDeleteBtn.style.display = isUserSong ? "flex" : "none";
-        const isShareable = (song.isLocal && song.fileBlob) || song.url || offlineSongsMap[song.id];
+        const isIndirili = offlineSongsMap[song.id] || (song.url && offlineSongsMap[song.url]);
+        const isShareable = (song.isLocal && song.fileBlob) || song.url || isIndirili;
         contextShareSongBtn.style.display = isShareable ? "flex" : "none";
         const touch = e.touches[0];
         showContextMenu(songContextMenu, touch.clientX, touch.clientY);
@@ -5055,9 +5067,12 @@ document.addEventListener("DOMContentLoaded", () => {
         activePlaylistContextId = playlistId;
         const remoteSongsToDownload = playlist.songs.filter(sid => {
           const s = masterSongLibrary[sid];
-          return s && !s.isLocal && !offlineSongsMap[sid] && s.url;
+          return s && !s.isLocal && !offlineSongsMap[sid] && (s.url && !offlineSongsMap[s.url]);
         });
-        const hasOfflineSongs = playlist.songs.some(sid => offlineSongsMap[sid]);
+        const hasOfflineSongs = playlist.songs.some(sid => {
+          const s = masterSongLibrary[sid];
+          return s && (offlineSongsMap[sid] || (s.url && offlineSongsMap[s.url]));
+        });
 
         playlistContextDownloadBtn.style.display = remoteSongsToDownload.length > 0 ? "flex" : "none";
         playlistContextRepairBtn.style.display = hasOfflineSongs ? "flex" : "none";
@@ -5077,9 +5092,12 @@ document.addEventListener("DOMContentLoaded", () => {
           activePlaylistContextId = playlistId;
           const remoteSongsToDownload = playlist.songs.filter(sid => {
             const s = masterSongLibrary[sid];
-            return s && !s.isLocal && !offlineSongsMap[sid] && s.url;
+            return s && !s.isLocal && !offlineSongsMap[sid] && (s.url && !offlineSongsMap[s.url]);
           });
-          const hasOfflineSongs = playlist.songs.some(sid => offlineSongsMap[sid]);
+          const hasOfflineSongs = playlist.songs.some(sid => {
+            const s = masterSongLibrary[sid];
+            return s && (offlineSongsMap[sid] || (s.url && offlineSongsMap[s.url]));
+          });
 
           playlistContextDownloadBtn.style.display = remoteSongsToDownload.length > 0 ? "flex" : "none";
           playlistContextRepairBtn.style.display = hasOfflineSongs ? "flex" : "none";
