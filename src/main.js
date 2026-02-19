@@ -120,6 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
     (editSongSubmitBtn = document.getElementById("edit-song-submit-btn")),
     (panelGreetingEl = document.getElementById("panel-greeting")),
     (openSettingsModalBtn = document.getElementById("open-settings-modal-btn")),
+    (openSettingsModalBtnSmall = document.getElementById("open-settings-modal-btn-small")),
     (usernameInput = document.getElementById("username-input")),
     (saveUsernameBtn = document.getElementById("save-username-btn")),
     (exportDataBtn = document.getElementById("export-data-btn")),
@@ -183,7 +184,9 @@ document.addEventListener("DOMContentLoaded", () => {
   );
   const transferProgressDetails = document.getElementById(
     "transfer-progress-details"
-  );
+  ),
+    cacheSizeDisplay = document.getElementById("cache-size-display"),
+    clearCacheBtn = document.getElementById("clear-cache-btn");
 
   const MAKER_KEY = "lunetuneMaker";
 
@@ -719,6 +722,33 @@ document.addEventListener("DOMContentLoaded", () => {
       };
       reader.onerror = (error) => reject(error);
     });
+  }
+
+  async function updateCacheSizeDisplay() {
+    if (navigator.storage && navigator.storage.estimate) {
+      try {
+        const estimate = await navigator.storage.estimate();
+        const sizeStr = (estimate.usage / (1024 * 1024)).toFixed(2);
+        cacheSizeDisplay.textContent = `${sizeStr} MB`;
+      } catch (e) {
+        cacheSizeDisplay.textContent = "Hata";
+      }
+    } else {
+      cacheSizeDisplay.textContent = "Bilinmiyor";
+    }
+  }
+
+  async function clearAllCaches() {
+    if (!("caches" in window)) return;
+    try {
+      const cacheNames = await caches.keys();
+      await Promise.all(cacheNames.map((name) => caches.delete(name)));
+      showNotification("Önbellek başarıyla temizlendi.", "success");
+      updateCacheSizeDisplay();
+    } catch (e) {
+      console.error("Cache clearing failed:", e);
+      showNotification("Önbellek temizlenirken hata oluştu.", "error");
+    }
   }
 
   function fadeVolume(audioElement, direction, duration = 400) {
@@ -4487,8 +4517,25 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   openSettingsModalBtn.addEventListener("click", () => {
     openModal("settings-modal");
+    updateCacheSizeDisplay();
     playlistPanel.classList.add(panelClosedClass);
     isPanelLockedOpen = false;
+  });
+
+  if (openSettingsModalBtnSmall) {
+    openSettingsModalBtnSmall.addEventListener("click", () => {
+      openModal("settings-modal");
+      updateCacheSizeDisplay();
+      playlistPanel.classList.add(panelClosedClass);
+      isPanelLockedOpen = false;
+    });
+  }
+
+  clearCacheBtn.addEventListener("click", () => {
+    confirmModalTitle.textContent = "Önbelleği Temizle";
+    confirmModalMessage.innerHTML = 'Tüm önbelleğe alınmış şarkılar ve uygulama verileri silinecektir. Emin misiniz?';
+    confirmModalBtn.onclick = clearAllCaches;
+    openModal("confirm-modal");
   });
 
   closeQueueBtn.addEventListener("click", () => {
