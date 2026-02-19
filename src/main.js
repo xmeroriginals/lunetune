@@ -2723,7 +2723,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const song = masterSongLibrary[songId];
       try {
         transferProgressDetails.textContent = `${song.title} indiriliyor... (${downloadedCount + 1}/${total})`;
-        const response = await fetch(song.url, { headers: { 'x-skip-cache': '1' } });
+        const response = await fetch(song.url, { cache: 'reload' });
         if (!response.ok) throw new Error("Download failed");
         const blob = await response.blob();
         await DBHelper.put("OfflineSongs", { id: song.url, blob: blob });
