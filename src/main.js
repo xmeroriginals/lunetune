@@ -2688,7 +2688,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const songsToDownload = playlist.songs.filter((songId) => {
       const song = masterSongLibrary[songId];
-      // Check if song already downloaded (by URL or ID)
       return song && !song.isLocal && song.url && !offlineSongsMap[song.url] && !offlineSongsMap[songId];
     });
 
@@ -2717,12 +2716,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const response = await fetch(song.url, { headers: { 'x-skip-cache': '1' } });
         if (!response.ok) throw new Error("Download failed");
         const blob = await response.blob();
-
-        // Use URL as ID for deduplication in DB
         await DBHelper.put("OfflineSongs", { id: song.url, blob: blob });
         offlineSongsMap[song.url] = { id: song.url, blob: blob };
-        
-        // Clean up "ghost" cache from Browser Cache API
         if ('caches' in window) {
            const cache = await caches.open('lunetune-audio-v1');
            await cache.delete(song.url).catch(() => {});
@@ -4307,18 +4302,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     loadedOfflineSongs.forEach((offlineData) => {
       offlineSongsMap[offlineData.id] = offlineData;
-      // Also map by URL for existing entries if possible
       const song = masterSongLibrary[offlineData.id];
       if (song && song.url) {
         offlineSongsMap[song.url] = offlineData;
       }
     });
 
-    // Ghost Cache Cleanup: If song is in OfflineSongs, remove it from Cache API to save space
     if ('caches' in window) {
       const cache = await caches.open('lunetune-audio-v1');
       loadedOfflineSongs.forEach(item => {
-        // item.id could be songId or url
         if (item.id.startsWith('http')) {
            cache.delete(item.id).catch(() => {});
         } else {
@@ -5136,6 +5128,14 @@ document.addEventListener("DOMContentLoaded", () => {
     updateGreeting();
     showNotification("Kullanıcı adı kaydedildi.", "success");
   });
+
+  const versionCheckBtn = document.getElementById("version-check-btn");
+  if (versionCheckBtn) {
+    versionCheckBtn.addEventListener("click", () => {
+      showNotification(`V${APP_VERSION}`, "info");
+    });
+  }
+
   exportDataBtn.addEventListener("click", async () => {
     showNotification("Dışa aktarma hazırlanıyor, lütfen bekleyin...", "info");
     try {
