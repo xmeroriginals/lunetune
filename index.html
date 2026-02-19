@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>Lunetune | Music. Freedom. Together.</title>
+  <script src="lib/tailwind.js"></script>
+  <link rel="stylesheet" href="src/style.css" />
+  <link rel="manifest" href="src/manifest.json" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <meta name="description"
+    content="Are you ready for the ultimate music listening experience in your browser? And it's completely free!" />
+  <meta name="keywords"
+    content="Lunetune, music game, voice music player, upload music, müzik yükle, yeni sanatçılar, new artists, Lunetune Library, müzik kütüphanesi, online music, ücretsiz müzik, ad-free music, local files, yerel müzik dosyaları, playlist oluştur, müzik paylaş, müzik senkronizasyonu, synchronize music, music rooms, arkadaşlarla müzik, müzik odası, browser music player, HTML5 music, free music player, no ads, sınırsız müzik, bedava müzik dinle" />
+  <meta name="author" content="XmerOriginals" />
+  <meta property="og:title" content="Lunetune | Music. Freedom. Together." />
+  <meta property="og:description" content="A free, seamless music experience – anytime, anywhere." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://lunetune.xmeroriginals.com/" />
+  <meta property="og:image" content="https://lunetune.xmeroriginals.com/resources/lunetunesquare.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Lunetune | Music. Freedom. Together." />
+  <meta name="twitter:description" content="A free, seamless music experience – anytime, anywhere." />
+  <meta name="twitter:image" content="https://lunetune.xmeroriginals.com/resources/lunetunesquare.png" />
+  <meta name="twitter:creator" content="@XmerOriginals" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Lunetune" />
+  <meta name="theme-color" content="#1e1f3a" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="description"
+    content="Lunetune ile sınırsız ve özgür müzik deneyimini keşfedin. Tarayıcınızda tamamen ücretsiz, reklamsız ve sosyal müzik dinleme platformu. Kendi çalma listelerinizi oluşturun ve arkadaşlarınızla paylaşın." />
+  <meta name="keywords"
+    content="Lunetune, müzik dinle, bedava müzik, reklamsız müzik, online müzik çalar, browser music player, playlist oluştur, müzik paylaş, Lunetune kütüphanesi, ücretsiz streaming, no ads music, local music player, yerel müzik dinle, sync music, xmeroriginals, müzik odaları, pwa music player" />
+  <meta name="author" content="XmerOriginals" />
+  <link rel="canonical" href="https://lunetune.xmeroriginals.com/" />
+  <meta http-equiv="content-language" content="tr, en" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://lunetune.xmeroriginals.com/" />
+  <meta property="og:title" content="Lunetune | Music. Freedom. Together." />
+  <meta property="og:description"
+    content="Ücretsiz, kesintisiz ve özgür bir müzik deneyimi. Her an, her yerde yanınızda." />
+  <meta property="og:image" content="https://lunetune.xmeroriginals.com/resources/lunetunesquare.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="Lunetune" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://lunetune.xmeroriginals.com/" />
+  <meta name="twitter:title" content="Lunetune | Music. Freedom. Together." />
+  <meta name="twitter:description"
+    content="Ücretsiz, kesintisiz ve özgür bir müzik deneyimi. Her an, her yerde yanınızda." />
+  <meta name="twitter:image" content="https://lunetune.xmeroriginals.com/resources/lunetunesquare.png" />
+  <meta name="twitter:site" content="@XmerOriginals" />
+  <meta name="twitter:creator" content="@XmerOriginals" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Lunetune" />
+  <meta name="theme-color" content="#1e1f3a" />
+  <meta name="format-detection" content="telephone=no" />
+
+  <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "MusicWebPlayer",
+        "name": "Lunetune",
+        "url": "https://lunetune.xmeroriginals.com/",
+        "image": "https://lunetune.xmeroriginals.com/resources/lunetunesquare.png",
+        "author": {
+          "@type": "Organization",
+          "name": "XmerOriginals"
+        },
+        "description": "A free, seamless music experience – anytime, anywhere.",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "All",
+        "genre": ["Music", "Audio", "Streaming", "Social", "Web App"],
+        "playMode": "Online"
+      }
+    </script>
+  <link rel="icon" type="image/png" href="https://lunetune.xmeroriginals.com/resources/Lunetune.png" />
+  <script type="application/ld+json">
+      {
+        "@type": "WebApplication",
+        "name": "Lunetune",
+        "url": "https://lunetune.xmeroriginals.com/",
+        "description": "Ücretsiz ve özgür bir müzik deneyimi. Reklamsız ve sosyal müzik platformu.",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "All",
+        "genre": ["Music", "Audio", "Streaming", "Social", "Web App"],
+        "author": {
+          "@type": "Organization",
+          "name": "XmerOriginals",
+          "url": "https://xmeroriginals.com"
+        },
+        "image": "https://lunetune.xmeroriginals.com/resources/lunetunesquare.png",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "featureList": [
+          "Reklamsız müzik dinleme",
+          "Kendi kütüphaneni oluşturma",
+          "Arkadaşlarla senkronize dinleme",
+          "Yerel dosya desteği",
+          "PWA Desteği"
+        ]
+      }
+    </script>
+
+  <link rel="icon" type="image/png" href="https://lunetune.xmeroriginals.com/resources/Lunetune.png" />
+  <link rel="apple-touch-icon" href="https://lunetune.xmeroriginals.com/resources/lunetune192x192.png" />
+</head>
+
+<body>
+  <div id="loader">
+    <div class="loader-logo">
+      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+        viewBox="0,0,500.20997,499.99999" fill="#ffffff">
+        <g transform="translate(10,70)">
+          <g stroke="none" stroke-miterlimit="10">
+            <path
+              d="M305.05393,-3.27944l-66.7189,-66.72056h57.02808l194.62582,194.6236l-0.00001,57.03417l-95.50675,-95.51117l11.34305,-11.35302l11.3425,-11.35246h-45.3949l-66.7189,-66.72056z" />
+            <path d="M489.98893,91.40451l-161.40119,-161.40451h60.34916l101.05202,101.0476z" />
+            <path d="M489.98892,1.15347l-71.14682,-71.15346h64.25771l3.53038,3.56249l3.53093,3.56249z" />
+            <path
+              d="M489.98894,271.90993l-140.64252,-140.64584l13.29206,-13.28376l13.29206,-13.28321l114.05838,114.05396z" />
+            <path
+              d="M489.98892,362.16209l-185.76332,-185.76554l24.63844,-24.63844l80.56245,80.56134l80.56245,80.56078z" />
+            <path
+              d="M-9.4463,178.88928l47.61633,47.61412l47.61578,47.61356l-11.20518,11.21514l-11.20573,11.2157h44.8412l133.4378,133.44112h-57.02808l-194.07212,-194.0699z" />
+            <path
+              d="M150.84694,23.01898l-93.01787,-93.01898h49.27964l161.40506,161.40838l-12.3242,12.31479l-12.3242,12.31534z" />
+            <path
+              d="M223.93502,256.68379c6.69586,-6.70085 12.30095,-12.18356 12.45653,-12.18356c0.15504,0 42.01623,41.73496 93.02507,92.74435l92.74324,92.74435h-49.27964l-161.1188,-161.12212l12.1736,-12.18301z" />
+            <path
+              d="M-9.4463,23.0223v-24.63954l185.48482,185.4826l-12.31534,12.3242l-12.31479,12.3242l-160.85468,-160.85136v-24.6401z" />
+            <path
+              d="M-9.4463,299.31796v-30.17652l80.28726,80.28504l80.2867,80.2856l-30.03311,0.14341l-30.03256,0.14285l-50.25415,-50.25138l-50.25415,-50.25193v-30.17707z" />
+            <path d="M148.08121,-70h53.15608l133.4378,133.44112h-38.03404l-3.84654,3.7131l-3.84598,3.7131z" />
+            <path
+              d="M187.67779,292.94102l3.57467,-3.60679l140.38116,140.37784l-26.43463,0.14396l-26.43408,0.14396l-133.4522,-133.4522h38.79039l3.57467,-3.60679z" />
+            <path
+              d="M-9.4463,88.63491l140.35792,140.35792l-13.28376,13.29206l-13.28376,13.29262l-113.7904,-113.78596z" />
+            <path
+              d="M490.20154,423.20614l-0.34606,6.7828h-23.39705l-66.30584,-66.30418c-36.46874,-36.46763 -66.55643,-66.74192 -66.55643,-66.9706c0,-0.22923 10.64959,-0.16634 23.36027,-0.16634h23.11023l109.92226,109.90122c0,0 0.27181,15.59796 0.21262,16.7571z" />
+            <path d="M-10,-58.23282v-11.76718h23.53381l133.4378,133.44112h-47.06042l-109.91118,-109.90676v-11.76718z" />
+            <path
+              d="M-9.4463,359.39581l70.32292,70.31628l-31.95721,0.14285l-31.95666,0.14285l-3.2048,-3.17047l-3.20425,-3.17103z" />
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <div class="loader-bottom">
+      <div class="line-loader"></div>
+      <div style="justify-content: center; text-align: center">
+        <div class="loader-XF">
+          <span class="loader-From">from</span>
+          <span class="loader-Xmer">Xmer™</span>
+        </div>
+        <span class="loader-Alt">© 2025 Xmer. All Rights Reserved.</span>
+      </div>
+    </div>
+  </div>
+  <div class="bg-[#1c1f3a] flex flex-col justify-between text-[#b9b9c9] overflow-hidden" style="min-height: 100dvh">
+    <div id="notification-container"></div>
+    <div id="modal-overlay"
+      class="fixed inset-0 bg-black/60 z-30 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+    <audio id="audio-player" preload="metadata" crossorigin="anonymous"></audio>
+    <audio id="preview-audio-player" crossorigin="anonymous"></audio>
+    <aside id="playlist-panel"
+      class="fixed top-4 left-4 h-[calc(100%-2rem)] w-80 md:w-96 bg-[#2a2d4a]/60 shadow-2xl z-40 flex flex-col rounded-3xl backdrop-blur-xl transform transition-transform duration-300 ease-in-out -translate-x-[calc(100%+1rem)]">
+      <div class="p-4 flex items-center justify-between border-b border-white/10">
+        <h3 id="panel-greeting" class="text-xl font-semibold text-white ml-1"></h3>
+        <button id="close-playlist-btn" class="text-white/70 hover:text-white">
+          <span class="material-symbols-rounded notranslate">close</span>
+        </button>
+      </div>
+      <ul id="playlist-list" class="flex-grow p-4 space-y-3 overflow-y-auto modal-scrollbar"></ul>
+      <div class="p-4 border-t border-white/10">
+        <div id="panel-actions-large" class="space-y-2">
+          <button id="more-actions-btn"
+            class="w-full text-left p-3 rounded-2xl hover:bg-white/10 flex items-center gap-3">
+            <span class="material-symbols-rounded notranslate text-white/70">more_vert</span>
+            Daha Fazla
+          </button>
+          <button id="open-music-store-btn"
+            class="w-full text-left p-3 rounded-2xl hover:bg-white/10 flex items-center gap-3">
+            <span class="material-symbols-rounded notranslate text-violet-500">storefront</span>
+            Müzik Mağazası
+          </button>
+          <button id="open-lunelights-btn" class="context-menu-btn">
+            <span class="material-symbols-rounded notranslate text-pink-400">diversity_1</span>
+            Lunelights
+          </button>
+          <button id="open-settings-modal-btn"
+            class="w-full text-left p-3 rounded-2xl hover:bg-white/10 flex items-center gap-3">
+            <span class="material-symbols-rounded notranslate text-gray-400">settings</span>
+            Ayarlar
+          </button>
+        </div>
+
+        <div id="panel-actions-small" class="space-y-2 hidden">
+          <button id="more-actions-btn-small"
+            class="w-full text-left p-3 rounded-2xl hover:bg-white/10 flex items-center gap-3">
+            <span class="material-symbols-rounded notranslate text-white/70">more_vert</span>
+            Daha Fazla
+          </button>
+          <button id="open-lunelights-btn-small" class="context-menu-btn">
+            <span class="material-symbols-rounded notranslate text-pink-400">diversity_1</span>
+            Lunelights
+          </button>
+          <button id="open-settings-modal-btn-small"
+            class="w-full text-left p-3 rounded-2xl hover:bg-white/10 flex items-center gap-3">
+            <span class="material-symbols-rounded notranslate text-gray-400">settings</span>
+            Ayarlar
+          </button>
+        </div>
+      </div>
+    </aside>
+    <aside id="queue-panel"
+      class="fixed top-4 right-4 h-[calc(100%-2rem)] w-80 md:w-96 bg-[#2a2d4a]/60 shadow-2xl z-40 flex flex-col rounded-3xl backdrop-blur-xl transform transition-transform duration-300 ease-in-out translate-x-[calc(100%+1rem)]">
+      <div class="p-4 flex items-center justify-between border-b border-white/10">
+        <h3 class="text-xl font-semibold text-white ml-1">
+          Sıradaki Şarkılar
+        </h3>
+        <button id="close-queue-btn" class="text-white/70 hover:text-white">
+          <span class="material-symbols-rounded notranslate">close</span>
+        </button>
+      </div>
+      <ul id="queue-list" class="flex-grow p-4 space-y-3 overflow-y-auto modal-scrollbar"></ul>
+    </aside>
+
+    <div id="share-modal" class="modal fixed inset-0 z-50 items-center justify-center p-4">
+      <div class="bg-[#2a2d4a] rounded-3xl shadow-2xl w-full max-w-md flex flex-col">
+        <div class="p-4 flex items-center justify-between border-b border-white/10">
+          <h3 class="text-xl font-semibold text-white">
+            Arkadaşını Davet Et
+          </h3>
+          <button data-close-modal="share-modal" class="text-white/70 hover:text-white">
+            <span class="material-symbols-rounded notranslate">close</span>
+          </button>
+        </div>
+        <div class="p-6 space-y-4">
+          <p class="text-white/80 text-center">
+            Bu bağlantıyı arkadaşınla paylaşarak birlikte müzik
+            dinleyebilirsiniz, *Bağlantıyı lütfen güvenmediğiniz kişilere
+            göndermeyiniz.*
+          </p>
+          <div class="flex gap-2">
+            <input type="text" id="share-link-input" readonly
+              class="w-full bg-[#1c1f3a] text-white p-3 round-r-none rounded-l-2xl border-2 border-transparent focus:outline-none" />
+            <button id="copy-share-link-btn"
+              class="px-4 round-l-none rounded-r-2xl bg-violet-600 hover:bg-violet-700 text-white font-semibold">
+              Kopyala
+            </button>
+          </div>
+          <p id="session-status" class="text-center text-yellow-400 h-5"></p>
+        </div>
+      </div>
+    </div>
+
+    <div id="edit-song-modal" class="modal fixed inset-0 z-50 items-center justify-center p-4">
+      <div class="bg-[#2a2d4a] rounded-3xl shadow-2xl w-full max-w-lg flex flex-col" data-editing-song-id="">
+        <div class="p-4 flex items-center justify-between border-b border-white/10">
+          <h3 class="text-xl font-semibold text-white ml-1">
+            Şarkıyı Düzenle
+          </h3>
+          <button data-close-modal="edit-song-modal" class="text-white/70 hover:text-white">
+            <span class="material-symbols-rounded notranslate">close</span>
+          </button>
+        </div>
+        <div class="p-6 space-y-4">
+          <input type="text" id="edit-song-title" placeholder="Şarkı Adı*"
+            class="w-full bg-[#1c1f3a] p-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-violet-400" /><input
+            type="text" id="edit-song-artist" placeholder="Sanatçı Adı"
+            class="w-full bg-[#1c1f3a] p-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-violet-400" />
+          <input type="text" id="edit-song-image-url" placeholder="Kapak Resmi URL (isteğe bağlı)"
+            class="w-full bg-[#1c1f3a] p-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-violet-400" />
+          <div class="text-center text-white/50 text-sm">VEYA</div>
+          <div class="flex justify-center">
+            <input type="file" id="edit-song-image-file" accept="image/*"
+              class="w-64 text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-600 file:text-[#ffffff] hover:file:bg-violet-700" />
+          </div>
+          <div class="flex justify-center gap-3 pt-2">
+            <button id="edit-song-submit-btn"
+              class="px-5 py-2 rounded-2xl bg-violet-600 hover:bg-violet-700 text-white font-semibold">
+              Değişiklikleri Kaydet
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="settings-modal" class="modal fixed inset-0 z-50 items-center justify-center p-4">
+      <div class="bg-[#2a2d4a] rounded-3xl shadow-2xl w-full max-w-lg flex flex-col h-[80vh]">
+        <div class="p-4 flex items-center justify-between border-b border-white/10">
+          <h3 class="text-xl font-semibold text-white ml-1">Ayarlar</h3>
+          <button data-close-modal="settings-modal" class="text-white/70 hover:text-white">
+            <span class="material-symbols-rounded notranslate">close</span>
+          </button>
+        </div>
+        <div class="flex-grow p-6 space-y-6 overflow-y-auto modal-scrollbar">
+          <div>
+            <label for="username-input" class="font-medium text-white/80 block mb-2">Kullanıcı Adı</label>
+            <div class="flex gap-1">
+              <input type="text" id="username-input" placeholder="Adınız..."
+                class="w-full bg-[#1c1f3a] text-white p-3 rounded-none rounded-l-2xl border-2 border-transparent focus:border-violet-400 focus:outline-none" />
+              <button id="save-username-btn"
+                class="px-4 rounded-r-2xl bg-violet-600 hover:bg-violet-700 text-white font-semibold">
+                Kaydet
+              </button>
+            </div>
+          </div>
+          <div class="border-t border-white/10"></div>
+          <div>
+            <h4 class="font-medium text-white/80 mb-2">Temel</h4>
+            <div class="space-y-1">
+              <button id="export-data-btn"
+                class="import-label w-full text-left p-3 rounded-b-none rounded-t-2xl bg-white/5 hover:bg-white/10 flex items-center gap-3 cursor-pointer">
+                <span class="material-symbols-rounded notranslate text-green-400">upload_file</span>
+                Tüm Verileri Dışa Aktar
+              </button>
+              <div>
+                <label for="import-data-file"
+                  class="import-label w-full text-left p-3 rounded-none bg-white/5 hover:bg-white/10 flex items-center gap-3 cursor-pointer">
+                  <span class="material-symbols-rounded notranslate text-blue-400">download</span>
+                  Verileri İçe Aktar
+                </label>
+                <input type="file" id="import-data-file" class="hidden" accept=".luneplaylist,.json" />
+              </div>
+              <button id="receive-song-share-btn"
+                class="import-label w-full text-left p-3 rounded-none bg-white/5 hover:bg-white/10 flex items-center gap-3 cursor-pointer">
+                <span class="material-symbols-rounded notranslate text-pink-400">redeem</span>
+                Hediye Kabul Et
+              </button>
+              <div>
+                <label for="import-playlist-file"
+                  class="import-label w-full text-left p-3 rounded-t-none rounded-b-2xl bg-white/5 hover:bg-white/10 flex items-center gap-3 cursor-pointer mb-6">
+                  <span class="material-symbols-rounded notranslate">queue_music</span>
+                  Çalma Listesi İçe Aktar
+                </label>
+                <input type="file" id="import-playlist-file" class="hidden" accept=".luneplaylist" />
+              </div>
+              <div class="border-t border-white/10 mt-4 pt-4"></div>
+              <h4 class="font-medium text-white/80 mb-2">Direkt Aktarım</h4>
+              <div class="space-y-1">
+                <button id="start-direct-transfer-btn"
+                  class="import-label w-full text-left p-3 rounded-b-none rounded-t-2xl bg-white/5 hover:bg-white/10 flex items-center gap-3 cursor-pointer">
+                  <span class="material-symbols-rounded notranslate text-teal-400">send</span>
+                  Verileri Direkt Gönder
+                </button>
+                <button id="receive-direct-transfer-btn"
+                  class="import-label w-full text-left p-3 rounded-t-none rounded-b-2xl bg-white/5 hover:bg-white/10 flex items-center gap-3 cursor-pointer">
+                  <span class="material-symbols-rounded notranslate text-purple-400">inbox</span>
+                  Verileri Direkt Al
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="border-t border-white/10 pt-4">
+            <h4 class="font-medium text-white/80 mb-2">Bakım</h4>
+            <button id="optimize-library-btn"
+              class="import-label w-full text-left p-3 rounded-2xl bg-white/5 hover:bg-white/10 flex items-center gap-3 cursor-pointer">
+              <span class="material-symbols-rounded notranslate text-yellow-400">auto_fix_high</span>
+              Kütüphaneyi Optimize Et
+            </button>
+            <span class="text-white/50 text-sm mt-2 px-1 block text-center">
+              Aynı şarkı ve kapak resimlerini bularak kopyaları temizler,
+              depolama alanından tasarruf sağlar.
+            </span>
+          </div>
+          <div>
+            <button id="not-used-songs-clear-library-btn"
+              class="import-label w-full text-left p-3 rounded-2xl bg-white/5 hover:bg-white/10 flex items-center gap-3 cursor-pointer">
+              <span class="material-symbols-rounded notranslate text-yellow-400">auto_fix_high</span>
+              Kütüphaneyi Temizle
+            </button>
+            <span class="text-white/50 text-sm mt-2 px-1 block text-center">
+              Kütüphanede olup hiçbir çalma listesinde kullanılmayan şarkıları temizleyip alan tasarrufu sağlar.
+            </span>
+          </div>
+          <div class="border-t border-white/10"></div>
+          <div class="flex items-center justify-between">
+            <div class="flex flex-col">
+              <span class="text-white/90">Sağ Menü Kilidi</span>
+              <span class="text-white/50 text-sm mt-1">Bilgisayarlar için sağ menüyü kilitler, imleç yaklaştığında
+                otomatik açılmaz.</span>
+            </div>
+            <label for="right-menu-toggle" class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="right-menu-toggle" class="sr-only peer" />
+              <div
+                class="w-11 h-6 bg-gray-600 rounded-full peer peer-focus:ring-2 peer-focus:ring-violet-400 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-violet-600">
+              </div>
+            </label>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="flex flex-col">
+              <span class="text-white/90">Sol Menü Kilidi</span>
+              <span class="text-white/50 text-sm mt-1">Bilgisayarlar için sol menüyü kilitler, imleç yaklaştığında
+                otomatik açılmaz.</span>
+            </div>
+            <label for="left-menu-toggle" class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="left-menu-toggle" class="sr-only peer" />
+              <div
+                class="w-11 h-6 bg-gray-600 rounded-full peer peer-focus:ring-2 peer-focus:ring-violet-400 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-violet-600">
+              </div>
+            </label>
+          </div>
+
+          <div class="border-t border-white/10 pt-4 mt-4">
+            <h4 class="font-medium text-white/80 mb-2">Veri Tasarrufu</h4>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="p-4 bg-white/5 rounded-2xl text-center">
+                <span class="block text-white/50 text-sm mb-1">Kullanılan Veri</span>
+                <span id="data-used-display" class="block text-xl font-bold text-red-300">0 MB</span>
+              </div>
+              <div class="p-4 bg-white/5 rounded-2xl text-center">
+                <span class="block text-white/50 text-sm mb-1">Tasarruf Edilen</span>
+                <span id="data-saved-display" class="block text-xl font-bold text-green-300">0 MB</span>
+              </div>
+            </div>
+            <p class="text-white/30 text-xs mt-2 text-center">
+              *Tasarruf edilen veri, önbellekten (cache) çalınan şarkılar sayesinde harcanmayan internet miktarını
+              gösterir.
+              Wi-Fi bağlantısında otomatik önbellekleme yapılır.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="music-store-modal" class="modal fixed inset-0 z-50 items-center justify-center p-4">
+      <div class="bg-[#2a2d4a] rounded-3xl shadow-2xl w-full max-w-lg flex flex-col h-[80vh]">
+        <div class="p-4 flex items-center justify-between border-b border-white/10">
+          <h3 class="text-xl font-semibold text-white ml-1">
+            Müzik Mağazası
+          </h3>
+          <button data-close-modal="music-store-modal" class="text-white/70 hover:text-white">
+            <span class="material-symbols-rounded notranslate">close</span>
+          </button>
+        </div>
+
+        <div class="flex border-b border-white/10 px-2 justify-center">
+          <button id="lunetune-tab-btn" class="store-tab-btn active-tab">
+            Sizin
+          </button>
+          <button id="ncs-tab-btn" class="store-tab-btn">NCS</button>
+          <button id="jamendo-tab-btn" class="store-tab-btn">Jamendo</button>
+        </div>
+
+        <div class="p-4 border-b border-white/10">
+          <div class="relative">
+            <input type="text" id="music-search-input" placeholder="Şarkı veya sanatçı ara..."
+              class="w-full bg-[#1c1f3a] text-white p-3 pl-10 rounded-2xl border-2 border-transparent focus:border-violet-400 focus:outline-none" /><span
+              class="material-symbols-rounded notranslate absolute left-3 top-1/2 -translate-y-1/2 text-white/40">search</span>
+          </div>
+          <div id="lunetune-tab-actions" class="mt-1 text-center flex gap-1">
+            <button id="open-add-music-modal-btn"
+              class="flex gap-1 items-center justify-center px-4 py-2 w-full rounded-t-none rounded-bl-2xl bg-violet-600 hover:bg-violet-700 text-white font-semibold transition-all duration-200">
+              <span class="material-symbols-rounded notranslate text-[28px] leading-none">add_circle</span>
+              <span class="mt-0.5">Ekle</span>
+            </button>
+
+            <button id="remove-from-library-btn"
+              class="flex gap-1 items-center justify-center px-4 py-2 w-full rounded-t-none rounded-br-2xl bg-red-600 hover:bg-red-700 text-white font-semibold transition-all duration-200">
+              <span class="material-symbols-rounded notranslate text-[28px] leading-none">delete</span>
+              <span class="mt-0.5">Kaldır</span>
+            </button>
+          </div>
+
+        </div>
+        <ul id="music-store-list" class="flex-grow p-4 space-y-3 overflow-y-auto modal-scrollbar"></ul>
+      </div>
+    </div>
+    <div id="playlist-select-modal" class="modal fixed inset-0 z-[51] items-center justify-center p-4">
+      <div class="bg-[#2a2d4a] rounded-3xl shadow-2xl w-full max-w-sm flex flex-col max-h-[80vh]">
+        <div class="p-4 flex items-center justify-between border-b border-white/10">
+          <h3 class="text-lg font-semibold text-white">Listeye Ekle</h3>
+          <button data-close-modal="playlist-select-modal" class="text-white/70 hover:text-white">
+            <span class="material-symbols-rounded notranslate">close</span>
+          </button>
+        </div>
+        <ul id="playlist-selection-list" class="flex-grow p-4 space-y-2 overflow-y-auto modal-scrollbar"></ul>
+      </div>
+    </div>
+    <div id="radio-select-modal" class="modal fixed inset-0 z-50 items-center justify-center p-4">
+      <div class="bg-[#2a2d4a] rounded-3xl shadow-2xl w-full max-w-lg flex flex-col h-[80vh]">
+        <div class="p-4 flex items-center justify-between border-b border-white/10">
+          <h3 class="text-lg font-semibold text-white">Radyo Kanalları</h3>
+          <button data-close-modal="radio-select-modal" class="text-white/70 hover:text-white">
+            <span class="material-symbols-rounded notranslate">close</span>
+          </button>
+        </div>
+        <div class="p-4 border-b border-white/10">
+          <input type="text" id="search-radio" placeholder="Kanal ara..."
+            class="w-full bg-[#1c1f3a] text-white p-3 rounded-2xl border-2 border-transparent focus:border-violet-400 focus:outline-none" />
+        </div>
+        <ul id="radio-station-list" class="flex-grow p-4 overflow-y-auto modal-scrollbar"></ul>
+      </div>
+    </div>
+    <div id="new-playlist-modal" class="modal fixed inset-0 z-50 items-center justify-center p-4">
+      <div class="bg-[#2a2d4a] rounded-3xl shadow-2xl w-full max-w-sm flex flex-col">
+        <div class="p-4 flex items-center justify-between border-b border-white/10">
+          <h3 class="text-lg font-semibold text-white">Yeni Çalma Listesi</h3>
+          <button data-close-modal="new-playlist-modal" class="text-white/70 hover:text-white">
+            <span class="material-symbols-rounded notranslate">close</span>
+          </button>
+        </div>
+        <div class="p-6 space-y-4">
+          <div class="flex items-center gap-4">
+            <div class="flex-shrink-0">
+              <label for="new-playlist-cover-input" class="cursor-pointer group">
+                <img id="new-playlist-cover-preview" src="https://placehold.co/80x80/818cf8/ffffff?text=+"
+                  class="w-20 h-20 rounded-none rounded-l-2xl rounded-tr-2xl object-cover border-2 border-dashed border-white/30 group-hover:border-violet-400 transition-all" />
+              </label>
+              <input type="file" id="new-playlist-cover-input" class="hidden" accept="image/*" />
+            </div>
+            <div class="w-full">
+              <label for="playlist-name-input" class="font-medium text-white/80 mb-2 block">Liste Adı</label>
+              <input type="text" id="playlist-name-input" placeholder="Yolculuk Müzikleri..."
+                class="w-full bg-[#1c1f3a] text-white p-3 rounded-none rounded-r-2xl border-2 border-transparent focus:border-violet-400 focus:outline-none" />
+            </div>
+          </div>
+          <div class="flex justify-center gap-1 pt-2">
+            <button data-close-modal="new-playlist-modal"
+              class="px-4 py-2 rounded-none rounded-l-2xl bg-white/10 hover:bg-white/20">
+              İptal
+            </button>
+            <button id="create-playlist-btn"
+              class="px-4 py-2 rounded-none rounded-r-2xl bg-violet-600 hover:bg-violet-700 text-white font-semibold">
+              Oluştur
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="confirm-modal" class="modal fixed inset-0 z-[51] items-center justify-center p-4">
+      <div class="bg-[#2a2d4a] rounded-3xl shadow-2xl w-full max-w-sm flex flex-col">
+        <div class="p-4 flex items-center justify-between border-b border-white/10">
+          <h3 id="confirm-modal-title" class="text-lg font-semibold text-white ml-1">
+            Onay
+          </h3>
+          <button data-close-modal="confirm-modal" class="text-white/70 hover:text-white">
+            <span class="material-symbols-rounded notranslate">close</span>
+          </button>
+        </div>
+        <div class="p-6 space-y-4">
+          <p id="confirm-modal-message" class="text-center"></p>
+          <div class="flex justify-center gap-1 pt-2">
+            <button data-close-modal="confirm-modal"
+              class="px-4 py-2 rounded-none rounded-l-2xl bg-white/10 hover:bg-white/20">
+              İptal</button><button id="confirm-modal-btn"
+              class="px-4 py-2 rounded-none rounded-r-2xl bg-red-600 hover:bg-red-700 text-white font-semibold">
+              Onayla
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="rename-playlist-modal" class="modal fixed inset-0 z-50 items-center justify-center p-4">
+      <div class="bg-[#2a2d4a] rounded-3xl shadow-2xl w-full max-w-sm flex flex-col">
+        <div class="p-4 flex items-center justify-between border-b border-white/10">
+          <h3 class="text-lg font-semibold text-white">
+            Listeyi Yeniden Adlandır
+          </h3>
+          <button data-close-modal="rename-playlist-modal" class="text-white/70 hover:text-white">
+            <span class="material-symbols-rounded notranslate">close</span>
+          </button>
+        </div>
+        <div class="p-6 space-y-4">
+          <div class="flex items-center gap-4">
+            <div class="flex-shrink-0">
+              <label for="rename-playlist-cover-input" class="cursor-pointer group">
+                <img id="rename-playlist-cover-preview" src="https://placehold.co/80x80/818cf8/ffffff?text=Kapak"
+                  class="w-20 h-20 rounded-2xl object-cover border-2 border-dashed border-white/30 group-hover:border-violet-400 transition-all" />
+              </label>
+              <input type="file" id="rename-playlist-cover-input" class="hidden" accept="image/*" />
+            </div>
+            <div class="w-full">
+              <label for="rename-playlist-input" class="font-medium text-white/80 mb-2 block">Yeni Liste Adı</label>
+              <input type="text" id="rename-playlist-input" placeholder="Yolculuk Müzikleri..."
+                class="w-full bg-[#1c1f3a] text-white p-3 rounded-2xl border-2 border-transparent focus:border-violet-400 focus:outline-none" />
+            </div>
+          </div>
+          <div class="flex justify-center gap-1 pt-2">
+            <button data-close-modal="rename-playlist-modal"
+              class="px-4 py-2 rounded-none rounded-l-2xl bg-white/10 hover:bg-white/20">
+              İptal
+            </button>
+            <button id="rename-playlist-btn"
+              class="px-4 py-2 rounded-none rounded-r-2xl bg-violet-600 hover:bg-violet-700 text-white font-semibold">
+              Kaydet
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="sleep-timer-modal" class="modal fixed inset-0 z-50 items-center justify-center p-4">
+      <div class="bg-[#2a2d4a] rounded-3xl shadow-2xl w-full max-w-xs flex flex-col">
+        <div class="p-4 flex items-center justify-between border-b border-white/10">
+          <h3 class="text-xl font-semibold text-white ml-1">
+            Uyku Zamanlayıcısı
+          </h3>
+          <button data-close-modal="sleep-timer-modal" class="text-white/70 hover:text-white">
+            <span class="material-symbols-rounded notranslate">close</span>
+          </button>
+        </div>
+        <div class="p-6 space-y-1">
+          <p id="sleep-timer-status" class="text-white/70 text-center mb-5 h-6">
+            Zamanlayıcı aktif değil.
+          </p>
+          <div class="grid grid-cols-2 gap-1">
+            <button class="timer-btn py-2 px-4 bg-white/5 hover:bg-white/10 rounded-none rounded-tl-2xl"
+              data-minutes="15">
+              15 Dakika
+            </button>
+            <button class="timer-btn py-2 px-4 bg-white/5 hover:bg-white/10 rounded-none rounded-tr-2xl"
+              data-minutes="30">
+              30 Dakika
+            </button>
+            <button class="timer-btn py-2 px-4 bg-white/5 hover:bg-white/10 rounded-none" data-minutes="45">
+              45 Dakika
+            </button>
+            <button class="timer-btn py-2 px-4 bg-white/5 hover:bg-white/10 rounded-none" data-minutes="60">
+              1 Saat
+            </button>
+          </div>
+          <button id="cancel-sleep-timer-btn"
+            class="w-full py-2 px-4 bg-red-600/20 hover:bg-red-600/40 text-red-300 rounded-none rounded-b-2xl">
+            İptal Et
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <header class="flex items-center justify-between p-4 space-x-3 z-10">
+      <div class="flex items-center space-x-2">
+        <img id="spinning-logo" alt="Lunetune Logo" class="w-12 h-12 is-spinning"
+          src="https://lunetune.xmeroriginals.com/resources/lunetune-circle-playing.png" />
+        <h1 class="text-[#b9b9c9] text-[17px] font-[Great Vibes] select-none" style="line-height: 1">
+          Lunetune
+        </h1>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="offline-indicator-btn"
+          class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-red-500/20 hidden" title="Çevrimdışı">
+          <span class="material-symbols-rounded notranslate text-red-400">wifi_off</span>
+        </button>
+        <button id="go-to-playlist-maker"
+          class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10"
+          title="Çalma Listesi Hazırlayıcı">
+          <span class="material-symbols-rounded notranslate text-white/80">library_music</span>
+        </button>
+        <button id="live-radio-btn" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10"
+          title="Canlı Radyo">
+          <span class="material-symbols-rounded notranslate text-white/80">podcasts</span>
+        </button>
+        <button id="open-playlist-btn"
+          class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10">
+          <span class="material-symbols-rounded notranslate text-white/80 text-3xl">menu</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="flex-grow min-h-0 flex flex-col items-center justify-center text-center p-4 relative overflow-hidden">
+      <div id="song-carousel-container" class="relative w-full flex items-center justify-center"></div>
+      <div id="emoji-display-area" class="absolute inset-0 pointer-events-none overflow-hidden z-20"></div>
+    </main>
+
+    <footer class="p-4 z-10" style="padding-bottom: calc(1rem + env(safe-area-inset-bottom))">
+      <div class="flex flex-col items-center max-w-4xl mx-auto gap-4">
+        <div
+          class="w-full flex flex-col-reverse md:flex-row md:items-center md:bg-[#2a2d4a]/50 md:rounded-3xl p-2 md:p-4 gap-4">
+          <nav class="flex items-center justify-around md:justify-start flex-shrink-0 gap-2">
+            <button id="seek-backward-btn" class="player-btn">
+              <span class="material-symbols-rounded notranslate text-3xl">replay_10</span>
+            </button>
+            <button id="prev-btn" class="player-btn">
+              <span class="material-symbols-rounded notranslate text-4xl">skip_previous</span>
+            </button>
+            <button id="play-pause-btn"
+              class="w-16 h-16 text-white shadow-lg transform hover:scale-105 transition-transform flex items-center justify-center">
+              <span id="play-pause-icon" class="material-symbols-rounded notranslate text-7xl">play_circle</span>
+            </button>
+            <button id="next-btn" class="player-btn">
+              <span class="material-symbols-rounded notranslate text-4xl">skip_next</span>
+            </button>
+            <button id="seek-forward-btn" class="player-btn">
+              <span class="material-symbols-rounded notranslate text-3xl">forward_10</span>
+            </button>
+          </nav>
+          <div class="flex items-center w-full gap-3 flex-1">
+            <span id="current-time-display" class="time-display">-:--</span>
+            <div id="progress-container" class="w-full bg-white/10 rounded-full h-1.5 cursor-pointer relative group">
+              <div id="progress-bar" class="bg-white rounded-full h-1.5" style="width: 0%"></div>
+              <div id="progress-handle"
+                class="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full"
+                style="left: 0%"></div>
+            </div>
+            <span id="duration-display" class="time-display">-:--</span>
+          </div>
+          <div class="flex items-center justify-center md:justify-end gap-1 flex-shrink-0">
+            <button id="shuffle-btn" class="player-btn relative">
+              <span class="material-symbols-rounded notranslate">shuffle</span>
+            </button>
+            <button id="loop-btn" class="player-btn relative">
+              <span class="material-symbols-rounded notranslate">repeat</span>
+            </button>
+            <button id="mini-player-pip" class="player-btn relative">
+              <span class="material-symbols-rounded notranslate">picture_in_picture_alt</span>
+            </button>
+            <div class="volume-control-container flex items-center">
+              <button id="volume-icon-btn" class="player-btn w-10 h-12 md:w-12">
+                <span id="volume-icon" class="material-symbols-rounded notranslate">volume_up</span>
+              </button>
+              <div class="volume-slider-container relative h-12 flex-1">
+                <input id="volume-slider" type="range" min="0" max="100" value="75"
+                  class="absolute top-1/2 -translate-y-1/2 w-full appearance-none" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="reaction-container" class="hidden flex w-full justify-center gap-2 flex-row z-20 pt-0">
+          <button
+            class="reaction-btn w-12 h-12 bg-[#2a2d4a]/60 backdrop-blur-md rounded-full text-2xl transform hover:scale-110 transition-transform"
+            data-emoji="❤️">
+            ❤️
+          </button>
+          <button
+            class="reaction-btn w-12 h-12 bg-[#2a2d4a]/60 backdrop-blur-md rounded-full text-2xl transform hover:scale-110 transition-transform"
+            data-emoji="🔥">
+            🔥
+          </button>
+          <button
+            class="reaction-btn w-12 h-12 bg-[#2a2d4a]/60 backdrop-blur-md rounded-full text-2xl transform hover:scale-110 transition-transform"
+            data-emoji="👍">
+            👍
+          </button>
+          <button
+            class="reaction-btn w-12 h-12 bg-[#2a2d4a]/60 backdrop-blur-md rounded-full text-2xl transform hover:scale-110 transition-transform"
+            data-emoji="👎">
+            👎
+          </button>
+          <button
+            class="reaction-btn w-12 h-12 bg-[#2a2d4a]/60 backdrop-blur-md rounded-full text-2xl transform hover:scale-110 transition-transform"
+            data-emoji="💅🏻">
+            💅🏻
+          </button>
+        </div>
+      </div>
+    </footer>
+
+    <div id="song-context-menu">
+      <button id="context-open-queue" class="context-menu-btn">
+        <span class="material-symbols-rounded notranslate">queue_music</span>
+        Sıradaki Şarkılar
+      </button>
+      <button id="context-remove-from-playlist" class="context-menu-btn" style="display: none">
+        <span class="material-symbols-rounded notranslate">remove_circle</span>
+        Listeden Çıkar
+      </button>
+      <button id="context-download-song" class="context-menu-btn" style="display: none">
+        <span class="material-symbols-rounded notranslate">download</span>
+        Şarkıyı İndir
+      </button>
+      <button id="context-share-song" class="context-menu-btn" style="display: none">
+        <span class="material-symbols-rounded notranslate">redeem</span>
+        Şarkıyı Hediye Et
+      </button>
+      <button id="context-edit-song" class="context-menu-btn" style="display: none">
+        <span class="material-symbols-rounded notranslate">edit</span> Düzenle
+      </button>
+      <button id="context-delete-song" class="context-menu-btn text-red-400" style="display: none">
+        <span class="material-symbols-rounded notranslate">delete</span>
+        Şarkıyı Kalıcı Sil
+      </button>
+    </div>
+
+    <div id="playlist-context-menu" class="playlist-context-menu">
+      <button id="playlist-context-rename" class="context-menu-btn">
+        <span class="material-symbols-rounded notranslate">edit_note</span>
+        Yeniden Adlandır
+      </button>
+      <button id="playlist-context-direct-transfer-to-maker" class="context-menu-btn">
+        <span class="material-symbols-rounded notranslate">outbound</span>
+        Maker Üzerinde Düzenle
+      </button>
+      <button id="playlist-context-download" class="context-menu-btn">
+        <span class="material-symbols-rounded notranslate">download_for_offline</span>
+        Listeyi İndir
+      </button>
+      <button id="playlist-context-repair" class="context-menu-btn text-yellow-500" style="display: none">
+        <span class="material-symbols-rounded notranslate">build</span>
+        Listeyi Düzelt
+      </button>
+      <button id="playlist-context-export" class="context-menu-btn">
+        <span class="material-symbols-rounded notranslate">upload_file</span>
+        Listeyi Dışa Aktar
+      </button>
+      <button id="playlist-context-delete" class="context-menu-btn text-red-400">
+        <span class="material-symbols-rounded notranslate">delete</span>Listeyi Sil
+      </button>
+    </div>
+
+    <div id="download-playlist-modal" class="modal fixed inset-0 z-50 items-center justify-center p-4">
+      <div class="bg-[#2a2d4a] rounded-3xl shadow-2xl w-full max-w-md flex flex-col">
+        <div class="p-4 flex items-center justify-between border-b border-white/10">
+          <h3 class="text-xl font-semibold text-white ml-1">Listeyi İndir</h3>
+          <button data-close-modal="download-playlist-modal" class="text-white/70 hover:text-white">
+            <span class="material-symbols-rounded notranslate">close</span>
+          </button>
+        </div>
+        <div class="p-6 space-y-4">
+          <div class="flex flex-col items-center gap-4 text-center">
+            <div class="w-16 h-16 rounded-full bg-violet-500/20 flex items-center justify-center">
+              <span class="material-symbols-rounded notranslate text-3xl text-violet-400">offline_pin</span>
+            </div>
+            <p class="text-white/80">
+              Listenizde URL'den dinlenen şarkılar var ise cihazınıza indirerek internetsiz dinlemenizi sağlar,
+              listenizin içine yerleştirilmez listeniz aynı boyutunda kalır.
+            </p>
+            <div
+              class="bg-yellow-400/10 p-3 rounded-2xl border border-yellow-400/20 w-full flex items-start gap-3 text-left">
+              <span class="material-symbols-rounded notranslate text-yellow-400 flex-shrink-0">info</span>
+              <p class="text-yellow-200/80 text-xs">
+                <b></b> Wi-Fi Bağlantısı kullanmanız tavsiye edilir. Mobil veri kullanımında internet
+                kotanızı tüketebilir.
+              </p>
+            </div>
+          </div>
+          <div class="flex justify-center pt-2">
+            <button id="start-download-playlist-btn"
+              class="w-full py-3 rounded-2xl bg-violet-600 hover:bg-violet-700 text-white font-semibold transition-all shadow-lg hover:shadow-violet-600/20 flex items-center justify-center gap-2">
+              <span class="material-symbols-rounded notranslate">download</span>
+              İndir
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="repair-playlist-modal" class="modal fixed inset-0 z-50 items-center justify-center p-4">
+      <div class="bg-[#2a2d4a] rounded-3xl shadow-2xl w-full max-w-md flex flex-col">
+        <div class="p-4 flex items-center justify-between border-b border-white/10">
+          <h3 class="text-xl font-semibold text-white ml-1">Listeyi Düzelt</h3>
+          <button data-close-modal="repair-playlist-modal" class="text-white/70 hover:text-white">
+            <span class="material-symbols-rounded notranslate">close</span>
+          </button>
+        </div>
+        <div class="p-6 space-y-4">
+          <div class="flex flex-col items-center gap-4 text-center">
+            <div class="w-16 h-16 rounded-full bg-yellow-500/20 flex items-center justify-center">
+              <span class="material-symbols-rounded notranslate text-3xl text-yellow-400">build</span>
+            </div>
+            <p class="text-white/80">
+              Bu işlem, bu liste için indirdiğiniz çevrimdışı (offline) kopyaları temizler. 
+              Liste içeriğiniz korunur, sadece indirilmiş dosyalar silinir ve şarkılar tekrar internet üzerinden çalınmaya başlar.
+            </p>
+            <div
+              class="bg-blue-400/10 p-3 rounded-2xl border border-blue-400/20 w-full flex items-start gap-3 text-left">
+              <span class="material-symbols-rounded notranslate text-blue-400 flex-shrink-0">info</span>
+              <p class="text-blue-200/80 text-xs">
+                Eğer indirilen şarkılarda bozulma veya çalma sorunu yaşıyorsanız bu işlemi yapmanız önerilir.
+              </p>
+            </div>
+          </div>
+          <div class="flex justify-center pt-2">
+            <button id="start-repair-playlist-btn"
+              class="w-full py-3 rounded-2xl bg-red-600 hover:bg-red-700 text-white font-semibold transition-all shadow-lg hover:shadow-red-600/20 flex items-center justify-center gap-2">
+              <span class="material-symbols-rounded notranslate">delete_sweep</span>
+              Düzeltmeyi Başlat
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="more-actions-context-menu" class="playlist-context-menu">
+      <button id="open-sleep-timer-modal-btn-small" class="context-menu-btn">
+        <span class="material-symbols-rounded notranslate">dark_mode</span>
+        Uyku Zamanlayıcısı
+      </button>
+      <button id="more-open-share-modal-btn" class="context-menu-btn">
+        <span class="material-symbols-rounded notranslate text-teal-400">group</span>
+        Arkadaşınla Dinle
+      </button>
+      <button id="more-open-music-store-btn" class="context-menu-btn">
+        <span class="material-symbols-rounded notranslate text-violet-500">storefront</span>
+        Müzik Mağazası
+      </button>
+      <button id="more-open-new-playlist-modal-btn" class="context-menu-btn">
+        <span class="material-symbols-rounded notranslate text-green-400">add_circle</span>
+        Yeni Liste Oluştur
+      </button>
+    </div>
+  </div>
+
+  <div id="transfer-sender-modal" class="modal fixed inset-0 z-50 items-center justify-center p-4">
+    <div class="bg-[#2a2d4a] rounded-3xl shadow-2xl w-full max-w-sm flex flex-col">
+      <div class="p-4 flex items-center justify-between border-b border-white/10">
+        <h3 class="text-xl font-semibold text-white ml-1">Verileri Gönder</h3>
+        <button data-close-modal="transfer-sender-modal" class="text-white/70 hover:text-white">
+          <span class="material-symbols-rounded notranslate">close</span>
+        </button>
+      </div>
+      <div class="p-6 space-y-4 text-center">
+        <p class="text-white/80">
+          Diğer cihazdan QR kodu taratın veya aşağıdaki kodu girin.
+        </p>
+        <div id="transfer-qr-code" class="p-2 bg-white rounded-2xl inline-block mx-auto"></div>
+        <div class="bg-[#1c1f3a] p-3 rounded-2xl">
+          <p class="text-2xl font-mono tracking-widest text-white" id="transfer-peer-id">
+            ...
+          </p>
+        </div>
+        <p id="transfer-sender-status" class="text-yellow-400 h-5">
+          Bağlantı bekleniyor...
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div id="transfer-receiver-modal" class="modal fixed inset-0 z-50 items-center justify-center p-4">
+    <div class="bg-[#2a2d4a] rounded-3xl shadow-2xl w-full max-w-sm flex flex-col">
+      <div class="p-4 flex items-center justify-between border-b border-white/10">
+        <h3 class="text-xl font-semibold text-white ml-1">Verileri Al</h3>
+        <button data-close-modal="transfer-receiver-modal" class="text-white/70 hover:text-white">
+          <span class="material-symbols-rounded notranslate">close</span>
+        </button>
+      </div>
+      <div class="p-6 space-y-4">
+        <p class="text-white/80 text-center">
+          Diğer cihazda gösterilen 9 haneli kodu girin.
+        </p>
+        <input type="text" id="transfer-receive-input" placeholder="XXX-XXX-XXX" maxlength="11"
+          class="w-full bg-[#1c1f3a] text-white p-3 rounded-2xl text-center font-mono tracking-widest focus:outline-none focus:ring-2 focus:ring-violet-400" />
+        <div class="flex justify-center gap-1 pt-2">
+          <button data-close-modal="transfer-receiver-modal"
+            class="px-4 py-2 rounded-none rounded-l-2xl text-[#b7b7c7] bg-white/10 hover:bg-white/20">
+            İptal
+          </button>
+          <button id="transfer-connect-btn"
+            class="px-4 py-2 rounded-none rounded-r-2xl bg-violet-600 hover:bg-violet-700 text-white font-semibold">
+            Bağlan
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="transfer-progress-modal" class="modal fixed inset-0 z-[52] items-center justify-center p-4 bg-black/70">
+    <div class="bg-[#2a2d4a] rounded-3xl shadow-2xl w-full max-w-sm flex flex-col">
+      <div class="p-4 border-b border-white/10">
+        <h3 id="transfer-progress-title" class="text-xl font-semibold text-white ml-1 text-center">
+          Veriler Aktarılıyor...
+        </h3>
+      </div>
+      <div class="p-8 space-y-4 text-center">
+        <div class="w-full bg-white/10 rounded-full h-4">
+          <div id="transfer-progress-bar" class="bg-green-500 h-4 rounded-full transition-all duration-300"
+            style="width: 0%"></div>
+        </div>
+        <p id="transfer-progress-text" class="text-lg font-semibold text-white">
+          0%
+        </p>
+        <p id="transfer-progress-details" class="text-sm text-white/60"></p>
+      </div>
+    </div>
+  </div>
+
+  <div id="song-share-sender-modal" class="modal fixed inset-0 z-50 items-center justify-center p-4">
+    <div class="bg-[#2a2d4a] rounded-3xl shadow-2xl w-full max-w-sm flex flex-col">
+      <div class="p-4 flex items-center justify-between border-b border-white/10">
+        <h3 class="text-xl font-semibold text-white ml-1">Şarkıyı Paylaş</h3>
+        <button data-close-modal="song-share-sender-modal" class="text-white/70 hover:text-white">
+          <span class="material-symbols-rounded notranslate">close</span>
+        </button>
+      </div>
+      <div class="p-6 space-y-4 text-center">
+        <p class="text-white/80">
+          Arkadaşınızın "Hediye Kabul Et" menüsüne bu kodu girmesini
+          söyleyiniz.
+        </p>
+        <div id="song-share-qr-code" class="p-2 bg-white rounded-2xl inline-block mx-auto"></div>
+        <div class="bg-[#1c1f3a] p-3 rounded-2xl">
+          <p class="text-3xl font-mono tracking-widest text-white" id="song-share-code-el">
+            ...
+          </p>
+        </div>
+        <p id="song-share-sender-status" class="text-yellow-400 h-5">
+          Bağlantı bekleniyor...
+        </p>
+      </div>
+    </div>
+  </div>
+  <div id="song-share-receiver-modal" class="modal fixed inset-0 z-50 items-center justify-center p-4">
+    <div class="bg-[#2a2d4a] rounded-3xl shadow-2xl w-full max-w-sm flex flex-col">
+      <div class="p-4 flex items-center justify-between border-b border-white/10">
+        <h3 class="text-xl font-semibold text-white ml-1">Hediye Kabul Et</h3>
+        <button data-close-modal="song-share-receiver-modal" class="text-white/70 hover:text-white">
+          <span class="material-symbols-rounded notranslate">close</span>
+        </button>
+      </div>
+      <div class="p-6 space-y-4">
+        <p class="text-white/80">
+          Arkadaşının paylaştığı 6 haneli kodu girin.
+        </p>
+        <input type="text" id="song-share-receive-input" placeholder="XXXXXX" maxlength="6"
+          class="w-full bg-[#1c1f3a] text-white p-3 rounded-2xl text-center text-2xl font-mono tracking-widest focus:outline-none focus:ring-2 focus:ring-violet-400" />
+        <div class="flex items-center justify-center pt-2">
+          <div class="relative flex items-center">
+            <input id="song-share-choose-playlist-check-v3" type="checkbox"
+              class="peer absolute w-full h-full opacity-0 cursor-pointer z-10" />
+            <div
+              class="w-5 h-5 flex items-center justify-center rounded-md border-2 border-gray-500 bg-gray-700 transition-all duration-200 shadow-inner peer-checked:bg-violet-600 peer-checked:border-violet-600 peer-focus:ring-2 peer-focus:ring-violet-400 peer-focus:ring-offset-2 peer-focus:ring-offset-gray-900">
+              <svg class="w-4 h-4 text-white transition-opacity duration-200 opacity-0 peer-checked:opacity-100"
+                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+          </div>
+          <label for="song-share-choose-playlist-check-v3"
+            class="ml-3 text-base font-semibold text-gray-200 select-none cursor-pointer">
+            Şarkı alındığında çalma listesi seç
+          </label>
+        </div>
+        <div class="flex justify-center gap-1 pt-2">
+          <button data-close-modal="song-share-receiver-modal"
+            class="px-4 py-2 rounded-none rounded-l-2xl text-[#b7b7c7] bg-white/10 hover:bg-white/20">
+            İptal
+          </button>
+          <button id="song-share-connect-btn"
+            class="px-4 py-2 rounded-none rounded-r-2xl bg-violet-600 hover:bg-violet-700 text-white font-semibold">
+            Tamam
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="add-music-modal" class="modal fixed inset-0 z-50 items-center justify-center p-4">
+    <div class="bg-[#2a2d4a] rounded-3xl shadow-2xl w-full max-w-lg flex flex-col">
+      <div class="p-4 flex items-center justify-between border-b border-white/10">
+        <h3 class="text-xl font-semibold text-white ml-1">Yeni Müzik Ekle</h3>
+        <button data-close-modal="add-music-modal" class="text-white/70 hover:text-white">
+          <span class="material-symbols-rounded notranslate">close</span>
+        </button>
+      </div>
+      <div class="p-6 space-y-4">
+        <div class="flex flex-col md:flex-row items-center gap-4">
+          <label for="add-music-cover-file" class="flex-shrink-0 relative cursor-pointer group">
+            <img id="add-music-cover-preview" src="https://placehold.co/128x128/4a4f8a/ffffff?text=325x325"
+              class="w-32 h-32 rounded-2xl object-cover border-2 border-transparent group-hover:border-violet-400 transition-all" />
+            <div
+              class="absolute inset-0 bg-black/50 flex items-center justify-center text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl">
+              Kapak Seç
+            </div>
+          </label>
+          <input type="file" id="add-music-cover-file" accept="image/*" class="hidden" />
+          <div class="w-full space-y-2">
+            <input type="text" id="add-music-title" placeholder="Şarkı Adı*"
+              class="w-full bg-[#1c1f3a] text-white p-3 rounded-none rounded-t-2xl focus:outline-none focus:ring-2 focus:ring-violet-400" />
+            <input type="text" id="add-music-artist" placeholder="Sanatçı Adı"
+              class="w-full bg-[#1c1f3a] text-white p-3 ounded-none rounded-b-2xl focus:outline-none focus:ring-2 focus:ring-violet-400" />
+          </div>
+        </div>
+        <div class="border-t border-white/10 pt-4 flex gap-2 content-center">
+          <div class="text-center w-full">
+            <button id="add-music-submit-btn"
+              class="px-4 py-2 w-full rounded-none rounded-l-2xl bg-violet-600 hover:bg-violet-700 text-white font-semibold transform transition-all duration-200 flex items-center justify-center gap-1">
+              <span class="material-symbols-rounded notranslate">add_circle</span>
+              Ekle
+            </button>
+          </div>
+          <div class="text-center w-full">
+            <label for="add-music-file"
+              class="px-4 py-2 w-full rounded-none rounded-r-2xl bg-violet-600 hover:bg-violet-700 text-white font-semibold transform transition-all duration-200 flex items-center justify-center gap-1 cursor-pointer">
+              <span class="material-symbols-rounded notranslate">upload</span>
+              Dosya Seç
+            </label>
+            <input type="file" id="add-music-file" accept="audio/*" class="hidden" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    tailwind.config = {
+      theme: { extend: {} },
+      plugins: [
+        function ({ addComponents }) {
+          addComponents({
+            ".player-btn": {
+              "@apply flex items-center justify-center w-12 h-12 text-white/70 hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:text-white/70":
+                {},
+            },
+            ".time-display": {
+              "@apply text-xs text-white/50 w-10 text-center flex-shrink-0":
+                {},
+            },
+          });
+        },
+      ],
+    };
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
+  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+  <script src="src/main.js"></script>
+  <script src="lib/lunetune-out-control.js"></script>
+  <script>
+    window.addEventListener("load", () => {
+      const loader = document.getElementById("loader");
+      if (loader) {
+        setTimeout(() => {
+          loader.style.opacity = "0";
+          loader.style.visibility = "hidden";
+        }, 333);
+      }
+    });
+
+    setTimeout(() => {
+      const loader = document.getElementById("loader");
+      if (loader && loader.style.visibility !== "hidden") {
+        console.warn("Loader timed out, forcing hide.");
+        loader.style.opacity = "0";
+        loader.style.visibility = "hidden";
+      }
+    }, 5000);
+  </script>
+</body>
+
+</html>

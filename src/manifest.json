@@ -1,0 +1,22 @@
+{
+  "name": "Lunetune",
+  "short_name": "Lunetune",
+  "start_url": "https://lunetune.xmeroriginals.com",
+  "scope": "https://lunetune.xmeroriginals.com",
+  "display": "standalone",
+  "background_color": "#1e1f3a",
+  "theme_color": "#1e293b",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/resources/lunetune192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/resources/lunetune512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
