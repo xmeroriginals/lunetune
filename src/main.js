@@ -1219,12 +1219,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
     checkConnectionAndPrefetch(trackIndex);
 
+    if (currentObjectUrl) {
+      URL.revokeObjectURL(currentObjectUrl);
+      currentObjectUrl = null;
+    }
+
+    const offlineData = track.isLocal ? null : (offlineSongsMap[track.url] || offlineSongsMap[track.id]);
+    const source = track.isLocal
+      ? URL.createObjectURL(track.fileBlob)
+      : (offlineData ? URL.createObjectURL(offlineData.blob) : track.url);
+
+    if (track.isLocal || offlineData) currentObjectUrl = source;
+
     if (isHost && conn && conn.open) {
-      const shouldAutoPlay = autoPlay || isPlaying;
       const syncId = `sync_${Date.now()}`;
       hostState.isWaitingForClient = true;
       hostState.pendingSongId = track.id;
-      hostState.pendingAutoPlay = shouldAutoPlay;
+      hostState.pendingAutoPlay = autoPlay || isPlaying;
       hostState.currentSyncId = syncId;
       broadcastMessage({
         t: "load_track",
@@ -1240,28 +1251,10 @@ document.addEventListener("DOMContentLoaded", () => {
         },
       });
       audioPlayer.currentTime = 0;
-      if (currentObjectUrl) {
-        URL.revokeObjectURL(currentObjectUrl);
-        currentObjectUrl = null;
-      }
-      const offlineData = track.isLocal ? null : (offlineSongsMap[track.url] || offlineSongsMap[track.id]);
-      const source = track.isLocal
-        ? URL.createObjectURL(track.fileBlob)
-        : (offlineData ? URL.createObjectURL(offlineData.blob) : track.url);
-      if (track.isLocal || offlineData) currentObjectUrl = source;
       audioPlayer.src = source;
       audioPlayer.load();
       showNotification(`${track.title} senkronize ediliyor...`, "info", 5000);
     } else if (!isClient) {
-      if (currentObjectUrl) {
-        URL.revokeObjectURL(currentObjectUrl);
-        currentObjectUrl = null;
-      }
-      const offlineData = track.isLocal ? null : (offlineSongsMap[track.url] || offlineSongsMap[track.id]);
-      const source = track.isLocal
-        ? URL.createObjectURL(track.fileBlob)
-        : (offlineData ? URL.createObjectURL(offlineData.blob) : track.url);
-      if (track.isLocal || offlineData) currentObjectUrl = source;
       audioPlayer.src = source;
       audioPlayer.load();
       if (autoPlay || isPlaying) {
