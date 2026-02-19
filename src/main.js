@@ -1428,7 +1428,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let isLoopingAround = false;
 
     if (currentTrackIndex >= playbackList.length - 1) {
-      if (loopState === 1) {
+      if (loopState === 1 || loopState === 2) {
         newIndex = 0;
         isLoopingAround = true;
       } else {
@@ -1514,7 +1514,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function updateLoopState() {
     loopState = (loopState + 1) % 3;
-    loopBtn.classList.remove("text-violet-400");
+    loopBtn.classList.remove("text-violet-400", "loop-btn-one");
     const loopBtnicon = loopBtn.querySelector("span");
     loopBtnicon.textContent = "repeat";
     if (loopState === 1) {
@@ -1522,7 +1522,7 @@ document.addEventListener("DOMContentLoaded", () => {
       loopBtn.classList.add("text-violet-400");
     } else if (loopState === 2) {
       loopBtnicon.textContent = "repeat_one";
-      loopBtn.classList.add("text-violet-400");
+      loopBtn.classList.add("text-violet-400", "loop-btn-one");
     }
     saveSettings();
   }
@@ -4396,7 +4396,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
    audioPlayer.addEventListener("pause", () => {
     updateMediaSessionPositionState();
-    if (isPlaying && !isChangingTrack) {
+    if (isPlaying && !isChangingTrack && !audioPlayer.ended && audioPlayer.currentTime < audioPlayer.duration - 0.5) {
       isPlaying = false;
       playPauseIcon.textContent = "play_circle";
       spinningLogo.classList.remove("playing");
