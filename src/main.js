@@ -1203,7 +1203,7 @@ document.addEventListener("DOMContentLoaded", () => {
         URL.revokeObjectURL(currentObjectUrl);
         currentObjectUrl = null;
       }
-      const offlineData = offlineSongsMap[track.id];
+      const offlineData = track.isLocal ? null : (offlineSongsMap[track.url] || offlineSongsMap[track.id]);
       const source = track.isLocal
         ? URL.createObjectURL(track.fileBlob)
         : (offlineData ? URL.createObjectURL(offlineData.blob) : track.url);
@@ -1216,7 +1216,7 @@ document.addEventListener("DOMContentLoaded", () => {
         URL.revokeObjectURL(currentObjectUrl);
         currentObjectUrl = null;
       }
-      const offlineData = offlineSongsMap[track.id];
+      const offlineData = track.isLocal ? null : (offlineSongsMap[track.url] || offlineSongsMap[track.id]);
       const source = track.isLocal
         ? URL.createObjectURL(track.fileBlob)
         : (offlineData ? URL.createObjectURL(offlineData.blob) : track.url);
@@ -1292,7 +1292,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const targetIndex = (currentIndex + i) % playbackList.length;
       const targetId = playbackList[targetIndex];
       const targetSong = masterSongLibrary[targetId];
-      if (targetSong && !targetSong.isLocal && targetSong.url && !targetSong.fileBlob && !offlineSongsMap[targetSong.id]) {
+      if (targetSong && !targetSong.isLocal && targetSong.url && !targetSong.fileBlob && !(offlineSongsMap[targetSong.url] || offlineSongsMap[targetSong.id])) {
         caches.open('lunetune-audio-v1').then(cache => {
           cache.match(targetSong.url).then(cached => {
             if (!cached) {
@@ -2688,7 +2688,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const songsToDownload = playlist.songs.filter((songId) => {
       const song = masterSongLibrary[songId];
-      return song && !song.isLocal && !offlineSongsMap[songId] && song.url;
+      // Check if song already downloaded (by URL or ID)
+      return song && !song.isLocal && song.url && !offlineSongsMap[song.url] && !offlineSongsMap[songId];
     });
 
     if (songsToDownload.length === 0) {
@@ -2713,12 +2714,20 @@ document.addEventListener("DOMContentLoaded", () => {
       const song = masterSongLibrary[songId];
       try {
         transferProgressDetails.textContent = `${song.title} indiriliyor... (${downloadedCount + 1}/${total})`;
-        const response = await fetch(song.url);
+        const response = await fetch(song.url, { headers: { 'x-skip-cache': '1' } });
         if (!response.ok) throw new Error("Download failed");
         const blob = await response.blob();
 
-        await DBHelper.put("OfflineSongs", { id: songId, blob: blob });
-        offlineSongsMap[songId] = { id: songId, blob: blob };
+        // Use URL as ID for deduplication in DB
+        await DBHelper.put("OfflineSongs", { id: song.url, blob: blob });
+        offlineSongsMap[song.url] = { id: song.url, blob: blob };
+        
+        // Clean up "ghost" cache from Browser Cache API
+        if ('caches' in window) {
+           const cache = await caches.open('lunetune-audio-v1');
+           await cache.delete(song.url).catch(() => {});
+        }
+        
         downloadedCount++;
         const percent = Math.round((downloadedCount / total) * 100);
         transferProgressBar.style.width = `${percent}%`;
@@ -2748,7 +2757,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let clearedCount = 0;
     for (const songId of playlist.songs) {
-      if (offlineSongsMap[songId]) {
+      const song = masterSongLibrary[songId];
+      if (song && (offlineSongsMap[song.url] || offlineSongsMap[songId])) {
+        if (song.url) {
+          await DBHelper.delete("OfflineSongs", song.url);
+          delete offlineSongsMap[song.url];
+        }
         await DBHelper.delete("OfflineSongs", songId);
         delete offlineSongsMap[songId];
         clearedCount++;
@@ -4293,7 +4307,26 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     loadedOfflineSongs.forEach((offlineData) => {
       offlineSongsMap[offlineData.id] = offlineData;
+      // Also map by URL for existing entries if possible
+      const song = masterSongLibrary[offlineData.id];
+      if (song && song.url) {
+        offlineSongsMap[song.url] = offlineData;
+      }
     });
+
+    // Ghost Cache Cleanup: If song is in OfflineSongs, remove it from Cache API to save space
+    if ('caches' in window) {
+      const cache = await caches.open('lunetune-audio-v1');
+      loadedOfflineSongs.forEach(item => {
+        // item.id could be songId or url
+        if (item.id.startsWith('http')) {
+           cache.delete(item.id).catch(() => {});
+        } else {
+           const song = masterSongLibrary[item.id];
+           if (song && song.url) cache.delete(song.url).catch(() => {});
+        }
+      });
+    }
     await loadNcsLibrary();
     playlists = await repairAndValidatePlaylists(loadedPlaylists);
 

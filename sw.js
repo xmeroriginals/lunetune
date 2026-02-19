@@ -60,6 +60,7 @@ self.addEventListener("fetch", (event) => {
     const url = new URL(event.request.url);
 
     if (event.request.destination === "audio" || url.host === "audio.jukehost.co.uk") {
+        if (event.request.headers.get('x-skip-cache')) return;
         const isRangeRequest = event.request.headers.has('range');
 
         event.respondWith(
