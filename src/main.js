@@ -240,7 +240,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   });
-  const APP_VERSION = "1.1.3";
+  const APP_VERSION = "1.1.4";
   const JAMENDO_CLIENT_ID = "d63aca13";
   let activeMusicStoreTab = "lunetune";
   let isClientPlaybackUnlocked = false;
@@ -4333,24 +4333,37 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function checkForUpdates() {
-    const savedVersion = localStorage.getItem("lunetune_version");
-    if (savedVersion && savedVersion !== APP_VERSION && navigator.onLine) {
-      console.log("New version detected, clearing cache and refreshing...");
-      if ("serviceWorker" in navigator) {
-        const registrations = await navigator.serviceWorker.getRegistrations();
-        for (let registration of registrations) {
-          await registration.unregister();
+    try {
+      const savedVersion = localStorage.getItem("lunetune_version");
+      if (savedVersion && savedVersion !== APP_VERSION && navigator.onLine) {
+        localStorage.setItem("lunetune_version", APP_VERSION);
+        console.log(
+          "New version detected: " + APP_VERSION + ". Clearing app cache...",
+        );
+
+        if ("serviceWorker" in navigator) {
+          try {
+            const cacheNames = await caches.keys();
+            for (let name of cacheNames) {
+              if (name.includes("lunetune") && !name.includes("audio")) {
+                await caches.delete(name);
+              }
+            }
+          } catch (cacheErr) {
+            console.warn(
+              "Cache deletion failed during update, proceeding anyway:",
+              cacheErr,
+            );
+          }
         }
-      }
-      const cacheNames = await caches.keys();
-      for (let name of cacheNames) {
-        await caches.delete(name);
+
+        window.location.reload();
+        return true;
       }
       localStorage.setItem("lunetune_version", APP_VERSION);
-      location.reload(true);
-      return true;
+    } catch (e) {
+      console.error("Update check failed:", e);
     }
-    localStorage.setItem("lunetune_version", APP_VERSION);
     return false;
   }
 
