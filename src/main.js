@@ -9,6 +9,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const clearLibraryBtn = document.getElementById(
     "not-used-songs-clear-library-btn"
   );
+  const duplicateCleanupBtn = document.getElementById(
+    "duplicate-names-cleanup-btn"
+  );
   const contextShareSongBtn = document.getElementById("context-share-song");
   const receiveSongShareBtn = document.getElementById("receive-song-share-btn");
   const songShareQrCodeEl = document.getElementById("song-share-qr-code");
@@ -5852,19 +5855,120 @@ document.addEventListener("DOMContentLoaded", () => {
           }
           deletedCount++;
         }
-        if (activeMusicStoreTab === "lunetune") {
-          musicSearchInput.value = "";
-          updateMusicStoreView();
-        }
         showNotification(
-          `Temizlik tamamlandı! ${deletedCount} şarkı silindi.`,
+          `${deletedCount} kullanılmayan şarkı başarıyla kütüphaneden temizlendi.`,
           "success"
         );
+        setTimeout(() => window.location.reload(), 2000);
       };
       openModal("confirm-modal");
     } catch (error) {
-      console.error("Temizlik hatası:", error);
-      showNotification("Kütüphane taranırken bir hata oluştu.", "error");
+      console.error("Kullanılmayan şarkılar temizlenirken hata:", error);
+      showNotification("Temizleme işlemi başarısız oldu.", "error");
+    }
+  }
+
+  async function startDuplicateTitleCleanupProcess() {
+    closeModal("settings-modal");
+    showNotification("Kütüphane kopyalar için taranıyor...", "info", 3000);
+
+    try {
+      const allUserSongs = await DBHelper.getAll("userSongs");
+      const sameTitleGroups = new Map();
+
+      allUserSongs.forEach(song => {
+        const title = (song.title || "").trim().toLowerCase();
+        if (!title) return;
+        if (!sameTitleGroups.has(title)) sameTitleGroups.set(title, []);
+        sameTitleGroups.get(title).push(song);
+      });
+
+      const duplicates = [];
+      for (const [title, group] of sameTitleGroups) {
+        if (group.length < 2) continue;
+
+        const processed = new Set();
+        for (let i = 0; i < group.length; i++) {
+          if (processed.has(group[i].id)) continue;
+
+          for (let j = i + 1; j < group.length; j++) {
+            if (processed.has(group[j].id)) continue;
+
+            const s1 = group[i];
+            const s2 = group[j];
+
+            let isMatch = false;
+
+            if (s1.isLocal && s2.isLocal && s1.fileBlob && s2.fileBlob) {
+              if (s1.fileBlob.size === s2.fileBlob.size) {
+                const head1 = await s1.fileBlob.slice(0, 20480).arrayBuffer();
+                const head2 = await s2.fileBlob.slice(0, 20480).arrayBuffer();
+                const view1 = new Uint8Array(head1);
+                const view2 = new Uint8Array(head2);
+
+                isMatch = view1.length === view2.length && view1.every((val, idx) => val === view2[idx]);
+              }
+            } else if (!s1.isLocal && !s2.isLocal) {
+              isMatch = s1.url === s2.url;
+            }
+
+            if (isMatch) {
+              duplicates.push({ master: s1, duplicate: s2 });
+              processed.add(s2.id);
+            }
+          }
+        }
+      }
+
+      if (duplicates.length === 0) {
+        showNotification("Aynı isme ve veriye sahip kopya şarkı bulunamadı.", "success");
+        return;
+      }
+
+      confirmModalTitle.textContent = "Kopya Temizliği Onayı";
+      confirmModalMessage.innerHTML = `
+        <div class="flex flex-col items-center gap-4 text-center">
+            <div class="w-16 h-16 rounded-full bg-red-400/20 flex items-center justify-center">
+                <span class="material-symbols-rounded notranslate text-3xl text-red-400">content_copy</span>
+            </div>
+            <div>
+                <p class="text-lg">Toplam <span class="font-bold text-white text-xl">${duplicates.length}</span> adet kesin kopya şarkı tespit edildi (İsim + İlk 20KB Veri eşleşmesi).</p>
+                <p class="text-white/60 text-sm mt-2">Bu şarkılar kütüphanenizden silinecek ve listelerde asıllarıyla yer değişterecek.</p>
+            </div>
+            <div class="bg-red-500/10 p-3 rounded-lg border border-red-500/20 w-full">
+                <p class="text-red-300 text-sm font-medium">Bu kopyaları şimdi temizlemek istiyor musunuz?</p>
+            </div>
+        </div>
+      `;
+
+      confirmAction = async () => {
+        showNotification("Kopya şarkılar temizleniyor...", "info");
+        const allPlaylists = await DBHelper.getAll("playlists");
+        
+        for (const item of duplicates) {
+          const masterId = item.master.id;
+          const duplicateId = item.duplicate.id;
+
+          for (const playlist of allPlaylists) {
+            if (playlist.songs && playlist.songs.includes(duplicateId)) {
+              playlist.songs = playlist.songs.map(id => id === duplicateId ? masterId : id);
+              playlist.songs = [...new Set(playlist.songs)];
+              await DBHelper.put("playlists", playlist);
+            }
+          }
+
+          await DBHelper.delete("userSongs", duplicateId);
+          if (masterSongLibrary[duplicateId]) delete masterSongLibrary[duplicateId];
+        }
+
+        showNotification(`${duplicates.length} kopya şarkı başarıyla temizlendi.`, "success");
+        setTimeout(() => window.location.reload(), 2000);
+      };
+      openModal("confirm-modal");
+
+    } catch (e) {
+      console.error("Kopya temizleme sırasında hata:", e);
+      showNotification("İşlem sırasında bir hata oluştu.", "error");
     }
   }
 
@@ -6175,6 +6279,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (clearLibraryBtn) {
     clearLibraryBtn.addEventListener("click", startClearUnusedSongsProcess);
+  }
+  if (duplicateCleanupBtn) {
+    duplicateCleanupBtn.addEventListener("click", startDuplicateTitleCleanupProcess);
   }
 
   initializeApp();
