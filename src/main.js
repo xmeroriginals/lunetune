@@ -7,23 +7,23 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   const optimizeLibraryBtn = document.getElementById("optimize-library-btn");
   const clearLibraryBtn = document.getElementById(
-    "not-used-songs-clear-library-btn"
+    "not-used-songs-clear-library-btn",
   );
   const duplicateCleanupBtn = document.getElementById(
-    "duplicate-names-cleanup-btn"
+    "duplicate-names-cleanup-btn",
   );
   const contextShareSongBtn = document.getElementById("context-share-song");
   const receiveSongShareBtn = document.getElementById("receive-song-share-btn");
   const songShareQrCodeEl = document.getElementById("song-share-qr-code");
   const songShareCodeEl = document.getElementById("song-share-code-el");
   const songShareSenderStatusEl = document.getElementById(
-    "song-share-sender-status"
+    "song-share-sender-status",
   );
   const songShareChoosePlaylistCheck = document.getElementById(
-    "song-share-choose-playlist-check"
+    "song-share-choose-playlist-check",
   );
   const songShareReceiveInput = document.getElementById(
-    "song-share-receive-input"
+    "song-share-receive-input",
   );
   const songShareConnectBtn = document.getElementById("song-share-connect-btn");
   const playlistPanel = document.getElementById("playlist-panel"),
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     progressContainer = document.getElementById("progress-container"),
     progressBar = document.getElementById("progress-bar"),
     progressHandle = document.getElementById("progress-handle");
-  (currentTimeDisplay = document.getElementById("current-time-display")),
+  ((currentTimeDisplay = document.getElementById("current-time-display")),
     (durationDisplay = document.getElementById("duration-display")),
     (loopBtn = document.getElementById("loop-btn")),
     (shuffleBtn = document.getElementById("shuffle-btn")),
@@ -57,13 +57,13 @@ document.addEventListener("DOMContentLoaded", () => {
     (modalOverlay = document.getElementById("modal-overlay")),
     (openMusicStoreBtn = document.getElementById("open-music-store-btn")),
     (openSleepTimerModalBtn = document.getElementById(
-      "open-sleep-timer-modal-btn-small"
+      "open-sleep-timer-modal-btn-small",
     )),
     (shareLinkInput = document.getElementById("share-link-input")),
     (copyShareLinkBtn = document.getElementById("copy-share-link-btn")),
     (sessionStatusEl = document.getElementById("session-status")),
     (openAddMusicModalBtn = document.getElementById(
-      "open-add-music-modal-btn"
+      "open-add-music-modal-btn",
     )),
     (addMusicTitleInput = document.getElementById("add-music-title")),
     (addMusicArtistInput = document.getElementById("add-music-artist")),
@@ -72,11 +72,11 @@ document.addEventListener("DOMContentLoaded", () => {
     (addMusicFileInput = document.getElementById("add-music-file")),
     (addMusicSubmitBtn = document.getElementById("add-music-submit-btn")),
     (addMusicCoverPreview = document.getElementById("add-music-cover-preview")),
-    (lunetuneTabActions = document.getElementById("lunetune-tab-actions"));
-  (musicStoreListEl = document.getElementById("music-store-list")),
+    (lunetuneTabActions = document.getElementById("lunetune-tab-actions")));
+  ((musicStoreListEl = document.getElementById("music-store-list")),
     (musicSearchInput = document.getElementById("music-search-input")),
     (playlistSelectionListEl = document.getElementById(
-      "playlist-selection-list"
+      "playlist-selection-list",
     )),
     (createPlaylistBtn = document.getElementById("create-playlist-btn")),
     (playlistNameInput = document.getElementById("playlist-name-input")),
@@ -87,22 +87,22 @@ document.addEventListener("DOMContentLoaded", () => {
     (goToPlaylistMakerBtn = document.getElementById("go-to-playlist-maker")),
     (goToLunelightsBtn = document.getElementById("open-lunelights-btn")),
     (goToLunelightsBtnSmall = document.getElementById(
-      "open-lunelights-btn-small"
+      "open-lunelights-btn-small",
     )),
     (liveRadioBtn = document.getElementById("live-radio-btn")),
     (radioStationListEl = document.getElementById("radio-station-list")),
     (searchRadioInput = document.getElementById("search-radio")),
-    (offlineIndicatorBtn = document.getElementById("offline-indicator-btn"));
+    (offlineIndicatorBtn = document.getElementById("offline-indicator-btn")));
   const songContextMenu = document.getElementById("song-context-menu"),
     playlistContextMenu = document.getElementById("playlist-context-menu"),
     playlistContextRenameBtn = document.getElementById(
-      "playlist-context-rename"
+      "playlist-context-rename",
     ),
     playlistContextDeleteBtn = document.getElementById(
-      "playlist-context-delete"
+      "playlist-context-delete",
     );
   const playlistContextDirectTransferBtn = document.getElementById(
-    "playlist-context-direct-transfer-to-maker"
+    "playlist-context-direct-transfer-to-maker",
   );
   const queueListEl = document.getElementById("queue-list"),
     sleepTimerStatusEl = document.getElementById("sleep-timer-status"),
@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const moreActionsBtn = document.getElementById("more-actions-btn");
   const moreActionsBtnSmall = document.getElementById("more-actions-btn-small");
   const moreActionsMenu = document.getElementById("more-actions-context-menu");
-  (contextRemoveBtn = document.getElementById("context-remove-from-playlist")),
+  ((contextRemoveBtn = document.getElementById("context-remove-from-playlist")),
     (contextDeleteBtn = document.getElementById("context-delete-song")),
     (contextDownloadBtn = document.getElementById("context-download-song")),
     (contextEditBtn = document.getElementById("context-edit-song")),
@@ -123,71 +123,73 @@ document.addEventListener("DOMContentLoaded", () => {
     (editSongSubmitBtn = document.getElementById("edit-song-submit-btn")),
     (panelGreetingEl = document.getElementById("panel-greeting")),
     (openSettingsModalBtn = document.getElementById("open-settings-modal-btn")),
-    (openSettingsModalBtnSmall = document.getElementById("open-settings-modal-btn-small")),
+    (openSettingsModalBtnSmall = document.getElementById(
+      "open-settings-modal-btn-small",
+    )),
     (usernameInput = document.getElementById("username-input")),
     (saveUsernameBtn = document.getElementById("save-username-btn")),
     (exportDataBtn = document.getElementById("export-data-btn")),
     (importDataFile = document.getElementById("import-data-file")),
     (lunetuneTabBtn = document.getElementById("lunetune-tab-btn")),
     (ncsTabBtn = document.getElementById("ncs-tab-btn")),
-    (jamendoTabBtn = document.getElementById("jamendo-tab-btn"));
-  (playlistContextExportBtn = document.getElementById(
-    "playlist-context-export"
+    (jamendoTabBtn = document.getElementById("jamendo-tab-btn")));
+  ((playlistContextExportBtn = document.getElementById(
+    "playlist-context-export",
   )),
-    (importPlaylistFile = document.getElementById("import-playlist-file"));
+    (importPlaylistFile = document.getElementById("import-playlist-file")));
   const newPlaylistCoverInput = document.getElementById(
-    "new-playlist-cover-input"
-  ),
+      "new-playlist-cover-input",
+    ),
     newPlaylistCoverPreview = document.getElementById(
-      "new-playlist-cover-preview"
+      "new-playlist-cover-preview",
     ),
     renamePlaylistCoverInput = document.getElementById(
-      "rename-playlist-cover-input"
+      "rename-playlist-cover-input",
     ),
     renamePlaylistCoverPreview = document.getElementById(
-      "rename-playlist-cover-preview"
+      "rename-playlist-cover-preview",
     );
   const playlistContextDownloadBtn = document.getElementById(
-    "playlist-context-download"
+    "playlist-context-download",
   );
-   const playlistContextRepairBtn = document.getElementById(
-    "playlist-context-repair"
+  const playlistContextRepairBtn = document.getElementById(
+    "playlist-context-repair",
   );
   const startDownloadPlaylistBtn = document.getElementById(
-    "start-download-playlist-btn"
+    "start-download-playlist-btn",
   );
   const startRepairPlaylistBtn = document.getElementById(
-    "start-repair-playlist-btn"
+    "start-repair-playlist-btn",
   );
   const menuRightToggle = document.getElementById("right-menu-toggle");
   const menuRightStorageKey = "right_menu_lock_enabled";
   const menuLeftToggle = document.getElementById("left-menu-toggle");
   const menuLeftStorageKey = "left_menu_lock_enabled";
   const startDirectTransferBtn = document.getElementById(
-    "start-direct-transfer-btn"
+    "start-direct-transfer-btn",
   );
   const receiveDirectTransferBtn = document.getElementById(
-    "receive-direct-transfer-btn"
+    "receive-direct-transfer-btn",
   );
   const transferQrCodeEl = document.getElementById("transfer-qr-code");
   const transferPeerIdEl = document.getElementById("transfer-peer-id");
   const transferSenderStatusEl = document.getElementById(
-    "transfer-sender-status"
+    "transfer-sender-status",
   );
   const transferReceiveInput = document.getElementById(
-    "transfer-receive-input"
+    "transfer-receive-input",
   );
   const transferConnectBtn = document.getElementById("transfer-connect-btn");
   const transferProgressTitle = document.getElementById(
-    "transfer-progress-title"
+    "transfer-progress-title",
   );
   const transferProgressBar = document.getElementById("transfer-progress-bar");
   const transferProgressText = document.getElementById(
-    "transfer-progress-text"
+    "transfer-progress-text",
   );
   const transferProgressDetails = document.getElementById(
-    "transfer-progress-details"
-  ),
+      "transfer-progress-details",
+    ),
     cacheSizeDisplay = document.getElementById("cache-size-display"),
     clearCacheBtn = document.getElementById("clear-cache-btn");
 
@@ -207,14 +209,16 @@ document.addEventListener("DOMContentLoaded", () => {
     "data:video/mp4;base64,AAAAIGZ0eXBpc29tAAACAGlzb21pc28yYXZjMW1wNDEAAAAIZnJlZQAAAAZmZGF0AAAAAgAAAABtb292AAAAbG12aGQAAAAA62U4QOtleEAAQAAAARACEAABAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAIGdHJhawAAAFx0a2hkAAAAAOtleEAAAAAA62U4QAAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAABAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAAAEAAAACZWR0cwAAABxlbHN0AAAAAAAAAAEAAAEAAAEAAQAAAAAAACBtZGlhAAAAIG1kaGQAAAAA62U4QOtleEAAQAAAARACEAAAAAAhZGhybQAAAAAAAAAAAAAAAQAAAAAAAAAAAAA4AAAAG3NtdGgAAAAAAAAAAQAAAAAAAQAAAAEAAAAHbWhkcmcAAAAAAAAAAQAAAAEAAAAAAAB4AAAAlHN0c2QAAAAAAAAAAQAAAJhhdmMxAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAEAAQABAAAAAAEgACCntxy4AAAABmF2Y0MBAMgAAAAAA//8AAAAO//8AABWAAABqAAAB6GAAABqAAAB6AAAABuyAAAAb3N0dHMAAAAAAAAAAQAAAAEAAAAIdHRzYQAAAAAAAAABAAAAAQAAABhzdHN6AAAAAAAAAAAAAAABAAAAHgAAABRzdHNjAAAAAAAAAAEAAAABAAAAAQAAAAFzdGNvAAAAAAAAAAEAAAAsAAAAYXVkdGEAAAA1bWV0YQAAAAAAAAAhaGRscgAAAAAAAAAAbWRpcgAAAAAAAAAAAAAAAAAAAAAiaWxzdAAAABZkYXRhAAAAAQAAAAAAAAB0cmll";
   document.body.appendChild(keepAliveVideo);
 
-  const silentPlayer = new Audio("data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAAAB");
+  const silentPlayer = new Audio(
+    "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAAAB",
+  );
   silentPlayer.loop = true;
   silentPlayer.volume = 0.01;
 
   function activateSurvivalMode() {
     if (!isPlaying) return;
     if (silentPlayer.paused) {
-      silentPlayer.play().catch(() => { });
+      silentPlayer.play().catch(() => {});
     }
     if ("mediaSession" in navigator) {
       navigator.mediaSession.playbackState = "playing";
@@ -236,7 +240,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   });
-  const APP_VERSION = "1.1.2";
+  const APP_VERSION = "1.1.3";
   const JAMENDO_CLIENT_ID = "d63aca13";
   let activeMusicStoreTab = "lunetune";
   let isClientPlaybackUnlocked = false;
@@ -246,26 +250,32 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentPreviewId = null;
   let activePlaylistContextId = null;
   let wakeLock = null;
-  async function requestWakeLock() {
-    if (wakeLock !== null) return;
-    try {
-      if ('wakeLock' in navigator) {
-        wakeLock = await navigator.wakeLock.request('screen');
-        console.log("Screen Wake Lock is active.");
-      }
-    } catch (err) {
-      console.warn(`Wake Lock request failed: ${err.name}, ${err.message}`);
-    }
-  }
 
-  function releaseWakeLock() {
-    if (wakeLock !== null) {
-      wakeLock.release().then(() => {
-        wakeLock = null;
-        console.log("Screen Wake Lock released.");
-      });
+  const requestWakeLock = async () => {
+    if (wakeLock !== null) return;
+    if ("wakeLock" in navigator) {
+      try {
+        wakeLock = await navigator.wakeLock.request("screen");
+      } catch (err) {
+        console.error(`Wake Lock request failed: ${err.name}, ${err.message}`);
+      }
+    } else {
+      console.warn("Wake Lock API is not supported in this browser.");
     }
-  }
+  };
+
+  const releaseWakeLock = async () => {
+    if (wakeLock) {
+      try {
+        await wakeLock.release();
+        wakeLock = null;
+      } catch (err) {
+        console.error(
+          `Failed to release Wake Lock: ${err.name}, ${err.message}`,
+        );
+      }
+    }
+  };
 
   document.addEventListener("change", (e) => {
     if (e.target.classList.contains("wake-lock-checkbox")) {
@@ -591,7 +601,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       const originalSongCount = playlist.songs.length;
       const validSongs = playlist.songs.filter((songId) =>
-        masterSongLibrary.hasOwnProperty(songId)
+        masterSongLibrary.hasOwnProperty(songId),
       );
       if (validSongs.length < originalSongCount) {
         playlist.songs = validSongs;
@@ -600,7 +610,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch (error) {
           console.error(
             `${playlist.name} listesi güncellenirken hata oluştu:`,
-            error
+            error,
           );
         }
       }
@@ -666,7 +676,7 @@ document.addEventListener("DOMContentLoaded", () => {
         time: audioPlayer.currentTime,
       };
       DBHelper.put("settings", state).catch((err) =>
-        console.error("Çalar durumu kaydedilemedi:", err)
+        console.error("Çalar durumu kaydedilemedi:", err),
       );
     }
   }
@@ -848,7 +858,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error(
           "Ayrıştırılan obje işlenemedi:",
           e,
-          objString.substring(0, 100)
+          objString.substring(0, 100),
         );
       }
     };
@@ -903,9 +913,9 @@ document.addEventListener("DOMContentLoaded", () => {
       "https://lunetune.xmeroriginals.com/resources/cardlogoerror.png";
     const coverArt = song
       ? song.image ||
-      `https://placehold.co/300x300/4a4f8a/ffffff?text=${encodeURIComponent(
-        song.title.charAt(0)
-      )}`
+        `https://placehold.co/300x300/4a4f8a/ffffff?text=${encodeURIComponent(
+          song.title.charAt(0),
+        )}`
       : "https://lunetune.xmeroriginals.com/resources/lunetune-thumb.png";
     const title = song ? song.title : isCurrent ? "Müzik Seçin" : "",
       artist = song ? song.artist : isCurrent ? "Henüz şarkı çalınmıyor" : "";
@@ -921,8 +931,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (song.isBroken) {
         actionButtonHTML = `<button class="broken-song-btn text-red-500" title="Bu ses desteklenmiyor"><span class="material-symbols-rounded notranslate text-3xl">warning</span></button>`;
       } else {
-        actionButtonHTML = `<button class="like-btn hover:text-pink-400 ${isLiked ? "text-pink-400" : "text-white/60"
-          }"><span class="material-symbols-rounded notranslate text-3xl">favorite</span></button>`;
+        actionButtonHTML = `<button class="like-btn hover:text-pink-400 ${
+          isLiked ? "text-pink-400" : "text-white/60"
+        }"><span class="material-symbols-rounded notranslate text-3xl">favorite</span></button>`;
       }
     }
     const imgClasses = isCurrent ? "w-80 h-80" : "w-64 h-64",
@@ -992,7 +1003,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const transitionDuration = 400;
     const prevCard = carouselContainer.querySelector('[data-type="prev"]');
     const currentCard = carouselContainer.querySelector(
-      '[data-type="current"]'
+      '[data-type="current"]',
     );
     const nextCard = carouselContainer.querySelector('[data-type="next"]');
     const setCardState = (card, state) => {
@@ -1092,7 +1103,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         carouselContainer.insertBefore(
           newPrevCard,
-          carouselContainer.firstChild
+          carouselContainer.firstChild,
         );
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
@@ -1139,7 +1150,7 @@ document.addEventListener("DOMContentLoaded", () => {
       title: `${stationName}`,
       artist: "Canlı",
       image: `https://placehold.co/300x300/e91e63/ffffff?text=${encodeURIComponent(
-        stationName.charAt(0)
+        stationName.charAt(0),
       )}`,
       isLive: true,
     };
@@ -1174,7 +1185,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     stopPreview();
 
-     isChangingTrack = true;
+    isChangingTrack = true;
     activateSurvivalMode();
     audioPlayer.pause();
 
@@ -1195,12 +1206,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const tempSongId = playbackList[trackIndex];
     const tempTrack = masterSongLibrary[tempSongId];
-    const isIndirili = tempTrack && (offlineSongsMap[tempTrack.id] || (tempTrack.url && offlineSongsMap[tempTrack.url]));
+    const isIndirili =
+      tempTrack &&
+      (offlineSongsMap[tempTrack.id] ||
+        (tempTrack.url && offlineSongsMap[tempTrack.url]));
     if (!navigator.onLine && tempTrack && !tempTrack.isLocal && !isIndirili) {
       let foundIndex = -1;
       for (let i = trackIndex + 1; i < playbackList.length; i++) {
         const s = masterSongLibrary[playbackList[i]];
-        const isSIndirili = s && (offlineSongsMap[s.id] || (s.url && offlineSongsMap[s.url]));
+        const isSIndirili =
+          s && (offlineSongsMap[s.id] || (s.url && offlineSongsMap[s.url]));
         if (s && (s.isLocal || isSIndirili)) {
           foundIndex = i;
           break;
@@ -1209,7 +1224,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (foundIndex === -1) {
         for (let i = 0; i < trackIndex; i++) {
           const s = masterSongLibrary[playbackList[i]];
-          const isSIndirili = s && (offlineSongsMap[s.id] || (s.url && offlineSongsMap[s.url]));
+          const isSIndirili =
+            s && (offlineSongsMap[s.id] || (s.url && offlineSongsMap[s.url]));
           if (s && (s.isLocal || isSIndirili)) {
             foundIndex = i;
             break;
@@ -1224,7 +1240,7 @@ document.addEventListener("DOMContentLoaded", () => {
         showNotification(
           "Bu listede çevrimdışı dinlenebilecek şarkı yok. İnternet bağlantısı gerekiyor.",
           "error",
-          5000
+          5000,
         );
         currentTrackIndex = -1;
         audioPlayer.src = "";
@@ -1268,10 +1284,14 @@ document.addEventListener("DOMContentLoaded", () => {
       currentObjectUrl = null;
     }
 
-    const offlineData = track.isLocal ? null : (offlineSongsMap[track.url] || offlineSongsMap[track.id]);
+    const offlineData = track.isLocal
+      ? null
+      : offlineSongsMap[track.url] || offlineSongsMap[track.id];
     const source = track.isLocal
       ? URL.createObjectURL(track.fileBlob)
-      : (offlineData ? URL.createObjectURL(offlineData.blob) : track.url);
+      : offlineData
+        ? URL.createObjectURL(offlineData.blob)
+        : track.url;
 
     if (track.isLocal || offlineData) currentObjectUrl = source;
 
@@ -1313,7 +1333,12 @@ document.addEventListener("DOMContentLoaded", () => {
         navigator.mediaSession.playbackState = "playing";
       }
       trackLoadTimeout = setTimeout(() => {
-        if (audioPlayer.readyState < 3 && !isLiveMode && isPlaying && !isClient) {
+        if (
+          audioPlayer.readyState < 3 &&
+          !isLiveMode &&
+          isPlaying &&
+          !isClient
+        ) {
           handleTrackLoadingIssue();
         }
       }, 7000);
@@ -1335,7 +1360,9 @@ document.addEventListener("DOMContentLoaded", () => {
         playbackList[currentTrackIndex] = playbackList[nextIdx];
         playbackList[nextIdx] = failedSongId;
 
-        console.warn(`Track ${failedSongId} failed (${trackFailures[failedSongId]}/3), swapping with next.`);
+        console.warn(
+          `Track ${failedSongId} failed (${trackFailures[failedSongId]}/3), swapping with next.`,
+        );
         showNotification("Bağlantı zayıf, parça sırası kaydırıldı...", "info");
         loadTrack(currentTrackIndex, "fade", true);
       } else {
@@ -1351,11 +1378,18 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function checkConnectionAndPrefetch(currentIndex) {
-    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    const connection =
+      navigator.connection ||
+      navigator.mozConnection ||
+      navigator.webkitConnection;
     let prefetchCount = 1;
 
     if (connection) {
-      if (connection.type === 'wifi' || connection.type === 'ethernet' || connection.effectiveType === '4g') {
+      if (
+        connection.type === "wifi" ||
+        connection.type === "ethernet" ||
+        connection.effectiveType === "4g"
+      ) {
         prefetchCount = 3;
       }
       if (connection.saveData === true) {
@@ -1370,14 +1404,20 @@ document.addEventListener("DOMContentLoaded", () => {
       const targetIndex = (currentIndex + i) % playbackList.length;
       const targetId = playbackList[targetIndex];
       const targetSong = masterSongLibrary[targetId];
-      if (targetSong && !targetSong.isLocal && targetSong.url && !targetSong.fileBlob && !(offlineSongsMap[targetSong.url] || offlineSongsMap[targetSong.id])) {
-        caches.open('lunetune-audio-v1').then(cache => {
-          cache.match(targetSong.url).then(cached => {
+      if (
+        targetSong &&
+        !targetSong.isLocal &&
+        targetSong.url &&
+        !targetSong.fileBlob &&
+        !(offlineSongsMap[targetSong.url] || offlineSongsMap[targetSong.id])
+      ) {
+        caches.open("lunetune-audio-v1").then((cache) => {
+          cache.match(targetSong.url).then((cached) => {
             if (!cached) {
-              const priority = i === 0 ? 'high' : 'low';
-              fetch(targetSong.url, { priority }).catch(() => { });
+              const priority = i === 0 ? "high" : "low";
+              fetch(targetSong.url, { priority }).catch(() => {});
             }
-          })
+          });
         });
       }
     }
@@ -1390,7 +1430,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }, 60000);
 
   if (navigator.connection) {
-    navigator.connection.addEventListener('change', () => {
+    navigator.connection.addEventListener("change", () => {
       if (currentTrackIndex > -1) checkConnectionAndPrefetch(currentTrackIndex);
     });
   }
@@ -1405,16 +1445,16 @@ document.addEventListener("DOMContentLoaded", () => {
       hostState.pendingAutoPlay = true;
       showNotification(
         "Arkadaşınla senkronize ediliyor, lütfen bekle...",
-        "info"
+        "info",
       );
       return;
     }
     audioPlayer
       .play()
       .then(() => {
-        keepAliveVideo.play().catch(() => { });
+        keepAliveVideo.play().catch(() => {});
         isPlaying = true;
-        activateSurvivalMode(); 
+        activateSurvivalMode();
         playPauseIcon.textContent = "pause_circle";
         if (!document.hidden) spinningLogo.classList.add("playing");
         if ("mediaSession" in navigator) {
@@ -1451,27 +1491,6 @@ document.addEventListener("DOMContentLoaded", () => {
     broadcastCurrentState();
   }
 
-  const requestWakeLock = async () => {
-    if ("wakeLock" in navigator && !wakeLock) {
-      try {
-        wakeLock = await navigator.wakeLock.request("screen");
-      } catch (err) {
-        console.error(`${err.name}, ${err.message}`);
-      }
-    }
-  };
-
-  const releaseWakeLock = async () => {
-    if (wakeLock) {
-      try {
-        await wakeLock.release();
-        wakeLock = null;
-      } catch (err) {
-        console.error(`${err.name}, ${err.message}`);
-      }
-    }
-  };
-
   function togglePlayPause() {
     if (isClient) return;
     if (isPlaying) {
@@ -1501,7 +1520,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     isChangingTrack = true;
     isMediaSessionActionLocked = true;
-    setTimeout(() => { isMediaSessionActionLocked = false; }, 500);
+    setTimeout(() => {
+      isMediaSessionActionLocked = false;
+    }, 500);
 
     let newIndex;
     let isLoopingAround = false;
@@ -1533,7 +1554,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (playbackList.length === 0) return;
 
     isMediaSessionActionLocked = true;
-    setTimeout(() => { isMediaSessionActionLocked = false; }, 500);
+    setTimeout(() => {
+      isMediaSessionActionLocked = false;
+    }, 500);
 
     if (audioPlayer.currentTime > 3) {
       seekTo(0);
@@ -1735,11 +1758,11 @@ document.addEventListener("DOMContentLoaded", () => {
       song.isBroken = true;
       showNotification(
         `${song.title} çalınamadı. Dosya bozuk veya desteklenmiyor olabilir.`,
-        "error"
+        "error",
       );
       setTimeout(() => {
         const currentCard = carouselContainer.querySelector(
-          '[data-type="current"]'
+          '[data-type="current"]',
         );
         if (currentCard) {
           const likeBtn = currentCard.querySelector(".like-btn");
@@ -1783,7 +1806,7 @@ document.addEventListener("DOMContentLoaded", () => {
       "https://lunetune.xmeroriginals.com/resources/cardlogoerror.png";
     let finalCoverArt = fallbackLogo;
     const currentCard = carouselContainer.querySelector(
-      '.song-card[data-type="current"]'
+      '.song-card[data-type="current"]',
     );
     if (currentCard) {
       const cardImage = currentCard.querySelector("img");
@@ -1872,7 +1895,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ) {
       try {
         navigator.mediaSession.setPositionState(null);
-      } catch (error) { }
+      } catch (error) {}
       return;
     }
     if (isHostSeeking || isClientSeeking) return;
@@ -1889,13 +1912,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function setupMediaSessionActions() {
     if ("mediaSession" in navigator) {
-       navigator.mediaSession.setActionHandler("play", playTrack);
+      navigator.mediaSession.setActionHandler("play", playTrack);
       navigator.mediaSession.setActionHandler("pause", pauseTrack);
       navigator.mediaSession.setActionHandler("nexttrack", () =>
-        handleMediaSessionNavigation("next")
+        handleMediaSessionNavigation("next"),
       );
       navigator.mediaSession.setActionHandler("previoustrack", () =>
-        handleMediaSessionNavigation("prev")
+        handleMediaSessionNavigation("prev"),
       );
       navigator.mediaSession.setActionHandler("seekforward", () => {
         if (!isLiveMode) seek(10);
@@ -1931,7 +1954,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     setTimeout(() => {
       const inputs = modal.querySelectorAll(
-        'input[type="text"]:not([disabled])'
+        'input[type="text"]:not([disabled])',
       );
       if (inputs.length > 0) {
         if (modalId != "settings-modal") {
@@ -1959,7 +1982,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     if (activeModals.length > 0) {
       const prevModal = document.getElementById(
-        activeModals[activeModals.length - 1]
+        activeModals[activeModals.length - 1],
       );
       prevModal.classList.remove("is-covered");
       modalOverlay.style.zIndex = window.getComputedStyle(prevModal).zIndex - 1;
@@ -1972,7 +1995,7 @@ document.addEventListener("DOMContentLoaded", () => {
     playlistListEl.innerHTML = playlists
       .map(
         (p) =>
-          `<li data-playlist-id="${p.id}" class="playlist-item flex items-center justify-between p-2 rounded-lg hover:bg-white/10 cursor-pointer group"><div class="flex items-center gap-4 overflow-hidden"><img src="${p.coverUrl}" class="w-12 h-12 rounded-md object-cover flex-shrink-0"><span class="font-medium truncate">${p.name}</span></div></li>`
+          `<li data-playlist-id="${p.id}" class="playlist-item flex items-center justify-between p-2 rounded-lg hover:bg-white/10 cursor-pointer group"><div class="flex items-center gap-4 overflow-hidden"><img src="${p.coverUrl}" class="w-12 h-12 rounded-md object-cover flex-shrink-0"><span class="font-medium truncate">${p.name}</span></div></li>`,
       )
       .join("");
   }
@@ -2001,7 +2024,7 @@ document.addEventListener("DOMContentLoaded", () => {
     playlistSelectionListEl.innerHTML = playlists
       .map(
         (p) =>
-          `<li data-playlist-id="${p.id}" class="playlist-select-item flex items-center gap-4 p-3 rounded-lg hover:bg-white/10 cursor-pointer"><img src="${p.coverUrl}" class="w-10 h-10 rounded-md"><span class="font-medium">${p.name}</span></li>`
+          `<li data-playlist-id="${p.id}" class="playlist-select-item flex items-center gap-4 p-3 rounded-lg hover:bg-white/10 cursor-pointer"><img src="${p.coverUrl}" class="w-10 h-10 rounded-md"><span class="font-medium">${p.name}</span></li>`,
       )
       .join("");
   }
@@ -2017,14 +2040,15 @@ document.addEventListener("DOMContentLoaded", () => {
         musicSearchInput.classList.add("rounded-t-2xl");
         musicSearchInput.classList.remove("rounded-2xl");
         const userSongs = Object.values(masterSongLibrary).filter((song) =>
-          song.id.startsWith("user_")
+          song.id.startsWith("user_"),
         );
         if (searchTerm) {
           songsToShow = userSongs.filter(
             (song) =>
               !song.isLive &&
               (song.title.toLowerCase().includes(searchTerm) ||
-                (song.artist && song.artist.toLowerCase().includes(searchTerm)))
+                (song.artist &&
+                  song.artist.toLowerCase().includes(searchTerm))),
           );
         } else {
           songsToShow = userSongs;
@@ -2033,7 +2057,7 @@ document.addEventListener("DOMContentLoaded", () => {
         break;
       case "ncs":
         const allNcsSongs = Object.values(masterSongLibrary).filter((song) =>
-          song.id.startsWith("ncs_")
+          song.id.startsWith("ncs_"),
         );
         if (allNcsSongs.length === 0) {
           musicStoreListEl.innerHTML = `<p class="text-center text-white/50">NCS kütüphanesi yükleniyor...</p>`;
@@ -2044,7 +2068,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .filter(
               (song) =>
                 song.title.toLowerCase().includes(searchTerm) ||
-                (song.artist && song.artist.toLowerCase().includes(searchTerm))
+                (song.artist && song.artist.toLowerCase().includes(searchTerm)),
             )
             .slice(0, 30);
         } else {
@@ -2075,39 +2099,47 @@ document.addEventListener("DOMContentLoaded", () => {
             ? `data-ncs-song="${songDataString}"`
             : `data-song-id="${song.id}"`;
         const isPreviewAvailable =
-          !!song.url || (song.isLocal && !!song.fileBlob) || offlineSongsMap[song.id];
+          !!song.url ||
+          (song.isLocal && !!song.fileBlob) ||
+          offlineSongsMap[song.id];
         const actionButtonsHTML = `
             <div class="action-buttons flex items-center">
-                <button data-preview-id="${type}_${song.id
-          }" data-preview-url="${song.url || ""
-          }" class="preview-song-btn w-10 h-10 flex items-center justify-center rounded-full hover:bg-blue-500/20 text-blue-400" ${!isPreviewAvailable ? "disabled" : ""
-          } title="${!isPreviewAvailable ? "Önizleme yok" : "Önizle"}">
+                <button data-preview-id="${type}_${
+                  song.id
+                }" data-preview-url="${
+                  song.url || ""
+                }" class="preview-song-btn w-10 h-10 flex items-center justify-center rounded-full hover:bg-blue-500/20 text-blue-400" ${
+                  !isPreviewAvailable ? "disabled" : ""
+                } title="${!isPreviewAvailable ? "Önizleme yok" : "Önizle"}">
                     <span class="material-symbols-rounded notranslate preview-icon">play_circle</span>
                 </button>
                 <button ${addButtonDataAttr} class="add-to-playlist-btn w-10 h-10 flex items-center justify-center rounded-full hover:bg-green-500/20 text-green-400" title="Ekle">
                     <span class="material-symbols-rounded notranslate">add</span>
                 </button>
             </div>
-            ${isLunetuneTab
-            ? `
+            ${
+              isLunetuneTab
+                ? `
             <div class="remove-button-wrapper" style="display: none;">
                  <button data-song-id="${song.id}" class="delete-song-btn w-10 h-10 flex items-center justify-center rounded-full hover:bg-red-500/20 text-red-400" title="Kalıcı Olarak Sil">
                     <span class="material-symbols-rounded notranslate">delete</span>
                 </button>
             </div>
             `
-            : ""
-          }
+                : ""
+            }
         `;
         return `<li class="flex items-center p-2 rounded-lg hover:bg-white/5">
             <div class="flex items-center gap-4 flex-grow overflow-hidden">
-                ${song.image
-            ? `<img src="${song.image}" class="w-12 h-12 rounded-md object-cover flex-shrink-0">`
-            : `<div class="w-12 h-12 rounded-md bg-white/10 flex-shrink-0 flex items-center justify-center"><span class="material-symbols-rounded notranslate text-white/50">music_note</span></div>`
-          }
+                ${
+                  song.image
+                    ? `<img src="${song.image}" class="w-12 h-12 rounded-md object-cover flex-shrink-0">`
+                    : `<div class="w-12 h-12 rounded-md bg-white/10 flex-shrink-0 flex items-center justify-center"><span class="material-symbols-rounded notranslate text-white/50">music_note</span></div>`
+                }
                 <div>
-                    <p class="font-semibold text-white truncate">${song.title
-          }</p>
+                    <p class="font-semibold text-white truncate">${
+                      song.title
+                    }</p>
                     <p class="text-sm text-white/60 truncate">${song.artist}</p>
                 </div>
             </div>
@@ -2128,8 +2160,8 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const response = await fetch(
         `https://api.jamendo.com/v3.0/tracks/?client_id=${JAMENDO_CLIENT_ID}&format=json&search=${encodeURIComponent(
-          query
-        )}`
+          query,
+        )}`,
       );
       if (!response.ok) {
         throw new Error(`API Hatası: ${response.statusText}`);
@@ -2173,7 +2205,7 @@ document.addEventListener("DOMContentLoaded", () => {
         coverUrl:
           newPlaylistCoverDataUrl ||
           `https://placehold.co/128x128/818cf8/ffffff?text=${encodeURIComponent(
-            name.charAt(0).toUpperCase()
+            name.charAt(0).toUpperCase(),
           )}`,
         deletable: true,
       };
@@ -2202,7 +2234,7 @@ document.addEventListener("DOMContentLoaded", () => {
       (!song.id.startsWith("user_") && !song.id.startsWith("jamendo_"))
     ) {
       showNotification(
-        "Sadece kendi ve Jamendo üzerinden eklediğiniz şarkıları silebilirsiniz."
+        "Sadece kendi ve Jamendo üzerinden eklediğiniz şarkıları silebilirsiniz.",
       );
       return;
     }
@@ -2256,7 +2288,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       showNotification(
         `${masterSongLibrary[songId].title} listeden çıkarıldı.`,
-        "info"
+        "info",
       );
       const newPlaybackList = isShuffle ? shuffledPlaylist : currentPlaylist;
       if (newPlaybackList.length === 0) {
@@ -2313,7 +2345,7 @@ document.addEventListener("DOMContentLoaded", () => {
       } catch (error) {
         showNotification(
           "Yeni kapak resmi işlenirken bir hata oluştu.",
-          "error"
+          "error",
         );
       }
     }
@@ -2341,7 +2373,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const playlistToRestore = playlists.find(
-      (p) => p.id === savedState.playlistId
+      (p) => p.id === savedState.playlistId,
     );
     if (!playlistToRestore) {
       updateCarouselUI();
@@ -2349,7 +2381,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const trackIndexToRestore = playlistToRestore.songs.indexOf(
-      savedState.trackId
+      savedState.trackId,
     );
     if (trackIndexToRestore > -1) {
       currentPlaylistId = savedState.playlistId;
@@ -2378,7 +2410,7 @@ document.addEventListener("DOMContentLoaded", () => {
           updateProgress();
           updateCarouselUI("none");
         },
-        { once: true }
+        { once: true },
       );
       if (isShuffle) {
         shuffleCurrentPlaylist(false);
@@ -2414,7 +2446,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadNcsLibrary() {
     try {
       const response = await fetch(
-        "https://lunetune.xmeroriginals.com/music-libs/ncs-lib.json"
+        "https://lunetune.xmeroriginals.com/music-libs/ncs-lib.json",
       );
       const libSongs = await response.json();
       libSongs.forEach((song) => {
@@ -2454,7 +2486,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     showNotification(
       `${masterSongLibrary[songId].title} bir sonraki şarkı olarak ayarlandı.`,
-      "success"
+      "success",
     );
     renderPlaybackOrder();
     updateCarouselUI("none");
@@ -2476,7 +2508,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     showNotification(
       `${masterSongLibrary[songId].title} sıranın sonuna eklendi.`,
-      "success"
+      "success",
     );
     renderPlaybackOrder();
     updateCarouselUI("none");
@@ -2582,19 +2614,24 @@ document.addEventListener("DOMContentLoaded", () => {
         return `
             <li class="queue-item flex items-center justify-between p-2 rounded-lg ${activeClasses} group" data-song-id="${songId}" data-index="${index}">
                 <div class="song-info-clickable flex items-center gap-3 overflow-hidden flex-grow cursor-pointer">
-                    ${isCurrent
-            ? '<span class="material-symbols-rounded notranslate">volume_up</span>'
-            : `<span class="w-4 text-center text-white/50">${index + 1
-            }</span>`
-          }
-                    <img src="${song.image ||
-          "https://lunetune.xmeroriginals.com/resources/lunetune-thumb.png"
-          }" class="w-10 h-10 rounded-md object-cover flex-shrink-0">
+                    ${
+                      isCurrent
+                        ? '<span class="material-symbols-rounded notranslate">volume_up</span>'
+                        : `<span class="w-4 text-center text-white/50">${
+                            index + 1
+                          }</span>`
+                    }
+                    <img src="${
+                      song.image ||
+                      "https://lunetune.xmeroriginals.com/resources/lunetune-thumb.png"
+                    }" class="w-10 h-10 rounded-md object-cover flex-shrink-0">
                     <div>
-                        <p class="font-medium truncate text-white pointer-events-none">${song.title
-          }</p>
-                        <p class="text-sm text-white/60 truncate pointer-events-none">${song.artist
-          }</p>
+                        <p class="font-medium truncate text-white pointer-events-none">${
+                          song.title
+                        }</p>
+                        <p class="text-sm text-white/60 truncate pointer-events-none">${
+                          song.artist
+                        }</p>
                     </div>
                 </div>
                 <div class="drag-handle p-2 text-white/40 group-hover:text-white/80 cursor-grab active:cursor-grabbing flex-shrink-0">
@@ -2619,7 +2656,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let songBlob;
     if (song.fileBlob) {
       songBlob = song.fileBlob;
-    } else if (offlineSongsMap[song.id] || (song.url && offlineSongsMap[song.url])) {
+    } else if (
+      offlineSongsMap[song.id] ||
+      (song.url && offlineSongsMap[song.url])
+    ) {
       const offlineData = offlineSongsMap[song.id] || offlineSongsMap[song.url];
       songBlob = offlineData.blob;
     } else if (sourceUrl) {
@@ -2633,7 +2673,7 @@ document.addEventListener("DOMContentLoaded", () => {
       } catch (error) {
         showNotification(
           "Şarkı indirilirken bir hata oluştu. URL geçersiz veya ulaşılamıyor olabilir.",
-          "error"
+          "error",
         );
         return;
       }
@@ -2648,7 +2688,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const safeTitle = song.title.replace(/[\\/:*?"<>|]/g, "");
     const safeArtist = (song.artist || "Bilinmeyen Sanatçı").replace(
       /[\\/:*?"<>|]/g,
-      ""
+      "",
     );
     const filename = `${safeArtist} - ${safeTitle}.${extension}`;
     const objectUrl = URL.createObjectURL(songBlob);
@@ -2666,7 +2706,7 @@ document.addEventListener("DOMContentLoaded", () => {
     activeMusicStoreTab = tabName;
     musicSearchInput.value = "";
     [lunetuneTabBtn, ncsTabBtn, jamendoTabBtn].forEach((btn) =>
-      btn.classList.remove("active-tab")
+      btn.classList.remove("active-tab"),
     );
     if (isRemoveModeActive) {
       toggleRemoveMode();
@@ -2744,10 +2784,10 @@ document.addEventListener("DOMContentLoaded", () => {
             url: song.url,
             mimeType: mimeType,
           };
-        })
+        }),
       );
       const validSongs = songsForExport.filter(
-        (s) => s !== null && (s.fileBase64 || s.url)
+        (s) => s !== null && (s.fileBase64 || s.url),
       );
       const exportData = {
         playlist: { name: playlist.name },
@@ -2773,20 +2813,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-   async function handleDownloadPlaylistToLocal() {
+  async function handleDownloadPlaylistToLocal() {
     if (!activePlaylistContextId) return;
     const playlist = playlists.find((p) => p.id === activePlaylistContextId);
     if (!playlist) return;
 
     const songsToDownload = playlist.songs.filter((songId) => {
       const song = masterSongLibrary[songId];
-      return song && !song.isLocal && song.url && !offlineSongsMap[song.url] && !offlineSongsMap[songId];
+      return (
+        song &&
+        !song.isLocal &&
+        song.url &&
+        !offlineSongsMap[song.url] &&
+        !offlineSongsMap[songId]
+      );
     });
 
     if (songsToDownload.length === 0) {
       showNotification(
         "Bu listedeki tüm şarkılar zaten yerel veya indirilecek URL bulunamadı.",
-        "info"
+        "info",
       );
       closeModal("download-playlist-modal");
       return;
@@ -2805,16 +2851,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const song = masterSongLibrary[songId];
       try {
         transferProgressDetails.textContent = `${song.title} indiriliyor... (${downloadedCount + 1}/${total})`;
-        const response = await fetch(song.url, { cache: 'reload' });
+        const response = await fetch(song.url, { cache: "reload" });
         if (!response.ok) throw new Error("Download failed");
         const blob = await response.blob();
         await DBHelper.put("OfflineSongs", { id: song.url, blob: blob });
         offlineSongsMap[song.url] = { id: song.url, blob: blob };
-        if ('caches' in window) {
-           const cache = await caches.open('lunetune-audio-v1');
-           await cache.delete(song.url).catch(() => {});
+        if ("caches" in window) {
+          const cache = await caches.open("lunetune-audio-v1");
+          await cache.delete(song.url).catch(() => {});
         }
-        
+
         downloadedCount++;
         const percent = Math.round((downloadedCount / total) * 100);
         transferProgressBar.style.width = `${percent}%`;
@@ -2827,7 +2873,7 @@ document.addEventListener("DOMContentLoaded", () => {
     transferProgressDetails.textContent = "Tamamlandı! Sayfa yenileniyor...";
     showNotification(
       `${downloadedCount} şarkı başarıyla çevrimdışı kütüphaneye kaydedildi.`,
-      "success"
+      "success",
     );
     setTimeout(() => {
       window.location.reload();
@@ -2840,7 +2886,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!playlist) return;
 
     closeModal("repair-playlist-modal");
-
 
     let clearedCount = 0;
     for (const songId of playlist.songs) {
@@ -2856,7 +2901,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    showNotification(`${clearedCount} çevrimdışı kopya temizlendi. Liste düzeltildi.`, "success");
+    showNotification(
+      `${clearedCount} çevrimdışı kopya temizlendi. Liste düzeltildi.`,
+      "success",
+    );
     setTimeout(() => {
       window.location.reload();
     }, 1500);
@@ -2871,14 +2919,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const partMatch = playlistName?.match(/^(.*?) \(Bölüm \d+\)$/);
     if (partMatch) playlistName = partMatch[1];
 
-    let existingPlaylist = playlists.find(p => p.name === playlistName);
+    let existingPlaylist = playlists.find((p) => p.name === playlistName);
     let shouldClear = false;
 
     if (existingPlaylist) {
-      if (confirm(`${playlistName} adında bir liste zaten var. \n\nMevcut listenin içeriğini TEMİZLEMEK ister misiniz?\n(Tamam = Temizle ve Ekle, İptal = Üzerine Ekle)`)) {
+      if (
+        confirm(
+          `${playlistName} adında bir liste zaten var. \n\nMevcut listenin içeriğini TEMİZLEMEK ister misiniz?\n(Tamam = Temizle ve Ekle, İptal = Üzerine Ekle)`,
+        )
+      ) {
         shouldClear = true;
         existingPlaylist.songs = [];
-        showNotification(`${playlistName} içeriği temizlendi, yeni parçalar ekleniyor...`, "info");
+        showNotification(
+          `${playlistName} içeriği temizlendi, yeni parçalar ekleniyor...`,
+          "info",
+        );
       }
     }
 
@@ -2894,7 +2949,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    showNotification(`${playlistName}, Toplam ${totalImported} şarkı başarıyla içe aktarıldı.`, "success");
+    showNotification(
+      `${playlistName}, Toplam ${totalImported} şarkı başarıyla içe aktarıldı.`,
+      "success",
+    );
     closeModal("settings-modal");
     event.target.value = "";
   }
@@ -2905,18 +2963,25 @@ document.addEventListener("DOMContentLoaded", () => {
       reader.onload = (e) => {
         try {
           resolve(JSON.parse(e.target.result));
-        } catch (err) { reject(err); }
+        } catch (err) {
+          reject(err);
+        }
       };
       reader.onerror = reject;
       reader.readAsText(file);
     });
   }
 
-  async function importPlaylistData(data, askToClear = true, isMultiBatch = false) {
+  async function importPlaylistData(
+    data,
+    askToClear = true,
+    isMultiBatch = false,
+  ) {
     if (!data || !data.playlist || !data.songs || !Array.isArray(data.songs)) {
       throw new Error("Geçersiz çalma listesi veri formatı.");
     }
-    if (!isMultiBatch) showNotification(`Maker'dan gelen liste içe aktarılıyor...`, "info");
+    if (!isMultiBatch)
+      showNotification(`Maker'dan gelen liste içe aktarılıyor...`, "info");
 
     let playlistName = data.playlist.name;
     const partMatch = playlistName.match(/^(.*?) \(Bölüm \d+\)$/);
@@ -2927,7 +2992,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let finalCoverUrl =
       data.playlist.coverUrl ||
       `https://placehold.co/128x128/818cf8/ffffff?text=${encodeURIComponent(
-        playlistName.charAt(0).toUpperCase()
+        playlistName.charAt(0).toUpperCase(),
       )}`;
 
     if (finalCoverUrl.startsWith("data:image")) {
@@ -2937,7 +3002,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const file = new File([blob], "cover.jpg", { type: blob.type });
           finalCoverUrl = await processImage(file);
         }
-      } catch (err) { }
+      } catch (err) {}
     }
 
     const newSongIds = [];
@@ -2990,23 +3055,34 @@ document.addEventListener("DOMContentLoaded", () => {
       newSongIds.push(newSongId);
     }
 
-    const existingPlaylist = playlists.find(p => p.name === playlistName);
+    const existingPlaylist = playlists.find((p) => p.name === playlistName);
 
     if (existingPlaylist) {
       let shouldClear = false;
 
       if (askToClear && !isMultiBatch) {
-        if (confirm(`${playlistName} adında bir liste zaten var. \n\nMevcut listenin içeriğini TEMİZLEMEK ister misiniz?\n(Tamam = Temizle ve Ekle, İptal = Üzerine Ekle)`)) {
+        if (
+          confirm(
+            `${playlistName} adında bir liste zaten var. \n\nMevcut listenin içeriğini TEMİZLEMEK ister misiniz?\n(Tamam = Temizle ve Ekle, İptal = Üzerine Ekle)`,
+          )
+        ) {
           shouldClear = true;
         }
       }
 
       if (shouldClear) {
         existingPlaylist.songs = newSongIds;
-        showNotification(`${playlistName} temizlendi ve yeni şarkılar eklendi.`, "success");
+        showNotification(
+          `${playlistName} temizlendi ve yeni şarkılar eklendi.`,
+          "success",
+        );
       } else {
         existingPlaylist.songs.push(...newSongIds);
-        if (!isMultiBatch) showNotification(`${playlistName} listesine ${newSongIds.length} şarkı eklendi.`, "success");
+        if (!isMultiBatch)
+          showNotification(
+            `${playlistName} listesine ${newSongIds.length} şarkı eklendi.`,
+            "success",
+          );
       }
 
       if (data.playlist.coverUrl) {
@@ -3015,7 +3091,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       await DBHelper.put("playlists", existingPlaylist);
       renderPlaylists();
-
     } else {
       const newPlaylist = {
         id: Date.now(),
@@ -3027,10 +3102,8 @@ document.addEventListener("DOMContentLoaded", () => {
       await DBHelper.put("playlists", newPlaylist);
       playlists.push(newPlaylist);
       renderPlaylists();
-      if (!isMultiBatch) showNotification(
-        `${playlistName} başarıyla oluşturuldu.`,
-        "success"
-      );
+      if (!isMultiBatch)
+        showNotification(`${playlistName} başarıyla oluşturuldu.`, "success");
     }
   }
 
@@ -3079,7 +3152,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function handleOutside(e) {
       const target = e.target;
       const isQueuePanelOpen = !queuePanel.classList.contains(
-        queuePanelClosedClass
+        queuePanelClosedClass,
       );
       const isPlaylistPanelOpen =
         !playlistPanel.classList.contains(panelClosedClass);
@@ -3113,7 +3186,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function onTouchStart(e) {
     const target = e.target;
     const isQueuePanelOpen = !queuePanel.classList.contains(
-      queuePanelClosedClass
+      queuePanelClosedClass,
     );
     const isPlaylistPanelOpen =
       !playlistPanel.classList.contains(panelClosedClass);
@@ -3131,7 +3204,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const screenWidth = window.innerWidth;
     const isLeftPanelOpen = !playlistPanel.classList.contains(panelClosedClass);
     const isRightPanelOpen = !queuePanel.classList.contains(
-      queuePanelClosedClass
+      queuePanelClosedClass,
     );
     if (isLeftPanelOpen || clientX < edgeThreshold) {
       activePanel = playlistPanel;
@@ -3432,9 +3505,9 @@ document.addEventListener("DOMContentLoaded", () => {
             fullStateData.position + networkLatency / 1000;
           audioPlayer.currentTime = Math.max(
             0,
-            Math.min(audioPlayer.duration, estimatedHostTime - 0.2)
+            Math.min(audioPlayer.duration, estimatedHostTime - 0.2),
           );
-          audioPlayer.play().catch((e) => { });
+          audioPlayer.play().catch((e) => {});
           isPlaying = true;
           playPauseIcon.classList.replace("fa-play", "fa-pause");
         } else if (!fullStateData) {
@@ -3460,7 +3533,7 @@ document.addEventListener("DOMContentLoaded", () => {
       showNotification(
         `${metadata.title} senkronize ediliyor...`,
         "info",
-        5000
+        5000,
       );
       conn.send({ t: "request_blob", id: metadata.id });
     }
@@ -3519,7 +3592,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   showNotification(
                     "Senkronizasyon tamamlandı!",
                     "success",
-                    2000
+                    2000,
                   );
                   broadcastCurrentState();
                 })
@@ -3549,7 +3622,7 @@ document.addEventListener("DOMContentLoaded", () => {
         handleClientLoad(data.metadata, `init_${Date.now()}`, data);
         break;
       case "load_track":
-        silentPlayer.play().catch((e) => { });
+        silentPlayer.play().catch((e) => {});
         handleClientLoad(data.metadata, data.syncId);
         break;
       case "base64_start":
@@ -3577,7 +3650,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
                   }
                 },
-                { once: true }
+                { once: true },
               );
             } finally {
               delete incomingBase64[data.id];
@@ -3596,7 +3669,7 @@ document.addEventListener("DOMContentLoaded", () => {
           audioPlayer.removeEventListener("seeked", onClientSeeked);
           if (data.isPlaying) {
             if (isClientPlaybackUnlocked) {
-              audioPlayer.play().catch((e) => { });
+              audioPlayer.play().catch((e) => {});
             }
           } else {
             audioPlayer.pause();
@@ -3615,7 +3688,7 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         if (data.isPlaying && audioPlayer.paused) {
           if (isClientPlaybackUnlocked) {
-            audioPlayer.play().catch((e) => { });
+            audioPlayer.play().catch((e) => {});
           }
         } else if (!data.isPlaying && !audioPlayer.paused) {
           audioPlayer.pause();
@@ -3634,7 +3707,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (Math.abs(timeDiff) > 0.15) {
           audioPlayer.playbackRate = Math.max(
             0.8,
-            Math.min(1.2, 1.0 + timeDiff * 0.05)
+            Math.min(1.2, 1.0 + timeDiff * 0.05),
           );
         } else {
           audioPlayer.playbackRate = 1.0;
@@ -3661,7 +3734,7 @@ document.addEventListener("DOMContentLoaded", () => {
     isHostSeeking = true;
     const newTime = Math.max(
       0,
-      Math.min(audioPlayer.duration || Infinity, time)
+      Math.min(audioPlayer.duration || Infinity, time),
     );
     broadcastMessage({ t: "seek_start" });
     const onSeeked = () => {
@@ -3707,9 +3780,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const startClientPlayback = () => {
         isClientPlaybackUnlocked = true;
         const dummyAudio = new Audio(
-          "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA="
+          "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=",
         );
-        dummyAudio.play().catch(() => { });
+        dummyAudio.play().catch(() => {});
         clientOverlay.remove();
         resolve();
       };
@@ -3754,7 +3827,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
     const targetButton = document.querySelector(
-      `.timer-btn[data-minutes="${minutes}"]`
+      `.timer-btn[data-minutes="${minutes}"]`,
     );
     if (targetButton) targetButton.classList.add("active");
     const endTime = Date.now() + minutes * 60 * 1000;
@@ -3773,17 +3846,20 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     updateTimerDisplay();
     sleepTimerInterval = setInterval(updateTimerDisplay, 1000);
-    sleepTimer = setTimeout(async () => {
-      await fadeVolume(audioPlayer, "out");
-      pauseTrack();
-      setSleepTimer(0);
-      setTimeout(() => {
-        window.close();
-      }, 1500);
-    }, minutes * 60 * 1000);
+    sleepTimer = setTimeout(
+      async () => {
+        await fadeVolume(audioPlayer, "out");
+        pauseTrack();
+        setSleepTimer(0);
+        setTimeout(() => {
+          window.close();
+        }, 1500);
+      },
+      minutes * 60 * 1000,
+    );
     showNotification(
       `${minutes} dakika sonra uygulama kapatılacak.`,
-      "success"
+      "success",
     );
     closeModal("sleep-timer-modal");
   }
@@ -3821,7 +3897,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (attempt > 10) {
       showNotification(
         "Uygun bir bağlantı kodu bulunamadı. Lütfen tekrar deneyin.",
-        "error"
+        "error",
       );
       resetTransferState();
       return;
@@ -3888,7 +3964,7 @@ document.addEventListener("DOMContentLoaded", () => {
     transferPeer.on("error", (err) => {
       showNotification(
         "Bağlantı kurulamadı. Kodun doğruluğunu veya internet bağlantınızı kontrol edin.",
-        "error"
+        "error",
       );
       resetTransferState();
     });
@@ -3920,7 +3996,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
               showNotification(
                 "Alıcı, aktarım başlamadan bağlantıyı kesti.",
-                "error"
+                "error",
               );
               resetTransferState();
             }
@@ -3963,7 +4039,7 @@ document.addEventListener("DOMContentLoaded", () => {
           if (songToSave.fileBase64) {
             songToSave.fileBlob = await base64ToBlob(
               songToSave.fileBase64,
-              songToSave.mimeType || "audio/mpeg"
+              songToSave.mimeType || "audio/mpeg",
             );
             delete songToSave.fileBase64;
           }
@@ -3988,7 +4064,7 @@ document.addEventListener("DOMContentLoaded", () => {
           transferProgressTitle.textContent = "İşlem Tamamlandı!";
           showNotification(
             "Veriler başarıyla alındı. Uygulama yeniden başlatılıyor...",
-            "success"
+            "success",
           );
           setTimeout(() => window.location.reload(), 2500);
           break;
@@ -4074,7 +4150,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Veri paketleme hatası:", error);
       showNotification(
         "Veriler gönderim için hazırlanırken bir hata oluştu.",
-        "error"
+        "error",
       );
       resetTransferState();
     }
@@ -4165,7 +4241,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (playbackListAfterDelete.length > 0) {
         const newIndex = Math.min(
           currentTrackIndex,
-          playbackListAfterDelete.length - 1
+          playbackListAfterDelete.length - 1,
         );
         loadTrack(newIndex, "none", isPlaying);
       } else {
@@ -4193,7 +4269,7 @@ document.addEventListener("DOMContentLoaded", () => {
       removeFromLibraryBtn.classList.replace("bg-red-600", "bg-gray-600");
       removeFromLibraryBtn.classList.replace(
         "hover:bg-red-700",
-        "hover:bg-gray-700"
+        "hover:bg-gray-700",
       );
     } else {
       removeFromLibraryBtn.innerHTML =
@@ -4201,7 +4277,7 @@ document.addEventListener("DOMContentLoaded", () => {
       removeFromLibraryBtn.classList.replace("bg-gray-600", "bg-red-600");
       removeFromLibraryBtn.classList.replace(
         "hover:bg-gray-700",
-        "hover:bg-red-700"
+        "hover:bg-red-700",
       );
     }
   }
@@ -4260,7 +4336,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const savedVersion = localStorage.getItem("lunetune_version");
     if (savedVersion && savedVersion !== APP_VERSION && navigator.onLine) {
       console.log("New version detected, clearing cache and refreshing...");
-      if ('serviceWorker' in navigator) {
+      if ("serviceWorker" in navigator) {
         const registrations = await navigator.serviceWorker.getRegistrations();
         for (let registration of registrations) {
           await registration.unregister();
@@ -4297,7 +4373,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("Maker verisi işlenirken hata:", error);
         showNotification(
           "Maker listesi aktarılırken bir hata oluştu.",
-          "error"
+          "error",
         );
       } finally {
         await DBHelper.delete("data", MAKER_KEY);
@@ -4311,7 +4387,7 @@ document.addEventListener("DOMContentLoaded", () => {
           window.history.replaceState(
             {},
             document.title,
-            window.location.pathname
+            window.location.pathname,
           );
           const MAKER_KEY = "lunetuneMaker";
           try {
@@ -4321,14 +4397,14 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
               showNotification(
                 "Maker'dan aktarılacak veri bulunamadı.",
-                "error"
+                "error",
               );
             }
           } catch (error) {
             console.error("Maker verisi işlenirken hata:", error);
             showNotification(
               "Maker listesi aktarılırken bir hata oluştu.",
-              "error"
+              "error",
             );
           } finally {
             await DBHelper.delete("data", MAKER_KEY);
@@ -4361,7 +4437,7 @@ document.addEventListener("DOMContentLoaded", () => {
       lockLeftMenu = true;
     }
 
-     let loadedOfflineSongs = [];
+    let loadedOfflineSongs = [];
     let loadedPlaylists = [];
     let loadedUserSongs = [];
     let settings = null;
@@ -4400,14 +4476,14 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    if ('caches' in window) {
-      const cache = await caches.open('lunetune-audio-v1');
-      loadedOfflineSongs.forEach(item => {
-        if (item.id.startsWith('http')) {
-           cache.delete(item.id).catch(() => {});
+    if ("caches" in window) {
+      const cache = await caches.open("lunetune-audio-v1");
+      loadedOfflineSongs.forEach((item) => {
+        if (item.id.startsWith("http")) {
+          cache.delete(item.id).catch(() => {});
         } else {
-           const song = masterSongLibrary[item.id];
-           if (song && song.url) cache.delete(song.url).catch(() => {});
+          const song = masterSongLibrary[item.id];
+          if (song && song.url) cache.delete(song.url).catch(() => {});
         }
       });
     }
@@ -4485,9 +4561,14 @@ document.addEventListener("DOMContentLoaded", () => {
     isChangingTrack = false;
     updateMediaSessionPositionState();
   });
-   audioPlayer.addEventListener("pause", () => {
+  audioPlayer.addEventListener("pause", () => {
     updateMediaSessionPositionState();
-    if (isPlaying && !isChangingTrack && !audioPlayer.ended && audioPlayer.currentTime < audioPlayer.duration - 0.5) {
+    if (
+      isPlaying &&
+      !isChangingTrack &&
+      !audioPlayer.ended &&
+      audioPlayer.currentTime < audioPlayer.duration - 0.5
+    ) {
       isPlaying = false;
       playPauseIcon.textContent = "play_circle";
       spinningLogo.classList.remove("playing");
@@ -4505,7 +4586,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   audioPlayer.addEventListener("waiting", () => {
     activateSurvivalMode();
-    keepAliveVideo.play().catch(() => { });
+    keepAliveVideo.play().catch(() => {});
   });
   audioPlayer.addEventListener("stalled", () => {
     activateSurvivalMode();
@@ -4523,21 +4604,24 @@ document.addEventListener("DOMContentLoaded", () => {
   progressContainer.addEventListener("click", setProgress);
   loopBtn.addEventListener("click", updateLoopState);
   volumeSlider.addEventListener("input", (e) =>
-    setVolume(e.target.value / 100)
+    setVolume(e.target.value / 100),
   );
   volumeIconBtn.addEventListener("click", toggleMute);
   goToPlaylistMakerBtn.addEventListener("click", () =>
-    window.open("https://lunetune.xmeroriginals.com/maker", "_blank")
+    window.open("https://lunetune.xmeroriginals.com/maker", "_blank"),
   );
   goToLunelightsBtn.addEventListener("click", () =>
-    window.open("https://lunetune.xmeroriginals.com/first-lunelights", "_blank")
+    window.open(
+      "https://lunetune.xmeroriginals.com/first-lunelights",
+      "_blank",
+    ),
   );
   if (goToLunelightsBtnSmall) {
     goToLunelightsBtnSmall.addEventListener("click", (e) =>
       window.open(
         "https://lunetune.xmeroriginals.com/first-lunelights",
-        "_blank"
-      )
+        "_blank",
+      ),
     );
   }
   liveRadioBtn.addEventListener("click", () => {
@@ -4546,7 +4630,7 @@ document.addEventListener("DOMContentLoaded", () => {
     openModal("radio-select-modal");
   });
   offlineIndicatorBtn.addEventListener("click", () =>
-    showNotification("İnternet bağlantınız yok.", "error")
+    showNotification("İnternet bağlantınız yok.", "error"),
   );
   window.addEventListener("online", updateOnlineStatus);
   window.addEventListener("offline", updateOnlineStatus);
@@ -4585,7 +4669,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   clearCacheBtn.addEventListener("click", () => {
     confirmModalTitle.textContent = "Önbelleği Temizle";
-    confirmModalMessage.innerHTML = 'Tüm önbelleğe alınmış şarkılar ve uygulama verileri silinecektir. Emin misiniz?';
+    confirmModalMessage.innerHTML =
+      "Tüm önbelleğe alınmış şarkılar ve uygulama verileri silinecektir. Emin misiniz?";
     confirmModalBtn.onclick = clearAllCaches;
     openModal("confirm-modal");
   });
@@ -4608,7 +4693,7 @@ document.addEventListener("DOMContentLoaded", () => {
       isPanelLockedOpen = false;
       queuePanel.classList.toggle(queuePanelClosedClass);
       isQueuePanelLockedOpen = !queuePanel.classList.contains(
-        queuePanelClosedClass
+        queuePanelClosedClass,
       );
       songContextMenu.classList.remove("is-open");
     });
@@ -4622,7 +4707,7 @@ document.addEventListener("DOMContentLoaded", () => {
   searchRadioInput.addEventListener("input", () => {
     const searchTerm = searchRadioInput.value.toLowerCase().trim();
     const filteredStations = radioStations.filter((station) =>
-      station.name.toLowerCase().includes(searchTerm)
+      station.name.toLowerCase().includes(searchTerm),
     );
     renderRadioStations(filteredStations);
   });
@@ -4756,7 +4841,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   });
-   if (playlistContextDownloadBtn) {
+  if (playlistContextDownloadBtn) {
     playlistContextDownloadBtn.addEventListener("click", () => {
       openModal("download-playlist-modal");
       playlistContextMenu.classList.remove("is-open");
@@ -4769,7 +4854,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
   if (startDownloadPlaylistBtn) {
-    startDownloadPlaylistBtn.addEventListener("click", handleDownloadPlaylistToLocal);
+    startDownloadPlaylistBtn.addEventListener(
+      "click",
+      handleDownloadPlaylistToLocal,
+    );
   }
   if (startRepairPlaylistBtn) {
     startRepairPlaylistBtn.addEventListener("click", handleRepairPlaylist);
@@ -4797,11 +4885,11 @@ document.addEventListener("DOMContentLoaded", () => {
     showContextMenu(moreActionsMenu, rect.left, rect.top);
   };
   moreActionsBtn.addEventListener("click", (e) =>
-    handleMoreActions(moreActionsBtn, e)
+    handleMoreActions(moreActionsBtn, e),
   );
   if (moreActionsBtnSmall) {
     moreActionsBtnSmall.addEventListener("click", (e) =>
-      handleMoreActions(moreActionsBtnSmall, e)
+      handleMoreActions(moreActionsBtnSmall, e),
     );
   }
   moreActionsMenu.addEventListener("click", (e) => e.stopPropagation());
@@ -4834,7 +4922,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!activePlaylistContextId) return;
 
     const playlistToTransfer = playlists.find(
-      (p) => p.id === activePlaylistContextId
+      (p) => p.id === activePlaylistContextId,
     );
     if (!playlistToTransfer) {
       showNotification("Aktarılacak liste bulunamadı.", "error");
@@ -4844,7 +4932,7 @@ document.addEventListener("DOMContentLoaded", () => {
     hideAllContextMenus();
     showNotification(
       `${playlistToTransfer.name} Maker'a aktarılıyor...`,
-      "info"
+      "info",
     );
 
     try {
@@ -4866,7 +4954,9 @@ document.addEventListener("DOMContentLoaded", () => {
             songExportData.fileBase64 = await blobToBase64(song.fileBlob);
             songExportData.mimeType = song.fileBlob.type;
           } else {
-            const offlineData = offlineSongsMap[songId] || (song.url && offlineSongsMap[song.url]);
+            const offlineData =
+              offlineSongsMap[songId] ||
+              (song.url && offlineSongsMap[song.url]);
             if (offlineData) {
               songExportData.fileBase64 = await blobToBase64(offlineData.blob);
               songExportData.mimeType = offlineData.blob.type;
@@ -4874,7 +4964,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }
 
           return songExportData;
-        })
+        }),
       );
 
       const validSongs = songsForExport.filter((s) => s !== null);
@@ -4922,11 +5012,12 @@ document.addEventListener("DOMContentLoaded", () => {
       let previewUrl = previewBtn.dataset.previewUrl;
       if (!previewUrl || previewUrl === "") {
         const songId = previewId.replace(
-          `${previewBtn.closest("li").parentElement.id.includes("music-store")
-            ? activeMusicStoreTab
-            : "lunetune"
+          `${
+            previewBtn.closest("li").parentElement.id.includes("music-store")
+              ? activeMusicStoreTab
+              : "lunetune"
           }_`,
-          ""
+          "",
         );
         const song = masterSongLibrary[songId];
         if (song && song.fileBlob) {
@@ -4934,7 +5025,9 @@ document.addEventListener("DOMContentLoaded", () => {
           currentObjectUrl = URL.createObjectURL(song.fileBlob);
           previewUrl = currentObjectUrl;
         } else {
-          const offlineData = offlineSongsMap[songId] || (song && song.url && offlineSongsMap[song.url]);
+          const offlineData =
+            offlineSongsMap[songId] ||
+            (song && song.url && offlineSongsMap[song.url]);
           if (offlineData) {
             if (currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
             currentObjectUrl = URL.createObjectURL(offlineData.blob);
@@ -4994,7 +5087,7 @@ document.addEventListener("DOMContentLoaded", () => {
         songToAddId = addButton.dataset.songId;
       } else if (addButton.dataset.ncsSong) {
         const ncsSongData = JSON.parse(
-          addButton.dataset.ncsSong.replace(/&quot;/g, '"')
+          addButton.dataset.ncsSong.replace(/&quot;/g, '"'),
         );
         if (!masterSongLibrary[ncsSongData.id]) {
           masterSongLibrary[ncsSongData.id] = ncsSongData;
@@ -5002,7 +5095,7 @@ document.addEventListener("DOMContentLoaded", () => {
         songToAddId = ncsSongData.id;
       } else if (addButton.dataset.jamendoSong) {
         const jamendoSongData = JSON.parse(
-          addButton.dataset.jamendoSong.replace(/&quot;/g, '"')
+          addButton.dataset.jamendoSong.replace(/&quot;/g, '"'),
         );
         const newSongId = `jamendo_${jamendoSongData.id}`;
         if (!masterSongLibrary[newSongId]) {
@@ -5021,7 +5114,7 @@ document.addEventListener("DOMContentLoaded", () => {
           } catch (error) {
             showNotification(
               "Şarkı kütüphaneye eklenirken hata oluştu.",
-              "error"
+              "error",
             );
             return;
           }
@@ -5049,7 +5142,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const song = masterSongLibrary[songToAddId];
         showNotification(
           `${song.title} şarkısı ${playlist.name} listesine eklendi.`,
-          "success"
+          "success",
         );
       }
       closeModal("playlist-select-modal");
@@ -5073,11 +5166,14 @@ document.addEventListener("DOMContentLoaded", () => {
         song.id.startsWith("user_") || song.id.startsWith("jamendo_");
       contextEditBtn.style.display = isUserSong ? "flex" : "none";
       contextDeleteBtn.style.display = isUserSong ? "flex" : "none";
-      const isIndirili = offlineSongsMap[song.id] || (song.url && offlineSongsMap[song.url]);
-      const isDownloadable = (song.isLocal && song.fileBlob) || song.url || isIndirili;
+      const isIndirili =
+        offlineSongsMap[song.id] || (song.url && offlineSongsMap[song.url]);
+      const isDownloadable =
+        (song.isLocal && song.fileBlob) || song.url || isIndirili;
       contextDownloadBtn.style.display = isDownloadable ? "flex" : "none";
       showContextMenu(songContextMenu, e.clientX, e.clientY);
-      const isShareable = (song.isLocal && song.fileBlob) || song.url || isIndirili;
+      const isShareable =
+        (song.isLocal && song.fileBlob) || song.url || isIndirili;
       contextShareSongBtn.style.display = isShareable ? "flex" : "none";
       showContextMenu(songContextMenu, e.clientX, e.clientY);
     }
@@ -5095,8 +5191,10 @@ document.addEventListener("DOMContentLoaded", () => {
           song.id.startsWith("user_") || song.id.startsWith("jamendo_");
         contextEditBtn.style.display = isUserSong ? "flex" : "none";
         contextDeleteBtn.style.display = isUserSong ? "flex" : "none";
-        const isIndirili = offlineSongsMap[song.id] || (song.url && offlineSongsMap[song.url]);
-        const isShareable = (song.isLocal && song.fileBlob) || song.url || isIndirili;
+        const isIndirili =
+          offlineSongsMap[song.id] || (song.url && offlineSongsMap[song.url]);
+        const isShareable =
+          (song.isLocal && song.fileBlob) || song.url || isIndirili;
         contextShareSongBtn.style.display = isShareable ? "flex" : "none";
         const touch = e.touches[0];
         showContextMenu(songContextMenu, touch.clientX, touch.clientY);
@@ -5111,19 +5209,30 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       const playlistId = parseInt(playlistItem.dataset.playlistId);
       const playlist = playlists.find((p) => p.id === playlistId);
-       if (playlist && playlist.deletable === true) {
+      if (playlist && playlist.deletable === true) {
         activePlaylistContextId = playlistId;
-        const remoteSongsToDownload = playlist.songs.filter(sid => {
+        const remoteSongsToDownload = playlist.songs.filter((sid) => {
           const s = masterSongLibrary[sid];
-          return s && !s.isLocal && !offlineSongsMap[sid] && (s.url && !offlineSongsMap[s.url]);
+          return (
+            s &&
+            !s.isLocal &&
+            !offlineSongsMap[sid] &&
+            s.url &&
+            !offlineSongsMap[s.url]
+          );
         });
-        const hasOfflineSongs = playlist.songs.some(sid => {
+        const hasOfflineSongs = playlist.songs.some((sid) => {
           const s = masterSongLibrary[sid];
-          return s && (offlineSongsMap[sid] || (s.url && offlineSongsMap[s.url]));
+          return (
+            s && (offlineSongsMap[sid] || (s.url && offlineSongsMap[s.url]))
+          );
         });
 
-        playlistContextDownloadBtn.style.display = remoteSongsToDownload.length > 0 ? "flex" : "none";
-        playlistContextRepairBtn.style.display = hasOfflineSongs ? "flex" : "none";
+        playlistContextDownloadBtn.style.display =
+          remoteSongsToDownload.length > 0 ? "flex" : "none";
+        playlistContextRepairBtn.style.display = hasOfflineSongs
+          ? "flex"
+          : "none";
 
         showContextMenu(playlistContextMenu, e.clientX, e.clientY);
       }
@@ -5138,17 +5247,28 @@ document.addEventListener("DOMContentLoaded", () => {
         const playlist = playlists.find((p) => p.id === playlistId);
         if (playlist && playlist.deletable === true) {
           activePlaylistContextId = playlistId;
-          const remoteSongsToDownload = playlist.songs.filter(sid => {
+          const remoteSongsToDownload = playlist.songs.filter((sid) => {
             const s = masterSongLibrary[sid];
-            return s && !s.isLocal && !offlineSongsMap[sid] && (s.url && !offlineSongsMap[s.url]);
+            return (
+              s &&
+              !s.isLocal &&
+              !offlineSongsMap[sid] &&
+              s.url &&
+              !offlineSongsMap[s.url]
+            );
           });
-          const hasOfflineSongs = playlist.songs.some(sid => {
+          const hasOfflineSongs = playlist.songs.some((sid) => {
             const s = masterSongLibrary[sid];
-            return s && (offlineSongsMap[sid] || (s.url && offlineSongsMap[s.url]));
+            return (
+              s && (offlineSongsMap[sid] || (s.url && offlineSongsMap[s.url]))
+            );
           });
 
-          playlistContextDownloadBtn.style.display = remoteSongsToDownload.length > 0 ? "flex" : "none";
-          playlistContextRepairBtn.style.display = hasOfflineSongs ? "flex" : "none";
+          playlistContextDownloadBtn.style.display =
+            remoteSongsToDownload.length > 0 ? "flex" : "none";
+          playlistContextRepairBtn.style.display = hasOfflineSongs
+            ? "flex"
+            : "none";
 
           const touch = e.touches[0];
           showContextMenu(playlistContextMenu, touch.clientX, touch.clientY);
@@ -5272,7 +5392,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return songForExport;
           }
           return song;
-        })
+        }),
       );
       const backupData = {
         playlists: allPlaylists,
@@ -5284,8 +5404,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `lunetune_backup_${new Date().toISOString().split("T")[0]
-        }.luneplaylist`;
+      a.download = `lunetune_backup_${
+        new Date().toISOString().split("T")[0]
+      }.luneplaylist`;
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
@@ -5322,7 +5443,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
           const playlistStr = text.substring(
             text.indexOf("{"),
-            text.indexOf('"songs"')
+            text.indexOf('"songs"'),
           );
           const cleanStr = playlistStr.trim().replace(/,$/, "") + "}";
           const partial = JSON.parse(cleanStr);
@@ -5345,7 +5466,7 @@ document.addEventListener("DOMContentLoaded", () => {
             jsonCandidate = jsonCandidate.slice(0, -1);
           jsonCandidate += "}";
           const playlistsMatch = text.match(
-            /"playlists"\s*:\s*\[(.*?)\]\s*,\s*"userSongs"/s
+            /"playlists"\s*:\s*\[(.*?)\]\s*,\s*"userSongs"/s,
           );
           if (playlistsMatch) {
             metadata = { playlists: JSON.parse(`[${playlistsMatch[1]}]`) };
@@ -5370,19 +5491,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (info.type === "maker") {
         confirmModalTitle.textContent = "Çalma Listesi İçe Aktar";
-        confirmModalMessage.innerHTML = `<b class='text-violet-400'>${info.metadata?.name || "Çalma Listesi"
-          }</b> ve içerikler kütüphanenize eklenecek.`;
+        confirmModalMessage.innerHTML = `<b class='text-violet-400'>${
+          info.metadata?.name || "Çalma Listesi"
+        }</b> ve içerikler kütüphanenize eklenecek.`;
 
         processImport = async () => {
           openModal("transfer-progress-modal");
           const transferProgressBar = document.getElementById(
-            "transfer-progress-bar"
+            "transfer-progress-bar",
           );
           const transferProgressText = document.getElementById(
-            "transfer-progress-text"
+            "transfer-progress-text",
           );
           const transferProgressDetails = document.getElementById(
-            "transfer-progress-details"
+            "transfer-progress-details",
           );
           transferProgressDetails.textContent = "Veriler analiz ediliyor...";
           const newPlaylistSongs = [];
@@ -5408,7 +5530,7 @@ document.addEventListener("DOMContentLoaded", () => {
               if (songData.fileBase64) {
                 const blob = base64ToBlob(
                   songData.fileBase64,
-                  songData.mimeType || "audio/mp3"
+                  songData.mimeType || "audio/mp3",
                 );
                 songForDB.fileBlob = blob;
                 songForDB.isLocal = true;
@@ -5423,12 +5545,12 @@ document.addEventListener("DOMContentLoaded", () => {
             (processed, total) => {
               const percent = Math.min(
                 100,
-                Math.round((processed / total) * 100)
+                Math.round((processed / total) * 100),
               );
               transferProgressBar.style.width = `${percent}%`;
               transferProgressText.textContent = `${percent}%`;
               transferProgressDetails.textContent = `${newPlaylistSongs.length} şarkı işlendi...`;
-            }
+            },
           );
 
           const newPlaylist = {
@@ -5447,7 +5569,7 @@ document.addEventListener("DOMContentLoaded", () => {
           updateMusicStoreView();
           showNotification(
             "Liste başarıyla eklendi! Sayfa yenileniyor...",
-            "success"
+            "success",
           );
           setTimeout(() => window.location.reload(), 2000);
         };
@@ -5459,13 +5581,13 @@ document.addEventListener("DOMContentLoaded", () => {
         processImport = async () => {
           openModal("transfer-progress-modal");
           const transferProgressBar = document.getElementById(
-            "transfer-progress-bar"
+            "transfer-progress-bar",
           );
           const transferProgressText = document.getElementById(
-            "transfer-progress-text"
+            "transfer-progress-text",
           );
           const transferProgressDetails = document.getElementById(
-            "transfer-progress-details"
+            "transfer-progress-details",
           );
 
           transferProgressDetails.textContent = "Veritabanı temizleniyor...";
@@ -5491,7 +5613,7 @@ document.addEventListener("DOMContentLoaded", () => {
               if (song.fileBase64) {
                 const blob = base64ToBlob(
                   song.fileBase64,
-                  song.fileBlob?.type || song.mimeType
+                  song.fileBlob?.type || song.mimeType,
                 );
                 const songForDB = { ...song, fileBlob: blob };
                 delete songForDB.fileBase64;
@@ -5505,18 +5627,18 @@ document.addEventListener("DOMContentLoaded", () => {
             (processed, total) => {
               const percent = Math.min(
                 100,
-                Math.round((processed / total) * 100)
+                Math.round((processed / total) * 100),
               );
               transferProgressBar.style.width = `${percent}%`;
               transferProgressText.textContent = `${percent}%`;
               transferProgressDetails.textContent = `${processedCount} veri geri yüklendi...`;
-            }
+            },
           );
 
           closeModal("transfer-progress-modal");
           showNotification(
             "Yedekleme başarıyla yüklendi. Yeniden başlatılıyor...",
-            "success"
+            "success",
           );
           setTimeout(() => window.location.reload(), 2000);
         };
@@ -5731,11 +5853,11 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
     const duplicateSongGroups = Array.from(songHashes.values()).filter(
-      (ids) => ids.length > 1
+      (ids) => ids.length > 1,
     );
     const totalDuplicateSongs = duplicateSongGroups.reduce(
       (acc, group) => acc + group.length - 1,
-      0
+      0,
     );
 
     const imageHashes = new Map();
@@ -5764,16 +5886,16 @@ document.addEventListener("DOMContentLoaded", () => {
       imageHashes.get(hash).locations.push(loc);
     }
     const duplicateImageGroups = Array.from(imageHashes.values()).filter(
-      (data) => data.locations.length > 1
+      (data) => data.locations.length > 1,
     );
     const totalDuplicateImages = duplicateImageGroups.reduce(
       (acc, group) => acc + group.locations.length - 1,
-      0
+      0,
     );
     if (totalDuplicateSongs === 0 && totalDuplicateImages === 0) {
       showNotification(
         "Harika! Kütüphaneniz zaten optimize edilmiş.",
-        "success"
+        "success",
       );
       return;
     }
@@ -5790,7 +5912,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function runCleanup(
     duplicateSongGroups,
     duplicateImageGroups,
-    allPlaylists
+    allPlaylists,
   ) {
     showNotification("Optimizasyon işlemi başladı...", "info", 5000);
     let cleanedSongs = 0;
@@ -5847,7 +5969,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
       showNotification(
         "Değişikliklerin uygulanması için sayfa yenileniyor...",
-        "info"
+        "info",
       );
       setTimeout(() => window.location.reload(), 2000);
     }, 1500);
@@ -5858,7 +5980,7 @@ document.addEventListener("DOMContentLoaded", () => {
     showNotification(
       "Kütüphane analiz ediliyor, lütfen bekleyin...",
       "info",
-      2000
+      2000,
     );
 
     try {
@@ -5872,13 +5994,13 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       const unusedSongs = allUserSongs.filter(
-        (song) => !usedSongIds.has(song.id)
+        (song) => !usedSongIds.has(song.id),
       );
 
       if (unusedSongs.length === 0) {
         showNotification(
           "Kütüphaneniz zaten temiz. Kullanılmayan şarkı bulunamadı.",
-          "success"
+          "success",
         );
         return;
       }
@@ -5909,7 +6031,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         showNotification(
           `${deletedCount} kullanılmayan şarkı başarıyla kütüphaneden temizlendi.`,
-          "success"
+          "success",
         );
         setTimeout(() => window.location.reload(), 2000);
       };
@@ -5928,7 +6050,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const allUserSongs = await DBHelper.getAll("userSongs");
       const sameTitleGroups = new Map();
 
-      allUserSongs.forEach(song => {
+      allUserSongs.forEach((song) => {
         const title = (song.title || "").trim().toLowerCase();
         if (!title) return;
         if (!sameTitleGroups.has(title)) sameTitleGroups.set(title, []);
@@ -5958,7 +6080,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 const view1 = new Uint8Array(head1);
                 const view2 = new Uint8Array(head2);
 
-                isMatch = view1.length === view2.length && view1.every((val, idx) => val === view2[idx]);
+                isMatch =
+                  view1.length === view2.length &&
+                  view1.every((val, idx) => val === view2[idx]);
               }
             } else if (!s1.isLocal && !s2.isLocal) {
               isMatch = s1.url === s2.url;
@@ -5973,7 +6097,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (duplicates.length === 0) {
-        showNotification("Aynı isme ve veriye sahip kopya şarkı bulunamadı.", "success");
+        showNotification(
+          "Aynı isme ve veriye sahip kopya şarkı bulunamadı.",
+          "success",
+        );
         return;
       }
 
@@ -5996,28 +6123,33 @@ document.addEventListener("DOMContentLoaded", () => {
       confirmAction = async () => {
         showNotification("Kopya şarkılar temizleniyor...", "info");
         const allPlaylists = await DBHelper.getAll("playlists");
-        
+
         for (const item of duplicates) {
           const masterId = item.master.id;
           const duplicateId = item.duplicate.id;
 
           for (const playlist of allPlaylists) {
             if (playlist.songs && playlist.songs.includes(duplicateId)) {
-              playlist.songs = playlist.songs.map(id => id === duplicateId ? masterId : id);
+              playlist.songs = playlist.songs.map((id) =>
+                id === duplicateId ? masterId : id,
+              );
               playlist.songs = [...new Set(playlist.songs)];
               await DBHelper.put("playlists", playlist);
             }
           }
 
           await DBHelper.delete("userSongs", duplicateId);
-          if (masterSongLibrary[duplicateId]) delete masterSongLibrary[duplicateId];
+          if (masterSongLibrary[duplicateId])
+            delete masterSongLibrary[duplicateId];
         }
 
-        showNotification(`${duplicates.length} kopya şarkı başarıyla temizlendi.`, "success");
+        showNotification(
+          `${duplicates.length} kopya şarkı başarıyla temizlendi.`,
+          "success",
+        );
         setTimeout(() => window.location.reload(), 2000);
       };
       openModal("confirm-modal");
-
     } catch (e) {
       console.error("Kopya temizleme sırasında hata:", e);
       showNotification("İşlem sırasında bir hata oluştu.", "error");
@@ -6062,7 +6194,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (attempt > 10) {
         showNotification(
           "Paylaşım kodu oluşturulamadı, tekrar deneyin.",
-          "error"
+          "error",
         );
         resetSongShareState();
         return;
@@ -6125,7 +6257,7 @@ document.addEventListener("DOMContentLoaded", () => {
     songSharePeer.on("error", (err) => {
       showNotification(
         "Bağlanılamadı, kodu veya internet bağlantısını kontrol edin.",
-        "error"
+        "error",
       );
       resetSongShareState();
     });
@@ -6155,7 +6287,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
               songShareSenderStatusEl.textContent = "Şarkı indiriliyor...";
               const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(
-                song.url
+                song.url,
               )}`;
               const response = await fetch(proxyUrl);
               if (!response.ok) {
@@ -6197,7 +6329,7 @@ document.addEventListener("DOMContentLoaded", () => {
               const receivedSong = data.payload;
               const blob = await base64ToBlob(
                 receivedSong.fileBase64,
-                receivedSong.mimeType
+                receivedSong.mimeType,
               );
 
               const newSongId = `user_${Date.now()}`;
@@ -6221,7 +6353,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 openModal("playlist-select-modal");
                 showNotification(
                   `Şarkı başarıyla alındı. Şimdi bir listeye seçin.`,
-                  "success"
+                  "success",
                 );
               } else {
                 try {
@@ -6233,21 +6365,21 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                     showNotification(
                       `Şarkı başarıyla alındı ve Favoriler'e eklendi.`,
-                      "success"
+                      "success",
                     );
                   } else {
                     showNotification(
                       `Şarkı alındı ancak Favoriler listesi bulunamadığı için eklenemedi.`,
-                      "info"
+                      "info",
                     );
                   }
                 } catch (dbError) {
                   console.error(
-                    "Favoriler listesine eklenirken veritabanı hatası:"
+                    "Favoriler listesine eklenirken veritabanı hatası:",
                   );
                   showNotification(
                     `Şarkı alındı ancak listeye eklenirken bir sorun oluştu.`,
-                    "info"
+                    "info",
                   );
                 }
               }
@@ -6263,9 +6395,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
           case "transfer_error":
             showNotification(
-              `Gönderici bir hatayla karşılaştı: ${data.message || "Bilinmeyen Hata"
+              `Gönderici bir hatayla karşılaştı: ${
+                data.message || "Bilinmeyen Hata"
               }`,
-              "error"
+              "error",
             );
             resetSongShareState();
             break;
@@ -6333,12 +6466,15 @@ document.addEventListener("DOMContentLoaded", () => {
     clearLibraryBtn.addEventListener("click", startClearUnusedSongsProcess);
   }
   if (duplicateCleanupBtn) {
-    duplicateCleanupBtn.addEventListener("click", startDuplicateTitleCleanupProcess);
+    duplicateCleanupBtn.addEventListener(
+      "click",
+      startDuplicateTitleCleanupProcess,
+    );
   }
 
   initializeApp();
   console.log(
-    "Lunetune Team Note | During the beta phase of your app, it will be loaded via the TailwindCSS CDN throughout this process."
+    "Lunetune Team Note | During the beta phase of your app, it will be loaded via the TailwindCSS CDN throughout this process.",
   );
 });
 
@@ -6346,7 +6482,7 @@ let totalDataUsed = parseInt(localStorage.getItem("totalDataUsed") || "0");
 let totalDataSaved = parseInt(localStorage.getItem("totalDataSaved") || "0");
 
 function formatBytes(bytes, decimals = 2) {
-  if (bytes === 0) return '0 MB';
+  if (bytes === 0) return "0 MB";
   const dm = decimals < 0 ? 0 : decimals;
   const mb = bytes / (1024 * 1024);
   if (mb < 1000) return mb.toFixed(dm) + " MB";
@@ -6375,15 +6511,15 @@ function checkDailyReset() {
 
 checkDailyReset();
 
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.addEventListener('message', event => {
-    if (event.data && event.data.type === 'DATA_USAGE_UPDATE') {
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.addEventListener("message", (event) => {
+    if (event.data && event.data.type === "DATA_USAGE_UPDATE") {
       checkDailyReset();
       const bytes = event.data.bytes;
-      if (event.data.usageType === 'used') {
+      if (event.data.usageType === "used") {
         totalDataUsed += bytes;
         localStorage.setItem("totalDataUsed", totalDataUsed.toString());
-      } else if (event.data.usageType === 'saved') {
+      } else if (event.data.usageType === "saved") {
         totalDataSaved += bytes;
         localStorage.setItem("totalDataSaved", totalDataSaved.toString());
       }
@@ -6395,4 +6531,3 @@ if ('serviceWorker' in navigator) {
     }
   });
 }
-
