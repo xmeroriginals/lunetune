@@ -539,6 +539,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 artist: songData.artist,
                 coverImageUrl: songData.image || "",
               };
+
+              if (!newSong.coverImageUrl) {
+                try {
+                  const metadata = await fetchMetadataFromUrl(newSong.url);
+                  if (metadata && metadata.coverBlob) {
+                    const coverFile = new File([metadata.coverBlob], "cover.jpg", {
+                      type: metadata.coverBlob.type,
+                    });
+                    newSong.coverImageUrl = await processImage(coverFile);
+                  }
+                } catch (e) {
+                  console.warn("İçe aktarma sırasında metadata alınamadı:", e);
+                }
+              }
             } else {
               return;
             }
@@ -636,6 +650,13 @@ document.addEventListener("DOMContentLoaded", () => {
         url.split("/").pop().split(".")[0].replace(/%20/g, " ") ||
         "İsimsiz URL Şarkısı";
       let artist = "Bilinmeyen Sanatçı";
+
+      if (title.includes(" - ")) {
+        const parts = title.split(" - ");
+        artist = parts[0].trim();
+        title = parts.slice(1).join(" - ").trim();
+      }
+
       let coverImageUrl = "";
 
       try {
