@@ -94,7 +94,11 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("Maker içe aktarma hatası:", error);
         showNotification("Liste alınırken bir hata oluştu.", "error");
       } finally {
-        await deleteDataFromDB(MAKER_KEY);
+        try {
+          await deleteDataFromDB(MAKER_KEY);
+        } catch (cleanupError) {
+          console.warn("Cleanup during import failed:", cleanupError);
+        }
       }
     } else {
       try {
@@ -114,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const request = store.get(key);
         request.onsuccess = () => resolve(request.result || null);
         request.onerror = (event) =>
-          reject("Error reading from DB: " + event.target.error);
+          reject("Error reading from DB: " + (event.target.error?.message || event.target.error));
       });
     });
   }
@@ -1223,16 +1227,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function openDB() {
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open(DB_NAME, 2);
+      const request = indexedDB.open(DB_NAME, 3);
       request.onupgradeneeded = (event) => {
         const db = event.target.result;
+        if (!db.objectStoreNames.contains("playlists")) {
+          db.createObjectStore("playlists", { keyPath: "id" });
+        }
+        if (!db.objectStoreNames.contains("userSongs")) {
+          db.createObjectStore("userSongs", { keyPath: "id" });
+        }
+        if (!db.objectStoreNames.contains("settings")) {
+          db.createObjectStore("settings", { keyPath: "id" });
+        }
         if (!db.objectStoreNames.contains(STORE_NAME)) {
           db.createObjectStore(STORE_NAME);
+        }
+        if (!db.objectStoreNames.contains("OfflineSongs")) {
+          db.createObjectStore("OfflineSongs", { keyPath: "id" });
         }
       };
 
       request.onerror = (event) =>
-        reject("Database error: " + event.target.errorCode);
+        reject("Database error: " + (event.target.error?.message || event.target.error));
       request.onsuccess = (event) => resolve(event.target.result);
     });
   }

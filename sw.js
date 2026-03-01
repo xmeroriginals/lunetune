@@ -1,4 +1,4 @@
-const CACHE_NAME = "lunetune-v1";
+const CACHE_NAME = "lunetune-v2";
 const AUDIO_CACHE_NAME = "lunetune-audio-v1";
 const ASSETS_TO_CACHE = [
     "./",
@@ -8,7 +8,10 @@ const ASSETS_TO_CACHE = [
     "./src/manifest.json",
     "./resources/Lunetune.png",
     "./resources/lunetune-thumb.png",
-    "./resources/lunetune-circle-playing.png"
+    "./resources/lunetune-circle-playing.png",
+    "./maker.html",
+    "./src/maker.js",
+    "./lib/tailwind.js"
 ];
 
 self.addEventListener("install", (event) => {
@@ -98,8 +101,14 @@ self.addEventListener("fetch", (event) => {
 
     if (event.request.mode === "navigate") {
         event.respondWith(
-            fetch(event.request).catch(() => {
+            fetch(event.request).catch(async () => {
+                const path = new URL(event.request.url).pathname;
+                if (path.includes("maker.html")) {
+                    return (await caches.match("./maker.html")) || (await caches.match("./index.html"));
+                }
                 return caches.match("./index.html");
+            }).then(response => {
+                return response || new Response("Page not found", { status: 404 });
             })
         );
         return;
@@ -110,13 +119,12 @@ self.addEventListener("fetch", (event) => {
             if (response) {
                 return response;
             }
-            return fetch(event.request).then(netRes => {
-                return netRes;
-            }).catch(() => {
+            return fetch(event.request).catch((err) => {
                 if (event.request.destination === "image") {
                     return caches.match("./resources/Lunetune.png");
                 }
-            })
+                return new Response("Network error occurred", { status: 408, statusText: "Network Error" });
+            });
         })
     );
 });
