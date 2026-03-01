@@ -994,7 +994,25 @@
         <p id="transfer-progress-text" class="text-lg font-semibold text-white">
           0%
         </p>
-        <p id="transfer-progress-details" class="text-sm text-white/60"></p>
+        <p id="transfer-progress-details" class="text-sm text-white/60 font-mono"></p>
+        <div class="flex items-center justify-center pt-2">
+          <div class="relative flex items-center">
+            <input id="wake-lock-check-transfer" type="checkbox"
+              class="wake-lock-checkbox peer absolute w-full h-full opacity-0 cursor-pointer z-10" checked />
+            <div
+              class="w-5 h-5 flex items-center justify-center rounded-md border-2 border-gray-500 bg-gray-700 transition-all duration-200 shadow-inner peer-checked:bg-green-600 peer-checked:border-green-600 peer-focus:ring-2 peer-focus:ring-green-400 peer-focus:ring-offset-2 peer-focus:ring-offset-gray-900">
+              <svg class="w-4 h-4 text-white transition-opacity duration-200 opacity-0 peer-checked:opacity-100"
+                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+          </div>
+          <label for="wake-lock-check-transfer"
+            class="ml-3 text-sm font-semibold text-gray-200 select-none cursor-pointer">
+            Ekranı Açık Tut
+          </label>
+        </div>
       </div>
     </div>
   </div>
@@ -1021,6 +1039,24 @@
         <p id="song-share-sender-status" class="text-yellow-400 h-5">
           Bağlantı bekleniyor...
         </p>
+        <div class="flex items-center justify-center pt-2">
+          <div class="relative flex items-center">
+            <input id="wake-lock-check-share-sender" type="checkbox"
+              class="wake-lock-checkbox peer absolute w-full h-full opacity-0 cursor-pointer z-10" checked />
+            <div
+              class="w-5 h-5 flex items-center justify-center rounded-md border-2 border-gray-500 bg-gray-700 transition-all duration-200 shadow-inner peer-checked:bg-green-600 peer-checked:border-green-600 peer-focus:ring-2 peer-focus:ring-green-400 peer-focus:ring-offset-2 peer-focus:ring-offset-gray-900">
+              <svg class="w-4 h-4 text-white transition-opacity duration-200 opacity-0 peer-checked:opacity-100"
+                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+          </div>
+          <label for="wake-lock-check-share-sender"
+            class="ml-3 text-sm font-semibold text-gray-200 select-none cursor-pointer">
+            Ekranı Açık Tut
+          </label>
+        </div>
       </div>
     </div>
   </div>
@@ -1054,6 +1090,24 @@
           <label for="song-share-choose-playlist-check-v3"
             class="ml-3 text-base font-semibold text-gray-200 select-none cursor-pointer">
             Şarkı alındığında çalma listesi seç
+          </label>
+        </div>
+        <div class="flex items-center justify-center pt-2">
+          <div class="relative flex items-center">
+            <input id="wake-lock-check-share-receiver" type="checkbox"
+              class="wake-lock-checkbox peer absolute w-full h-full opacity-0 cursor-pointer z-10" checked />
+            <div
+              class="w-5 h-5 flex items-center justify-center rounded-md border-2 border-gray-500 bg-gray-700 transition-all duration-200 shadow-inner peer-checked:bg-green-600 peer-checked:border-green-600 peer-focus:ring-2 peer-focus:ring-green-400 peer-focus:ring-offset-2 peer-focus:ring-offset-gray-900">
+              <svg class="w-4 h-4 text-white transition-opacity duration-200 opacity-0 peer-checked:opacity-100"
+                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+          </div>
+          <label for="wake-lock-check-share-receiver"
+            class="ml-3 text-sm font-semibold text-gray-200 select-none cursor-pointer">
+            Ekranı Açık Tut
           </label>
         </div>
         <div class="flex justify-center gap-1 pt-2">

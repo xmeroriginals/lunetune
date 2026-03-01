@@ -246,6 +246,37 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentPreviewId = null;
   let activePlaylistContextId = null;
   let wakeLock = null;
+  async function requestWakeLock() {
+    if (wakeLock !== null) return;
+    try {
+      if ('wakeLock' in navigator) {
+        wakeLock = await navigator.wakeLock.request('screen');
+        console.log("Screen Wake Lock is active.");
+      }
+    } catch (err) {
+      console.warn(`Wake Lock request failed: ${err.name}, ${err.message}`);
+    }
+  }
+
+  function releaseWakeLock() {
+    if (wakeLock !== null) {
+      wakeLock.release().then(() => {
+        wakeLock = null;
+        console.log("Screen Wake Lock released.");
+      });
+    }
+  }
+
+  document.addEventListener("change", (e) => {
+    if (e.target.classList.contains("wake-lock-checkbox")) {
+      if (e.target.checked) {
+        requestWakeLock();
+      } else {
+        releaseWakeLock();
+      }
+    }
+  });
+
   let isMediaSessionActionLocked = false;
   let currentObjectUrl = null;
   let isHostSeeking = false;
@@ -537,6 +568,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const transaction = this.db.transaction(storeName, "readwrite");
         const store = transaction.objectStore(storeName);
         const request = store.delete(key);
+        request.onsuccess = () => resolve();
+        request.onerror = (e) => reject(e.target.error);
+      });
+    },
+    async clear(storeName) {
+      const db = await this.init();
+      return new Promise((resolve, reject) => {
+        const transaction = this.db.transaction(storeName, "readwrite");
+        const store = transaction.objectStore(storeName);
+        const request = store.clear();
         request.onsuccess = () => resolve();
         request.onerror = (e) => reject(e.target.error);
       });
@@ -1882,6 +1923,12 @@ document.addEventListener("DOMContentLoaded", () => {
     activeModals.push(modalId);
     modalOverlay.classList.remove("opacity-0", "pointer-events-none");
     modalOverlay.style.zIndex = window.getComputedStyle(modal).zIndex - 1;
+
+    const wakeLockCheck = modal.querySelector(".wake-lock-checkbox");
+    if (wakeLockCheck && wakeLockCheck.checked) {
+      requestWakeLock();
+    }
+
     setTimeout(() => {
       const inputs = modal.querySelectorAll(
         'input[type="text"]:not([disabled])'
@@ -1904,6 +1951,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const index = activeModals.indexOf(modalId);
     if (index > -1) {
       activeModals.splice(index, 1);
+    }
+
+    const wakeLockCheck = modal.querySelector(".wake-lock-checkbox");
+    if (wakeLockCheck) {
+      releaseWakeLock();
     }
     if (activeModals.length > 0) {
       const prevModal = document.getElementById(
@@ -5932,7 +5984,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <span class="material-symbols-rounded notranslate text-3xl text-red-400">content_copy</span>
             </div>
             <div>
-                <p class="text-lg">Toplam <span class="font-bold text-white text-xl">${duplicates.length}</span> adet kesin kopya şarkı tespit edildi (İsim + İlk 20KB Veri eşleşmesi).</p>
+                <p class="text-lg">Toplam <span class="font-bold text-white text-xl">${duplicates.length}</span> adet kesin kopya şarkı tespit edildi.</p>
                 <p class="text-white/60 text-sm mt-2">Bu şarkılar kütüphanenizden silinecek ve listelerde asıllarıyla yer değişterecek.</p>
             </div>
             <div class="bg-red-500/10 p-3 rounded-lg border border-red-500/20 w-full">
