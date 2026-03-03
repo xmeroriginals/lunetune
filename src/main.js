@@ -5410,14 +5410,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const forceClearCacheBtn = document.getElementById("force-clear-cache-btn");
   if (forceClearCacheBtn) {
-    forceClearCacheBtn.addEventListener("click", async () => {
-      if (
-        confirm(
-          "Tüm uygulama önbelleği temizlenecek ve sayfa yenilenecek. Emin misiniz?",
-        )
-      ) {
+    forceClearCacheBtn.addEventListener("click", () => {
+      confirmModalTitle.textContent = "Zorla Önbellek Temizleme";
+      confirmModalMessage.innerHTML =
+        '<div class="text-center"><p>Tüm uygulama önbelleği temizlenecek ve sayfa yenilenecek. <b>İndirilmiş şarkılarınız silinmez.</b></p><p class="text-white/50 text-sm mt-2">Bu işlem yeni güncellemeleri zorlamak içindir.</p></div>';
+      confirmAction = async () => {
         showNotification("Önbellek zorla temizleniyor...", "warning");
-
         try {
           if ("serviceWorker" in navigator) {
             const registrations =
@@ -5428,7 +5426,9 @@ document.addEventListener("DOMContentLoaded", () => {
           }
           const cacheNames = await caches.keys();
           for (let name of cacheNames) {
-            await caches.delete(name);
+            if (!name.includes("audio")) {
+              await caches.delete(name);
+            }
           }
           showNotification(
             "Önbellek temizlendi, sayfa yenileniyor...",
@@ -5441,7 +5441,8 @@ document.addEventListener("DOMContentLoaded", () => {
           console.error("Force clear cache failed:", err);
           showNotification("Hata oluştu, lütfen manuel temizleyin.", "error");
         }
-      }
+      };
+      openModal("confirm-modal");
     });
   }
 
