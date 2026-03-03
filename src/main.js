@@ -256,12 +256,12 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       if (wakeLock && !wakeLock.released) return;
       wakeLock = await navigator.wakeLock.request("screen");
-      console.log("Screen Wake Lock is active.");
+      console.log("SWL Active");
       wakeLock.addEventListener("release", () => {
-        console.log("Screen Wake Lock was released.");
+        console.log("SWL Released");
       });
     } catch (err) {
-      console.error(`Wake Lock request failed: ${err.name}, ${err.message}`);
+      console.error(`SWL request failed: ${err.name}, ${err.message}`);
     }
   };
 
@@ -270,7 +270,7 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         await wakeLock.release();
         wakeLock = null;
-        console.log("Screen Wake Lock manually released.");
+        console.log("SWL Manuel Released");
       } catch (err) {
         console.error(
           `Failed to release Wake Lock: ${err.name}, ${err.message}`,
@@ -5405,6 +5405,43 @@ document.addEventListener("DOMContentLoaded", () => {
   if (versionCheckBtn) {
     versionCheckBtn.addEventListener("click", () => {
       showNotification(`V${APP_VERSION}`, "info");
+    });
+  }
+
+  const forceClearCacheBtn = document.getElementById("force-clear-cache-btn");
+  if (forceClearCacheBtn) {
+    forceClearCacheBtn.addEventListener("click", async () => {
+      if (
+        confirm(
+          "Tüm uygulama önbelleği temizlenecek ve sayfa yenilenecek. Emin misiniz?",
+        )
+      ) {
+        showNotification("Önbellek zorla temizleniyor...", "warning");
+
+        try {
+          if ("serviceWorker" in navigator) {
+            const registrations =
+              await navigator.serviceWorker.getRegistrations();
+            for (let registration of registrations) {
+              await registration.unregister();
+            }
+          }
+          const cacheNames = await caches.keys();
+          for (let name of cacheNames) {
+            await caches.delete(name);
+          }
+          showNotification(
+            "Önbellek temizlendi, sayfa yenileniyor...",
+            "success",
+          );
+          setTimeout(() => {
+            window.location.reload(true);
+          }, 1000);
+        } catch (err) {
+          console.error("Force clear cache failed:", err);
+          showNotification("Hata oluştu, lütfen manuel temizleyin.", "error");
+        }
+      }
     });
   }
 
