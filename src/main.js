@@ -252,23 +252,25 @@ document.addEventListener("DOMContentLoaded", () => {
   let wakeLock = null;
 
   const requestWakeLock = async () => {
-    if (wakeLock !== null) return;
-    if ("wakeLock" in navigator) {
-      try {
-        wakeLock = await navigator.wakeLock.request("screen");
-      } catch (err) {
-        console.error(`Wake Lock request failed: ${err.name}, ${err.message}`);
-      }
-    } else {
-      console.warn("Wake Lock API is not supported in this browser.");
+    if (!("wakeLock" in navigator)) return;
+    try {
+      if (wakeLock && !wakeLock.released) return;
+      wakeLock = await navigator.wakeLock.request("screen");
+      console.log("Screen Wake Lock is active.");
+      wakeLock.addEventListener("release", () => {
+        console.log("Screen Wake Lock was released.");
+      });
+    } catch (err) {
+      console.error(`Wake Lock request failed: ${err.name}, ${err.message}`);
     }
   };
 
   const releaseWakeLock = async () => {
-    if (wakeLock) {
+    if (wakeLock && !wakeLock.released) {
       try {
         await wakeLock.release();
         wakeLock = null;
+        console.log("Screen Wake Lock manually released.");
       } catch (err) {
         console.error(
           `Failed to release Wake Lock: ${err.name}, ${err.message}`,
@@ -277,13 +279,33 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  document.addEventListener("change", (e) => {
-    if (e.target.classList.contains("wake-lock-checkbox")) {
-      if (e.target.checked) {
-        requestWakeLock();
-      } else {
-        releaseWakeLock();
+  const updateWakeLockState = async () => {
+    let shouldWake = isPlaying;
+
+    activeModals.forEach((modalId) => {
+      const modal = document.getElementById(modalId);
+      const wakeCheck = modal?.querySelector(".wake-lock-checkbox");
+      if (wakeCheck && wakeCheck.checked) {
+        shouldWake = true;
       }
+    });
+
+    if (shouldWake) {
+      await requestWakeLock();
+    } else {
+      await releaseWakeLock();
+    }
+  };
+
+  document.addEventListener("visibilitychange", async () => {
+    if (document.visibilityState === "visible") {
+      await updateWakeLockState();
+    }
+  });
+
+  document.addEventListener("change", async (e) => {
+    if (e.target.classList.contains("wake-lock-checkbox")) {
+      await updateWakeLockState();
     }
   });
 
@@ -1461,7 +1483,7 @@ document.addEventListener("DOMContentLoaded", () => {
           navigator.mediaSession.playbackState = "playing";
         }
         broadcastCurrentState();
-        requestWakeLock();
+        updateWakeLockState();
       })
       .catch((error) => {
         keepAliveVideo.pause();
@@ -1487,7 +1509,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if ("mediaSession" in navigator) {
       navigator.mediaSession.playbackState = "paused";
     }
-    releaseWakeLock();
+    updateWakeLockState();
     broadcastCurrentState();
   }
 
@@ -1947,10 +1969,7 @@ document.addEventListener("DOMContentLoaded", () => {
     modalOverlay.classList.remove("opacity-0", "pointer-events-none");
     modalOverlay.style.zIndex = window.getComputedStyle(modal).zIndex - 1;
 
-    const wakeLockCheck = modal.querySelector(".wake-lock-checkbox");
-    if (wakeLockCheck && wakeLockCheck.checked) {
-      requestWakeLock();
-    }
+    updateWakeLockState();
 
     setTimeout(() => {
       const inputs = modal.querySelectorAll(
@@ -1976,10 +1995,8 @@ document.addEventListener("DOMContentLoaded", () => {
       activeModals.splice(index, 1);
     }
 
-    const wakeLockCheck = modal.querySelector(".wake-lock-checkbox");
-    if (wakeLockCheck) {
-      releaseWakeLock();
-    }
+    updateWakeLockState();
+
     if (activeModals.length > 0) {
       const prevModal = document.getElementById(
         activeModals[activeModals.length - 1],
