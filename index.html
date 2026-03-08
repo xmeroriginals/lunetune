@@ -262,6 +262,114 @@
       </div>
     </div>
 
+
+    <div id="battle-modal" class="modal fixed inset-0 z-50 items-center justify-center p-4">
+      <div class="bg-[#2a2d4a] rounded-3xl shadow-2xl w-full max-w-md flex flex-col">
+        <div class="p-4 flex items-center justify-between border-b border-white/10">
+          <h3 class="text-xl font-semibold text-white">Arkadaşınla Savaş</h3>
+          <button data-close-modal="battle-modal" class="text-white/70 hover:text-white">
+            <span class="material-symbols-rounded notranslate">close</span>
+          </button>
+        </div>
+        <div class="p-6 space-y-6">
+          <div id="battle-config-section">
+            <label class="block text-white/80 mb-2 font-medium">Tur Sayısı 1-30</label>
+            <div class="flex items-center gap-4 bg-[#1c1f3a] p-4 rounded-2xl">
+              <input type="range" id="battle-rounds-input" min="1" max="30" value="10" class="flex-grow accent-violet-500 cursor-pointer" />
+              <span id="battle-rounds-display" class="text-2xl font-bold text-violet-400 w-8 text-center">10</span>
+            </div>
+            <p class="text-white/70 text-xs mt-2 px-1 text-center">Her iki kullanıcı da seçilen tur sayısı kadar şarkı seçer ve sırayla kapışır.</p>
+            <button id="create-battle-btn" class="w-full mt-6 py-4 rounded-2xl bg-violet-600 hover:bg-violet-700 text-white font-bold flex items-center justify-center gap-2 transform active:scale-95 transition-all shadow-lg shadow-violet-500/20 whitespace-nowrap">
+              <span class="material-symbols-rounded notranslate flex-shrink-0">bolt</span>
+              <span>Savaş Bağlantısı Oluştur</span>
+            </button>
+          </div>
+          
+          <div id="battle-share-section" class="hidden space-y-4">
+            <p class="text-white/80 text-center">Bu bağlantıyı arkadaşınla paylaşarak savaşı başlatabilirsin.</p>
+            <div class="flex gap-1">
+              <input type="text" id="battle-share-link" readonly class="w-full bg-[#1c1f3a] text-white p-3 rounded-l-2xl border-2 border-transparent focus:outline-none" />
+              <button id="copy-battle-link-btn" class="px-4 rounded-r-2xl bg-violet-600 hover:bg-violet-700 text-white font-semibold">Kopyala</button>
+            </div>
+            <p id="battle-status" class="text-center text-yellow-400 h-5 font-medium animate-pulse">Arkadaşın bekleniyor...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="battle-rating-modal" class="modal fixed inset-0 z-[60] items-center justify-center p-4">
+      <div class="bg-[#2a2d4a] rounded-3xl shadow-2xl w-full max-w-sm flex flex-col p-6 text-center">
+        <h3 class="text-xl font-bold text-white mb-2">Şarkıyı Puanla</h3>
+        <p class="text-white/60 text-sm mb-6">Bu şarkıya kaç yıldız veriyorsun?</p>
+        
+        <div class="flex justify-center gap-2 mb-8" id="battle-stars-container">
+          <button class="star-btn transition-all duration-200 hover:scale-125" data-star="1">
+            <span class="material-symbols-rounded notranslate text-4xl text-white/20">star</span>
+          </button>
+          <button class="star-btn transition-all duration-200 hover:scale-125" data-star="2">
+            <span class="material-symbols-rounded notranslate text-4xl text-white/20">star</span>
+          </button>
+          <button class="star-btn transition-all duration-200 hover:scale-125" data-star="3">
+            <span class="material-symbols-rounded notranslate text-4xl text-white/20">star</span>
+          </button>
+          <button class="star-btn transition-all duration-200 hover:scale-125" data-star="4">
+            <span class="material-symbols-rounded notranslate text-4xl text-white/20">star</span>
+          </button>
+          <button class="star-btn transition-all duration-200 hover:scale-125" data-star="5">
+            <span class="material-symbols-rounded notranslate text-4xl text-white/20">star</span>
+          </button>
+        </div>
+        
+        <button id="battle-submit-rating-btn" disabled class="w-full py-4 rounded-2xl bg-violet-600 hover:bg-violet-700 text-white font-bold disabled:opacity-50 disabled:grayscale transition-all shadow-lg shadow-violet-500/20">
+          Değerlendir
+        </button>
+      </div>
+    </div>
+
+    <div id="battle-selection-modal" class="modal fixed inset-0 z-[55] items-center justify-center p-4">
+      <div class="bg-[#2a2d4a] rounded-3xl shadow-2xl w-full max-w-lg flex flex-col h-[80vh]">
+        <div class="p-4 flex items-center justify-between border-b border-white/10">
+          <h3 class="text-xl font-semibold text-white ml-1">Savaş için Şarkı Seç</h3>
+          <div class="bg-violet-500/20 px-3 py-1 rounded-full text-sm font-bold text-violet-300">
+            <span id="battle-selected-count">0</span> / <span id="battle-total-required">10</span>
+          </div>
+        </div>
+        <div class="p-4 border-b border-white/10 flex gap-2">
+             <div class="relative flex-grow">
+               <input type="text" id="battle-selection-search" placeholder="Kütüphanende ara..." class="w-full bg-[#1c1f3a] text-white p-3 pl-10 rounded-2xl border-2 border-transparent focus:border-violet-400 focus:outline-none" />
+               <span class="material-symbols-rounded notranslate absolute left-3 top-1/2 -translate-y-1/2 text-white/40">search</span>
+             </div>
+             <button id="battle-confirm-selection-btn" disabled class="px-6 py-2 rounded-2xl bg-violet-600 hover:bg-violet-700 text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all">Tamam</button>
+        </div>
+        <ul id="battle-selection-list" class="flex-grow p-4 space-y-3 overflow-y-auto modal-scrollbar"></ul>
+      </div>
+    </div>
+
+    <div id="battle-result-modal" class="modal fixed inset-0 z-[60] items-center justify-center p-4">
+      <div class="bg-[#2a2d4a] rounded-3xl shadow-2xl w-full max-w-sm flex flex-col overflow-hidden">
+        <div id="battle-result-header" class="p-8 text-center bg-gradient-to-b from-violet-600/20 to-transparent">
+          <div id="winner-icon-container" class="mb-4">
+            <span class="material-symbols-rounded notranslate text-7xl text-yellow-400">emoji_events</span>
+          </div>
+          <h3 id="battle-result-title" class="text-3xl font-bold text-white mb-2">Maç Bitti!</h3>
+          <p id="battle-result-message" class="text-white/70 italic"></p>
+        </div>
+        <div class="p-6 space-y-4">
+          <div class="flex justify-between items-center p-4 bg-white/5 rounded-2xl">
+            <div class="text-center flex-1">
+              <p class="text-xs text-white/50 mb-1 uppercase tracking-wider">Senin Puanın</p>
+              <p id="my-battle-score" class="text-4xl font-black text-white">0</p>
+            </div>
+            <div class="w-px h-12 bg-white/10"></div>
+            <div class="text-center flex-1">
+              <p class="text-xs text-white/50 mb-1 uppercase tracking-wider">Rakibin Puanı</p>
+              <p id="opponent-battle-score" class="text-4xl font-black text-white">0</p>
+            </div>
+          </div>
+          <button data-close-modal="battle-result-modal" class="w-full py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-semibold transition-all">Kapat</button>
+        </div>
+      </div>
+    </div>
     <div id="edit-song-modal" class="modal fixed inset-0 z-50 items-center justify-center p-4">
       <div class="bg-[#2a2d4a] rounded-3xl shadow-2xl w-full max-w-lg flex flex-col" data-editing-song-id="">
         <div class="p-4 flex items-center justify-between border-b border-white/10">
@@ -915,8 +1023,12 @@
         Uyku Zamanlayıcısı
       </button>
       <button id="more-open-share-modal-btn" class="context-menu-btn">
-        <span class="material-symbols-rounded notranslate text-teal-400">group</span>
-        Arkadaşınla Dinle
+        <span class="material-symbols-rounded notranslate text-teal-400 flex-shrink-0">group</span>
+        <span class="flex-grow">Arkadaşınla Dinle</span>
+      </button>
+      <button id="more-open-battle-modal-btn" class="context-menu-btn group">
+        <span class="material-symbols-rounded notranslate text-red-500 flex-shrink-0 group-hover:scale-110 transition-transform">bolt</span>
+        <span class="flex-grow">Arkadaşınla Savaş</span>
       </button>
       <button id="more-open-music-store-btn" class="context-menu-btn">
         <span class="material-symbols-rounded notranslate text-violet-500">storefront</span>

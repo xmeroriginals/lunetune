@@ -149,6 +149,35 @@ document.addEventListener("DOMContentLoaded", () => {
     renamePlaylistCoverPreview = document.getElementById(
       "rename-playlist-cover-preview",
     );
+  const openBattleModalBtn = document.getElementById(
+      "more-open-battle-modal-btn",
+    ),
+    battleRoundsInput = document.getElementById("battle-rounds-input"),
+    battleRoundsDisplay = document.getElementById("battle-rounds-display"),
+    createBattleBtn = document.getElementById("create-battle-btn"),
+    battleModal = document.getElementById("battle-modal"),
+    battleConfigSection = document.getElementById("battle-config-section"),
+    battleShareSection = document.getElementById("battle-share-section"),
+    battleShareLink = document.getElementById("battle-share-link"),
+    copyBattleLinkBtn = document.getElementById("copy-battle-link-btn"),
+    battleStatus = document.getElementById("battle-status"),
+    battleSelectionModal = document.getElementById("battle-selection-modal"),
+    battleSelectedCount = document.getElementById("battle-selected-count"),
+    battleTotalRequired = document.getElementById("battle-total-required"),
+    battleSelectionSearch = document.getElementById("battle-selection-search"),
+    battleConfirmSelectionBtn = document.getElementById(
+      "battle-confirm-selection-btn",
+    ),
+    battleSelectionList = document.getElementById("battle-selection-list"),
+    battleScoreBtns = document.querySelectorAll(".battle-score-btn"),
+    battleResultModal = document.getElementById("battle-result-modal"),
+    battleResultTitle = document.getElementById("battle-result-title"),
+    battleResultMessage = document.getElementById("battle-result-message"),
+    myBattleScoreEl = document.getElementById("my-battle-score"),
+    opponentBattleScoreEl = document.getElementById("opponent-battle-score"),
+    battleRatingModal = document.getElementById("battle-rating-modal"),
+    battleStarsContainer = document.getElementById("battle-stars-container"),
+    battleSubmitRatingBtn = document.getElementById("battle-submit-rating-btn");
   const playlistContextDownloadBtn = document.getElementById(
     "playlist-context-download",
   );
@@ -240,7 +269,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   });
-  const APP_VERSION = "1.1.4";
+  const APP_VERSION = "1.1.5";
   const JAMENDO_CLIENT_ID = "d63aca13";
   let activeMusicStoreTab = "lunetune";
   let isClientPlaybackUnlocked = false;
@@ -250,6 +279,85 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentPreviewId = null;
   let activePlaylistContextId = null;
   let wakeLock = null;
+
+  let isBattleMode = false;
+  let battleRounds = 10;
+  let currentBattleRound = 1;
+  let battleTurn = null;
+  let myBattleSongs = [];
+  let opponentBattleSongs = [];
+  let myBattleScores = [];
+  let opponentBattleScores = [];
+  let battlePlaylist = [];
+  let currentBattleIndex = 0;
+  let isBattlePlaylistVerified = false;
+  let lastSyncTime = 0;
+  let battleNavVotes = {
+    next: { my: false, opponent: false },
+    prev: { my: false, opponent: false },
+  };
+  let battleSeekVotes = {
+    fwd: { my: false, opponent: false },
+    bwd: { my: false, opponent: false },
+  };
+  let currentBattleRating = 0;
+  let hasMyRated = false;
+  let hasOpponentRated = false;
+  let currentTrackScores = { my: null, opponent: null };
+  let battleSelectionInProgress = [];
+  let preBattlePlayerState = null;
+
+  function savePreBattleState() {
+    if (isBattleMode) return;
+    preBattlePlayerState = {
+      isLiveMode: isLiveMode,
+      currentPlaylistId: currentPlaylistId,
+      currentPlaylist: [...currentPlaylist],
+      shuffledPlaylist: [...shuffledPlaylist],
+      currentTrackIndex: currentTrackIndex,
+      isPlaying: isPlaying,
+      time: audioPlayer.currentTime,
+    };
+  }
+
+  function restorePreBattleState() {
+    if (!preBattlePlayerState) {
+      isLiveMode = false;
+      currentTrackIndex = -1;
+      currentPlaylist = [];
+      shuffledPlaylist = [];
+      currentPlaylistId = null;
+      updateCarouselUI("none");
+      return;
+    }
+
+    isLiveMode = preBattlePlayerState.isLiveMode;
+    currentPlaylistId = preBattlePlayerState.currentPlaylistId;
+    currentPlaylist = preBattlePlayerState.currentPlaylist;
+    shuffledPlaylist = preBattlePlayerState.shuffledPlaylist;
+    currentTrackIndex = preBattlePlayerState.currentTrackIndex;
+
+    const wasPlaying = preBattlePlayerState.isPlaying;
+    const restoredTime = preBattlePlayerState.time;
+
+    if (currentTrackIndex > -1 && currentPlaylist.length > 0) {
+      loadTrack(currentTrackIndex, "none", wasPlaying);
+      if (restoredTime) {
+        audioPlayer.addEventListener(
+          "loadedmetadata",
+          () => {
+            audioPlayer.currentTime = restoredTime;
+            updateProgress();
+          },
+          { once: true },
+        );
+      }
+    } else {
+      updateCarouselUI("none");
+    }
+
+    preBattlePlayerState = null;
+  }
 
   const requestWakeLock = async () => {
     if (!("wakeLock" in navigator)) return;
@@ -1457,10 +1565,26 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  function updatePlayPauseUI(playing) {
+    isPlaying = playing;
+    playPauseIcon.textContent = isPlaying ? "pause_circle" : "play_circle";
+    if (isPlaying) {
+      if (!document.hidden) spinningLogo.classList.add("playing");
+      if ("mediaSession" in navigator)
+        navigator.mediaSession.playbackState = "playing";
+    } else {
+      spinningLogo.classList.remove("playing");
+      if ("mediaSession" in navigator)
+        navigator.mediaSession.playbackState = "paused";
+    }
+    updateMediaSession();
+  }
+
   function playTrack() {
-    if (currentTrackIndex === -1 && !isLiveMode) return;
-    if (isClient) return;
+    if (currentTrackIndex === -1 && !isLiveMode && !isBattleMode) return;
+    if (isClient && !isBattleMode) return;
     stopPreview();
+
     if (isPlaying && audioPlayer.paused === false) return;
 
     if (isHost && hostState.isWaitingForClient) {
@@ -1475,46 +1599,41 @@ document.addEventListener("DOMContentLoaded", () => {
       .play()
       .then(() => {
         keepAliveVideo.play().catch(() => {});
-        isPlaying = true;
+        updatePlayPauseUI(true);
         activateSurvivalMode();
-        playPauseIcon.textContent = "pause_circle";
-        if (!document.hidden) spinningLogo.classList.add("playing");
-        if ("mediaSession" in navigator) {
-          navigator.mediaSession.playbackState = "playing";
-        }
         broadcastCurrentState();
         updateWakeLockState();
       })
       .catch((error) => {
         keepAliveVideo.pause();
         console.error("Çalma hatası:", error);
-        isPlaying = false;
-        playPauseIcon.textContent = "play_circle";
-        spinningLogo.classList.remove("playing");
-        if ("mediaSession" in navigator) {
-          navigator.mediaSession.playbackState = "paused";
-        }
+        updatePlayPauseUI(false);
         activateSurvivalMode();
       });
   }
 
   function pauseTrack() {
-    if (isClient) return;
+    if (isClient && !isBattleMode) return;
     audioPlayer.pause();
     silentPlayer.pause();
     keepAliveVideo.pause();
-    isPlaying = false;
-    playPauseIcon.textContent = "play_circle";
-    spinningLogo.classList.remove("playing");
-    if ("mediaSession" in navigator) {
-      navigator.mediaSession.playbackState = "paused";
-    }
+    updatePlayPauseUI(false);
     updateWakeLockState();
     broadcastCurrentState();
   }
 
   function togglePlayPause() {
-    if (isClient) return;
+    if (isBattleMode && isClient) {
+      updatePlayPauseUI(!isPlaying);
+      broadcastMessage({ t: "battle_request_toggle_pause" });
+      if (!isPlaying) {
+        audioPlayer.pause();
+      } else {
+      }
+      return;
+    }
+    if (isClient && !isBattleMode) return;
+
     if (isPlaying) {
       pauseTrack();
     } else {
@@ -1526,10 +1645,13 @@ document.addEventListener("DOMContentLoaded", () => {
         playTrack();
       }
     }
-    updateMediaSession();
   }
 
   function nextTrack() {
+    if (isBattleMode) {
+      voteBattleNav("next");
+      return;
+    }
     if (
       carouselContainer.dataset.isAnimating === "true" ||
       isLiveMode ||
@@ -1565,6 +1687,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function prevTrack() {
+    if (isBattleMode) {
+      voteBattleNav("prev");
+      return;
+    }
     if (
       carouselContainer.dataset.isAnimating === "true" ||
       isLiveMode ||
@@ -1598,6 +1724,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function seek(seconds) {
+    if (isBattleMode) {
+      voteBattleSeek(seconds);
+      return;
+    }
     if (isLiveMode || isClient) return;
     seekTo(audioPlayer.currentTime + seconds);
   }
@@ -1653,6 +1783,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function handleSongEnd() {
+    if (isBattleMode) {
+      if (isHost) broadcastMessage({ t: "battle_force_modal" });
+      showRatingModal();
+      return;
+    }
     if (isLiveMode) return;
     activateSurvivalMode();
     const playbackList = isShuffle ? shuffledPlaylist : currentPlaylist;
@@ -1688,6 +1823,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function setVolume(level, fromMute = false) {
+    if (isBattleMode && level < 0.01) {
+      level = 0.01;
+      showNotification("Savaş modunda ses kapatılamaz.", "info");
+    }
     audioPlayer.volume = level;
     if (level > 0.5) {
       volumeIcon.textContent = "volume_up";
@@ -1703,6 +1842,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function toggleMute() {
+    if (isBattleMode) {
+      showNotification("Savaş modunda ses kapatılamaz.", "info");
+      return;
+    }
     if (audioPlayer.volume > 0) {
       setVolume(0, true);
       volumeSlider.value = 0;
@@ -1988,6 +2131,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!modal) return;
     if (modalId === "music-store-modal") {
       stopPreview();
+    } else if (modalId === "battle-modal") {
+      if (isHost && isBattleMode && !conn) {
+        resetShareSession();
+        restorePreBattleState();
+        showNotification("Savaş oluşturma iptal edildi.", "info");
+      }
     }
     modal.classList.remove("is-active");
     const index = activeModals.indexOf(modalId);
@@ -3345,9 +3494,14 @@ document.addEventListener("DOMContentLoaded", () => {
     peer.on("open", async (id) => {
       const params = new URLSearchParams(window.location.search);
       const hostId = params.get("share");
+      const battleId = params.get("battle");
+      const rounds = params.get("rounds");
       if (hostId) {
         await enterShareClientMode();
         connectToHost(hostId);
+      } else if (battleId && rounds) {
+        await enterShareClientMode();
+        connectToBattle(battleId, rounds);
       }
     });
     peer.on("connection", (newConn) => {
@@ -3356,7 +3510,17 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
       conn = newConn;
-      sessionStatusEl.textContent = "Arkadaşın bağlandı.";
+      if (newConn.metadata && newConn.metadata.mode === "battle") {
+        isBattleMode = true;
+        isHost = true;
+        isClient = false;
+        battleRounds = parseInt(newConn.metadata.rounds, 10);
+        showNotification("Savaş daveti kabul edildi!", "success");
+        closeModal("battle-modal");
+        startBattleSongSelection();
+      } else {
+        sessionStatusEl.textContent = "Arkadaşın bağlandı.";
+      }
       setupConnection(conn);
     });
     peer.on("error", (err) => {
@@ -3406,6 +3570,608 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 5000);
   }
 
+  function startBattleSession() {
+    if (!peer || peer.disconnected) {
+      showNotification("Bağlantı servisiyle irtibat kurulamadı.", "error");
+      return;
+    }
+    savePreBattleState();
+    audioPlayer.pause();
+    audioPlayer.src = "";
+    isPlaying = false;
+    currentTrackIndex = -1;
+    currentPlaylist = [];
+    shuffledPlaylist = [];
+    isLiveMode = true;
+    isHost = true;
+    isClient = false;
+    isBattleMode = true;
+    battleTurn = "user1";
+    currentBattleRound = 1;
+    myBattleScores = [];
+    opponentBattleScores = [];
+    myBattleSongs = [];
+    opponentBattleSongs = [];
+    battlePlaylist = [];
+    currentBattleIndex = 0;
+    isBattlePlaylistVerified = false;
+
+    updateCarouselUI("none");
+    carouselContainer.innerHTML = `<div class="flex flex-col items-center justify-center h-full text-white/40 p-10 text-center animate-pulse">
+        <span class="material-symbols-rounded notranslate text-6xl mb-4">swords</span>
+        <p class="text-xl font-bold">Savaş Hazırlığı</p>
+        <p class="text-sm">Şarkılar seçiliyor...</p>
+    </div>`;
+
+    battleConfigSection.classList.remove("hidden");
+    battleShareSection.classList.add("hidden");
+    updateVolumeSliderFill(battleRoundsInput);
+    openModal("battle-modal");
+  }
+
+  function handleCreateBattle() {
+    battleRounds = parseInt(battleRoundsInput.value, 10);
+    const battleUrl = `${window.location.origin}${window.location.pathname}?battle=${peer.id}&rounds=${battleRounds}`;
+    battleShareLink.value = battleUrl;
+    battleShareSection.classList.remove("hidden");
+    battleConfigSection.classList.add("hidden");
+    battleStatus.textContent = "Arkadaşın bekleniyor...";
+  }
+
+  function connectToBattle(hostId, rounds) {
+    savePreBattleState();
+    audioPlayer.pause();
+    audioPlayer.src = "";
+    isPlaying = false;
+    currentTrackIndex = -1;
+    currentPlaylist = [];
+    shuffledPlaylist = [];
+    isClient = true;
+    isHost = false;
+    isBattleMode = true;
+    battleRounds = parseInt(rounds, 10);
+    battleTurn = "user1";
+    currentBattleRound = 1;
+    myBattleScores = [];
+    opponentBattleScores = [];
+    myBattleSongs = [];
+    opponentBattleSongs = [];
+    battlePlaylist = [];
+    currentBattleIndex = 0;
+    isBattlePlaylistVerified = false;
+
+    updateCarouselUI("none");
+    carouselContainer.innerHTML = `<div class="flex flex-col items-center justify-center h-full text-white/40 p-10 text-center animate-pulse">
+        <span class="material-symbols-rounded notranslate text-6xl mb-4">swords</span>
+        <p class="text-xl font-bold">Savaş Hazırlığı</p>
+        <p class="text-sm">Şarkılar seçiliyor...</p>
+    </div>`;
+
+    isLiveMode = true;
+    conn = peer.connect(hostId, {
+      metadata: { rounds: battleRounds, mode: "battle" },
+    });
+    setupConnection(conn);
+  }
+
+  function startBattleSongSelection() {
+    myBattleSongs = [];
+    battleSelectedCount.textContent = "0";
+    battleTotalRequired.textContent = battleRounds;
+    battleConfirmSelectionBtn.disabled = true;
+    battleSelectionInProgress = [];
+    renderBattleSelectionList();
+    openModal("battle-selection-modal");
+  }
+
+  function renderBattleSelectionList(filter = "") {
+    battleSelectionList.innerHTML = "";
+    const allSongs = Object.values(masterSongLibrary).filter(
+      (s) =>
+        !s.isBroken &&
+        !s.isLocal &&
+        (s.title.toLowerCase().includes(filter.toLowerCase()) ||
+          (s.artist && s.artist.toLowerCase().includes(filter.toLowerCase()))),
+    );
+
+    if (allSongs.length === 0) {
+      battleSelectionList.innerHTML =
+        '<p class="text-white/50 text-center py-4">Şarkı bulunamadı.</p>';
+      return;
+    }
+
+    allSongs.forEach((song) => {
+      const li = document.createElement("li");
+      li.className =
+        "flex items-center gap-3 p-3 bg-white/5 rounded-2xl hover:bg-white/10 cursor-pointer transition-all";
+      const isSelected = battleSelectionInProgress.includes(song.id);
+      if (isSelected)
+        li.classList.add("ring-2", "ring-violet-400", "bg-violet-400/10");
+
+      li.innerHTML = `
+        <img src="${song.image || "https://lunetune.xmeroriginals.com/resources/lunetune-thumb.png"}" class="w-12 h-12 rounded-xl object-cover" />
+        <div class="flex-grow overflow-hidden">
+          <p class="text-white font-medium truncate">${song.title}</p>
+          <p class="text-white/50 text-xs truncate">${song.artist || "Bilinmeyen Sanatçı"}</p>
+        </div>
+        ${isSelected ? '<span class="material-symbols-rounded notranslate text-violet-400">check_circle</span>' : ""}
+      `;
+
+      li.addEventListener("click", () => {
+        if (battleSelectionInProgress.includes(song.id)) {
+          battleSelectionInProgress = battleSelectionInProgress.filter(
+            (id) => id !== song.id,
+          );
+        } else if (battleSelectionInProgress.length < battleRounds) {
+          battleSelectionInProgress.push(song.id);
+        } else {
+          showNotification(
+            `Maksimum ${battleRounds} şarkı seçebilirsiniz.`,
+            "info",
+          );
+          return;
+        }
+        battleSelectedCount.textContent = battleSelectionInProgress.length;
+        battleConfirmSelectionBtn.disabled =
+          battleSelectionInProgress.length < battleRounds;
+        renderBattleSelectionList(filter);
+      });
+
+      battleSelectionList.appendChild(li);
+    });
+  }
+
+  async function finishBattleSelection() {
+    myBattleSongs = battleSelectionInProgress.map(
+      (id) => masterSongLibrary[id],
+    );
+    closeModal("battle-selection-modal");
+    silentPlayer.play().catch(() => {});
+    const unlockAudio = audioPlayer.play();
+    if (unlockAudio !== undefined) {
+      unlockAudio.then(() => audioPlayer.pause()).catch(() => {});
+    }
+    isClientPlaybackUnlocked = true;
+    showNotification("Şarkıların hazır! Rakibin bekleniyor...", "success");
+    broadcastMessage({
+      t: "battle_songs_selected",
+      songs: myBattleSongs.map((s) => ({
+        id: s.id,
+        title: s.title,
+        artist: s.artist,
+        image: s.image,
+        isLocal: s.isLocal,
+        url: s.isLocal ? null : s.url,
+        mime: s.fileBlob ? s.fileBlob.type : "audio/mpeg",
+      })),
+    });
+
+    if (opponentBattleSongs.length > 0) {
+      console.log("Opponent selection already present, starting rounds...");
+      beginBattleRounds();
+    } else {
+      console.log("Waiting for opponent to select songs...");
+    }
+  }
+
+  function beginBattleRounds() {
+    console.log(
+      "beginBattleRounds() triggered. My:",
+      myBattleSongs.length,
+      "Opponent:",
+      opponentBattleSongs.length,
+      "Rounds:",
+      battleRounds,
+    );
+    if (
+      myBattleSongs.length < battleRounds ||
+      opponentBattleSongs.length < battleRounds
+    ) {
+      console.warn("Attempted to start rounds without enough songs.");
+      return;
+    }
+    battlePlaylist = [];
+    currentBattleIndex = 0;
+    for (let i = 0; i < battleRounds; i++) {
+      if (isHost) {
+        battlePlaylist.push(myBattleSongs[i]);
+        battlePlaylist.push(opponentBattleSongs[i]);
+      } else {
+        battlePlaylist.push(opponentBattleSongs[i]);
+        battlePlaylist.push(myBattleSongs[i]);
+      }
+    }
+    console.log(
+      "Battle playlist prepared interleaved:",
+      battlePlaylist.map((s) => s.title),
+    );
+
+    if (battlePlaylist[1] && battlePlaylist[1].url) {
+      const link = document.createElement("link");
+      link.rel = "prefetch";
+      link.href = battlePlaylist[1].url;
+      link.as = "audio";
+      document.head.appendChild(link);
+    }
+
+    if (isHost) {
+      console.log("Host sending playlist verification...");
+      setTimeout(() => {
+        broadcastMessage({
+          t: "battle_verify_playlist",
+          playlist: battlePlaylist.map((s) => s.id),
+        });
+        showNotification("Playlist doğrulanıyor...", "info");
+      }, 500);
+    }
+  }
+
+  function handleBattlePlaylistVerification(receivedIds) {
+    const myInterleavedIds = [];
+    for (let i = 0; i < battleRounds; i++) {
+      myInterleavedIds.push(opponentBattleSongs[i].id);
+      myInterleavedIds.push(myBattleSongs[i].id);
+    }
+
+    const isMatch = receivedIds.every(
+      (id, idx) => id === myInterleavedIds[idx],
+    );
+
+    if (isMatch) {
+      console.log("Playlist matching successful on Client.");
+      conn.send({ t: "battle_verification_ok" });
+      isBattlePlaylistVerified = true;
+      showNotification("Oyun senkronize edildi, başlanıyor...", "success");
+    } else {
+      broadcastMessage({
+        t: "battle_cheat_detected",
+        reason: "Playlist Mismatch",
+      });
+      showNotification("Hile algılandı: Playlist uyumsuzluğu!", "error");
+      finishBattle();
+    }
+  }
+
+  function startCurrentBattleTurn() {
+    console.log(
+      "startCurrentBattleTurn() called. Index:",
+      currentBattleIndex,
+      "IsVerified:",
+      isBattlePlaylistVerified,
+    );
+    if (!isBattlePlaylistVerified) {
+      console.warn("Attempted to start turn without verification.");
+      return;
+    }
+    reactionContainer.classList.add("hidden");
+    const song = battlePlaylist[currentBattleIndex];
+    if (!song || song.isLocal) {
+      if (!song) finishBattle();
+      else {
+        showNotification("Yerel şarkılar savaş modunda kullanılamaz!", "error");
+        finishBattle();
+      }
+      return;
+    }
+
+    shuffleBtn.classList.add("opacity-50", "pointer-events-none");
+    loopBtn.classList.add("opacity-50", "pointer-events-none");
+    currentBattleRound = Math.floor(currentBattleIndex / 2) + 1;
+    battleTurn = currentBattleIndex % 2 === 0 ? "user1" : "user2";
+
+    if (isHost) {
+      loadBattleTrack(song);
+    }
+    battleNavVotes.next.my = battleNavVotes.next.opponent = false;
+    battleNavVotes.prev.my = battleNavVotes.prev.opponent = false;
+    battleSeekVotes.fwd.my = battleSeekVotes.fwd.opponent = false;
+    battleSeekVotes.bwd.my = battleSeekVotes.bwd.opponent = false;
+  }
+
+  function loadBattleTrack(song) {
+    if (!isHost) return;
+    if (
+      battlePlaylist[currentBattleIndex + 1] &&
+      battlePlaylist[currentBattleIndex + 1].url
+    ) {
+      const link = document.createElement("link");
+      link.rel = "prefetch";
+      link.href = battlePlaylist[currentBattleIndex + 1].url;
+      link.as = "audio";
+      document.head.appendChild(link);
+    }
+
+    broadcastMessage({
+      t: "battle_load_track",
+      song: song,
+      round: currentBattleRound,
+      turn: battleTurn,
+      index: currentBattleIndex,
+    });
+
+    handleBattleTrackLoad(song);
+  }
+
+  function handleBattleTrackLoad(metadata) {
+    isPlaying = false;
+    audioPlayer.pause();
+    if (audioPlayer.src !== metadata.url) {
+      audioPlayer.src = "";
+    }
+
+    masterSongLibrary[metadata.id] = metadata;
+    updateCarouselUI("none");
+    carouselContainer.innerHTML = "";
+    carouselContainer.appendChild(createSongCard(metadata, "current"));
+
+    clientState.currentSongId = metadata.id;
+    clientState.currentLoadId = `battle_${currentBattleRound}_${battleTurn}`;
+
+    const onReady = () => {
+      console.log("handleBattleTrackLoad: Track ready.");
+      if (isHost) {
+        hostState.isWaitingForClient = true;
+        hostState.pendingSongId = metadata.id;
+        hostState.pendingAutoPlay = true;
+        hostState.currentSyncId = `battle_${currentBattleRound}_${battleTurn}`;
+        console.log("Host waiting for Client ready_to_play sync...");
+        setTimeout(() => {
+          if (
+            hostState.isWaitingForClient &&
+            hostState.currentSyncId ===
+              `battle_${currentBattleRound}_${battleTurn}`
+          ) {
+            console.warn("Battle Sync Timeout: Forcing start.");
+            hostState.isWaitingForClient = false;
+            if (hostState.pendingAutoPlay) {
+              playTrack();
+            }
+          }
+        }, 5000);
+      } else {
+        console.log("Client sending ready_to_play sync...");
+        conn.send({
+          t: "client_ready_to_play",
+          id: metadata.id,
+          syncId: `battle_${currentBattleRound}_${battleTurn}`,
+        });
+      }
+    };
+
+    if (metadata.url) {
+      audioPlayer.addEventListener("loadedmetadata", onReady, { once: true });
+      audioPlayer.src = metadata.url;
+      audioPlayer.load();
+    } else if (metadata.isLocal) {
+      if (isClient) {
+        showNotification(`${metadata.title} alınıyor...`, "info", 5000);
+        conn.send({ t: "request_blob", id: metadata.id });
+      } else {
+        const songData = masterSongLibrary[metadata.id];
+        if (songData && songData.fileBlob) {
+          audioPlayer.addEventListener("loadedmetadata", onReady, {
+            once: true,
+          });
+          audioPlayer.src = URL.createObjectURL(songData.fileBlob);
+          audioPlayer.load();
+        }
+      }
+    }
+  }
+
+  function voteBattleNav(action) {
+    battleNavVotes[action].my = true;
+    const emoji = action === "next" ? "⏭️" : "⏮️";
+    showReaction(emoji);
+    broadcastMessage({ t: "battle_nav_vote", action: action, emoji: emoji });
+    if (battleNavVotes[action].opponent) {
+      executeBattleNav(action);
+    } else {
+      showNotification(
+        "Geçiş oyu verildi. Rakibin onayı bekleniyor...",
+        "info",
+      );
+    }
+  }
+
+  function executeBattleNav(action) {
+    battleNavVotes.next.my = battleNavVotes.next.opponent = false;
+    battleNavVotes.prev.my = battleNavVotes.prev.opponent = false;
+    if (action === "next") {
+      showRatingModal();
+    } else {
+      if (currentBattleIndex > 0) {
+        currentBattleIndex--;
+        startCurrentBattleTurn();
+      }
+    }
+  }
+
+  function voteBattleSeek(offset) {
+    const key = offset > 0 ? "fwd" : "bwd";
+    battleSeekVotes[key].my = true;
+    const emoji = offset > 0 ? "⏩" : "⏪";
+    showReaction(emoji);
+    broadcastMessage({ t: "battle_seek_vote", offset: offset, emoji: emoji });
+    if (battleSeekVotes[key].opponent) {
+      executeBattleSeek(offset);
+    } else {
+      showNotification(
+        "Sarma oyu verildi. Rakibin onayı bekleniyor...",
+        "info",
+      );
+    }
+  }
+
+  function executeBattleSeek(offset) {
+    const key = offset > 0 ? "fwd" : "bwd";
+    battleSeekVotes[key].my = battleSeekVotes[key].opponent = false;
+    const newTime = Math.max(
+      0.1,
+      Math.min(
+        audioPlayer.duration || Infinity,
+        audioPlayer.currentTime + offset,
+      ),
+    );
+    if (isHost) {
+      seekTo(newTime);
+    }
+  }
+
+  function showRatingModal() {
+    audioPlayer.pause();
+    isPlaying = false;
+    playPauseIcon.textContent = "play_circle";
+
+    hasMyRated = false;
+    hasOpponentRated = false;
+    currentBattleRating = 0;
+    currentTrackScores.my = null;
+    currentTrackScores.opponent = null;
+
+    const starIcons = battleStarsContainer.querySelectorAll(
+      ".material-symbols-rounded",
+    );
+    starIcons.forEach((icon) => {
+      icon.classList.remove("text-yellow-400");
+      icon.classList.add("text-white/20");
+    });
+    battleSubmitRatingBtn.disabled = true;
+    battleSubmitRatingBtn.innerHTML = "Değerlendir";
+
+    openModal("battle-rating-modal");
+  }
+
+  function submitBattleRating(stars) {
+    hasMyRated = true;
+    currentTrackScores.my = stars;
+    broadcastMessage({ t: "battle_rating_sync", stars: stars });
+    checkRatingStatus();
+  }
+
+  function checkRatingStatus() {
+    if (hasMyRated && hasOpponentRated) {
+      if (currentBattleIndex % 2 === (isHost ? 0 : 1)) {
+        myBattleScores.push(currentTrackScores.opponent);
+        opponentBattleScores.push(currentTrackScores.my);
+      } else {
+        opponentBattleScores.push(currentTrackScores.my);
+        myBattleScores.push(currentTrackScores.opponent);
+      }
+      closeModal("battle-rating-modal");
+      showNotification("Puanlar kaydedildi!", "success");
+      advanceBattleRound();
+    } else if (hasMyRated) {
+      showNotification("Rakibin puan vermesi bekleniyor...", "info");
+      battleSubmitRatingBtn.disabled = true;
+      battleSubmitRatingBtn.innerHTML = "Bekleniyor...";
+    } else if (hasOpponentRated) {
+      showNotification("Rakibin puan verdi, senin puanın bekleniyor!", "info");
+    }
+  }
+
+  function advanceBattleRound() {
+    currentBattleIndex++;
+    if (currentBattleIndex >= battlePlaylist.length) {
+      finishBattle();
+    } else {
+      startCurrentBattleTurn();
+    }
+  }
+
+  function advanceBattle() {
+    if (battleTurn === "user1") {
+      battleTurn = "user2";
+      startCurrentBattleTurn();
+    } else {
+      if (currentBattleRound < battleRounds) {
+        currentBattleRound++;
+        battleTurn = "user1";
+        showNotification(`Round ${currentBattleRound} Başlıyor!`, "info");
+        startCurrentBattleTurn();
+      } else {
+        finishBattle();
+      }
+    }
+  }
+
+  async function finishBattle() {
+    isBattleMode = false;
+    isBattlePlaylistVerified = false;
+    reactionContainer.classList.add("hidden");
+    battleSelectionModal.classList.add("hidden");
+    shuffleBtn.classList.remove("opacity-50", "pointer-events-none");
+    loopBtn.classList.remove("opacity-50", "pointer-events-none");
+
+    if (
+      carouselContainer.querySelector(".battle-prep-screen") ||
+      carouselContainer.innerHTML.includes("Savaş Hazırlığı")
+    ) {
+      carouselContainer.innerHTML = "";
+      updateCarouselUI("library");
+    }
+
+    if (myBattleScores.length > 0 || opponentBattleScores.length > 0) {
+      showNotification("Savaş Bitti! Sonuçlar hesaplanıyor...", "success");
+      broadcastMessage({
+        t: "battle_verification",
+        myScores: myBattleScores,
+        opponentScores: opponentBattleScores,
+      });
+
+      if (receivedOpponentResults) {
+        verifyAndShowResults();
+      }
+    } else {
+      showNotification("Savaş Modu sonlandırıldı.", "info");
+      resetShareSession();
+      restorePreBattleState();
+    }
+  }
+
+  let receivedOpponentResults = null;
+  function verifyAndShowResults() {
+    const remote = receivedOpponentResults;
+    const myScoresMatch =
+      JSON.stringify(myBattleScores) === JSON.stringify(remote.opponentScores);
+    const opponentScoresMatch =
+      JSON.stringify(opponentBattleScores) === JSON.stringify(remote.myScores);
+
+    if (!myScoresMatch || !opponentScoresMatch) {
+      showNotification("Hile algılandı! Maç iptal edildi.", "error", 10000);
+      isBattleMode = false;
+      return;
+    }
+
+    const myTotal = myBattleScores.reduce((a, b) => a + b, 0);
+    const opponentTotal = opponentBattleScores.reduce((a, b) => a + b, 0);
+
+    myBattleScoreEl.textContent = myTotal;
+    opponentBattleScoreEl.textContent = opponentTotal;
+
+    if (myTotal > opponentTotal) {
+      battleResultTitle.textContent = "Kazandın! 🏆";
+      battleResultMessage.textContent = "Harika bir zevkin var! 😎";
+    } else if (opponentTotal > myTotal) {
+      battleResultTitle.textContent = "Kaybettin... 💀";
+      battleResultMessage.textContent = "Daha iyi şarkılar seçmelisin. 😊";
+    } else {
+      battleResultTitle.textContent = "Berabere! 🤝";
+      battleResultMessage.textContent = "Zevkleriniz birebir aynı! 🤩";
+    }
+
+    openModal("battle-result-modal");
+    isBattleMode = false;
+    resetShareSession();
+    myBattleSongs = [];
+    opponentBattleSongs = [];
+    myBattleScores = [];
+    opponentBattleScores = [];
+    battlePlaylist = [];
+    currentBattleIndex = 0;
+    restorePreBattleState();
+  }
+
   function startShareSession() {
     if (!peer || peer.disconnected) {
       showNotification("Bağlantı servisiyle irtibat kurulamadı.", "error");
@@ -3421,12 +4187,25 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function resetShareSession() {
-    if (conn) conn.close();
+    if (conn) {
+      try {
+        conn.close();
+      } catch (e) {}
+    }
     clearInterval(syncInterval);
     syncInterval = null;
+    if (typeof reconnectInterval !== "undefined" && reconnectInterval) {
+      clearInterval(reconnectInterval);
+      reconnectInterval = null;
+    }
     conn = null;
     isHost = false;
+    isClient = false;
+    isBattleMode = false;
     sessionStatusEl.textContent = "Bağlantı bekleniyor...";
+    if (typeof reactionContainer !== "undefined" && reactionContainer) {
+      reactionContainer.classList.add("hidden");
+    }
   }
 
   function connectToHost(hostId) {
@@ -3442,10 +4221,16 @@ document.addEventListener("DOMContentLoaded", () => {
   function setupConnection(connection) {
     connection.on("open", () => {
       if (isHost) {
-        sessionStatusEl.textContent = "Arkadaşın bağlandı.";
-        showNotification("Arkadaşın katıldı.", "success");
-        reactionContainer.classList.remove("hidden");
-        if (currentTrackIndex > -1) {
+        if (isBattleMode) {
+          sessionStatusEl.textContent = "Savaşçı rakibin bağlandı.";
+          showNotification("Rakibin katıldı!", "success");
+          startBattleSongSelection();
+        } else {
+          sessionStatusEl.textContent = "Arkadaşın bağlandı.";
+          showNotification("Arkadaşın katıldı.", "success");
+          reactionContainer.classList.remove("hidden");
+        }
+        if (currentTrackIndex > -1 && !isBattleMode) {
           if (initialSyncTimeout) clearTimeout(initialSyncTimeout);
           initialSyncTimeout = setTimeout(() => sendFullState(), 500);
         }
@@ -3454,8 +4239,14 @@ document.addEventListener("DOMContentLoaded", () => {
           clearInterval(reconnectInterval);
           reconnectInterval = null;
         }
-        sessionStatusEl.textContent = "Arkadaşınla dinliyorsun";
-        reactionContainer.classList.remove("hidden");
+        if (isBattleMode) {
+          sessionStatusEl.textContent = "Savaşa katıldın";
+          showNotification("Savaşa katıldın! Şarkılarını seç.", "success");
+          startBattleSongSelection();
+        } else {
+          sessionStatusEl.textContent = "Arkadaşınla dinliyorsun";
+          reactionContainer.classList.remove("hidden");
+        }
       }
     });
     connection.on("data", handleIncomingData);
@@ -3495,7 +4286,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function broadcastMessage(data) {
-    if (isHost && conn && conn.open) {
+    if (conn && conn.open) {
       conn.send(data);
     }
   }
@@ -3526,7 +4317,7 @@ document.addEventListener("DOMContentLoaded", () => {
           );
           audioPlayer.play().catch((e) => {});
           isPlaying = true;
-          playPauseIcon.classList.replace("fa-play", "fa-pause");
+          playPauseIcon.textContent = "pause_circle";
         } else if (!fullStateData) {
           conn.send({
             t: "client_ready_to_play",
@@ -3558,6 +4349,87 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let isClientSeeking = false;
   async function handleIncomingData(data) {
+    switch (data.t) {
+      case "battle_songs_selected":
+        if (data.songs.length !== battleRounds) {
+          showNotification("Hile algılandı! Tur sayısı uyuşmuyor.", "error");
+          isBattleMode = false;
+          resetShareSession();
+          return;
+        }
+        opponentBattleSongs = data.songs;
+        showNotification("Rakibin şarkılarını seçti!", "success");
+        if (myBattleSongs.length > 0) {
+          beginBattleRounds();
+        }
+        break;
+      case "battle_rating_sync":
+        hasOpponentRated = true;
+        currentTrackScores.opponent = data.stars;
+        checkRatingStatus();
+        break;
+      case "battle_nav_vote":
+        battleNavVotes[data.action].opponent = true;
+        if (data.emoji) showReaction(data.emoji);
+        if (battleNavVotes[data.action].my) {
+          executeBattleNav(data.action);
+        } else {
+          showNotification(
+            `Rakibin ${data.action === "next" ? "sonraki" : "önceki"} şarkıya geçmek istiyor.`,
+            "info",
+          );
+        }
+        break;
+      case "battle_seek_vote":
+        const voteKey = data.offset > 0 ? "fwd" : "bwd";
+        battleSeekVotes[voteKey].opponent = true;
+        if (data.emoji) showReaction(data.emoji);
+        if (battleSeekVotes[voteKey].my) {
+          executeBattleSeek(data.offset);
+        } else {
+          showNotification(
+            `Rakibin şarkıyı ${Math.abs(data.offset)}s ${data.offset > 0 ? "ileri" : "geri"} sarmak istiyor.`,
+            "info",
+          );
+        }
+        break;
+      case "battle_force_modal":
+        showRatingModal();
+        break;
+      case "battle_verify_playlist":
+        handleBattlePlaylistVerification(data.playlist);
+        break;
+      case "battle_verification_ok":
+        if (isHost) {
+          isBattlePlaylistVerified = true;
+          showNotification("Eşleşme Tamam! Savaş Başlıyor...", "success");
+          currentBattleIndex = 0;
+          setTimeout(() => {
+            startCurrentBattleTurn();
+          }, 1000);
+        }
+        break;
+      case "battle_request_toggle_pause":
+        if (isHost) {
+          togglePlayPause();
+        }
+        break;
+      case "battle_cheat_detected":
+        showNotification(
+          `Hile algılandı (${data.reason || "Bilinmiyor"})! Maç sonlandırıldı.`,
+          "error",
+        );
+        finishBattle();
+        break;
+      case "battle_verification":
+        receivedOpponentResults = data;
+        verifyAndShowResults();
+        break;
+      case "reaction_display":
+        showReaction(data.emoji);
+        break;
+    }
+
     if (isHost) {
       switch (data.t) {
         case "request_blob":
@@ -3604,7 +4476,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 .play()
                 .then(() => {
                   isPlaying = true;
-                  playPauseIcon.classList.replace("fa-play", "fa-pause");
+                  playPauseIcon.textContent = "pause_circle";
                   spinningLogo.classList.add("playing");
                   showNotification(
                     "Senkronizasyon tamamlandı!",
@@ -3617,7 +4489,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
               isPlaying = false;
               audioPlayer.pause();
-              playPauseIcon.classList.replace("fa-pause", "fa-play");
+              playPauseIcon.textContent = "play_circle";
               spinningLogo.classList.remove("playing");
               showNotification("Senkronizasyon tamamlandı!", "success", 2000);
               broadcastCurrentState();
@@ -3632,122 +4504,150 @@ document.addEventListener("DOMContentLoaded", () => {
           broadcastMessage({ t: "reaction_display", emoji: data.emoji });
           break;
       }
-      return;
-    }
-    switch (data.t) {
-      case "full_state":
-        handleClientLoad(data.metadata, `init_${Date.now()}`, data);
-        break;
-      case "load_track":
-        silentPlayer.play().catch((e) => {});
-        handleClientLoad(data.metadata, data.syncId);
-        break;
-      case "base64_start":
-        if (data.id === clientState.currentSongId) {
-          incomingBase64[data.id] = { data: "", mime: data.mime };
-        }
-        break;
-      case "base64_chunk":
-        if (incomingBase64[data.id] && data.id === clientState.currentSongId) {
-          const transfer = incomingBase64[data.id];
-          transfer.data += data.data;
-          if (data.isLast) {
-            try {
-              const blob = await base64ToBlob(transfer.data, transfer.mime);
-              audioPlayer.src = URL.createObjectURL(blob);
-              audioPlayer.load();
-              audioPlayer.addEventListener(
-                "canplaythrough",
-                () => {
-                  if (clientState.currentLoadId) {
-                    conn.send({
-                      t: "client_ready_to_play",
-                      id: data.id,
-                      syncId: clientState.currentLoadId,
-                    });
-                  }
-                },
-                { once: true },
-              );
-            } finally {
-              delete incomingBase64[data.id];
+    } else {
+      switch (data.t) {
+        case "full_state":
+          handleClientLoad(data.metadata, `init_${Date.now()}`, data);
+          break;
+        case "load_track":
+          silentPlayer.play().catch((e) => {});
+          handleClientLoad(data.metadata, data.syncId);
+          break;
+        case "battle_load_track":
+          currentBattleRound = data.round;
+          battleTurn = data.turn;
+          if (typeof data.index === "number") currentBattleIndex = data.index;
+          reactionContainer.classList.add("hidden");
+          handleBattleTrackLoad(data.song);
+          break;
+        case "base64_start":
+          if (data.id === clientState.currentSongId) {
+            incomingBase64[data.id] = { data: "", mime: data.mime };
+          }
+          break;
+        case "base64_chunk":
+          if (
+            incomingBase64[data.id] &&
+            data.id === clientState.currentSongId
+          ) {
+            const transfer = incomingBase64[data.id];
+            transfer.data += data.data;
+            if (data.isLast) {
+              try {
+                const blob = await base64ToBlob(transfer.data, transfer.mime);
+                audioPlayer.src = URL.createObjectURL(blob);
+                audioPlayer.load();
+                audioPlayer.addEventListener(
+                  "canplaythrough",
+                  () => {
+                    if (clientState.currentLoadId) {
+                      conn.send({
+                        t: "client_ready_to_play",
+                        id: data.id,
+                        syncId: clientState.currentLoadId,
+                      });
+                    }
+                  },
+                  { once: true },
+                );
+              } finally {
+                delete incomingBase64[data.id];
+              }
             }
           }
-        }
-        break;
-      case "seek_start":
-        isClientSeeking = true;
-        audioPlayer.pause();
-        break;
-      case "seek_end":
-        const networkLatency = Date.now() - data.at;
-        const estimatedHostPosition = data.pos + networkLatency / 1000;
-        const onClientSeeked = () => {
-          audioPlayer.removeEventListener("seeked", onClientSeeked);
-          if (data.isPlaying) {
+          break;
+        case "seek_start":
+          isClientSeeking = true;
+          audioPlayer.pause();
+          break;
+        case "seek_end":
+          const networkLatency = Date.now() - data.at;
+          const estimatedHostPosition = data.pos + networkLatency / 1000;
+          const onClientSeeked = () => {
+            audioPlayer.removeEventListener("seeked", onClientSeeked);
+            if (data.isPlaying) {
+              if (isClientPlaybackUnlocked) {
+                audioPlayer.play().catch((e) => {});
+              }
+            } else {
+              audioPlayer.pause();
+            }
+            isClientSeeking = false;
+          };
+          audioPlayer.addEventListener("seeked", onClientSeeked, {
+            once: true,
+          });
+          audioPlayer.currentTime = estimatedHostPosition;
+          break;
+        case "state_update":
+          if (isClientSeeking) return;
+          if (isBattleMode && isPlaying && !isChangingTrack) {
+            const hostPos = data.pos;
+            const myPos = audioPlayer.currentTime;
+            const latency = (Date.now() - data.at) / 1000;
+            const diff = Math.abs(hostPos + latency - myPos);
+            if (diff > 5) {
+              broadcastMessage({
+                t: "battle_cheat_detected",
+                reason: "Unauthorized Seek",
+              });
+              showNotification(
+                "Hile algılandı: Senkronizasyon bozuldu!",
+                "error",
+              );
+              finishBattle();
+              return;
+            }
+          }
+
+          if (
+            audioPlayer.readyState < 2 ||
+            data.songId !== clientState.currentSongId
+          )
+            return;
+          if (data.isPlaying && audioPlayer.paused) {
             if (isClientPlaybackUnlocked) {
               audioPlayer.play().catch((e) => {});
             }
-          } else {
+          } else if (!data.isPlaying && !audioPlayer.paused) {
             audioPlayer.pause();
           }
-          isClientSeeking = false;
-        };
-        audioPlayer.addEventListener("seeked", onClientSeeked, { once: true });
-        audioPlayer.currentTime = estimatedHostPosition;
-        break;
-      case "state_update":
-        if (isClientSeeking) return;
-        if (
-          audioPlayer.readyState < 2 ||
-          data.songId !== clientState.currentSongId
-        )
-          return;
-        if (data.isPlaying && audioPlayer.paused) {
-          if (isClientPlaybackUnlocked) {
-            audioPlayer.play().catch((e) => {});
+          updatePlayPauseUI(data.isPlaying);
+          if (!isPlaying) {
+            audioPlayer.playbackRate = 1.0;
+            return;
           }
-        } else if (!data.isPlaying && !audioPlayer.paused) {
-          audioPlayer.pause();
-        }
-        isPlaying = data.isPlaying;
-        playPauseIcon.textContent = isPlaying ? "pause_circle" : "play_circle";
-        if (!isPlaying) {
-          audioPlayer.playbackRate = 1.0;
-          return;
-        }
-        const estimatedHostTime = data.pos + (Date.now() - data.at) / 1000;
-        const timeDiff = estimatedHostTime - audioPlayer.currentTime;
-        if (Math.abs(timeDiff) > 1.2) {
-          audioPlayer.currentTime = estimatedHostTime;
-          audioPlayer.playbackRate = 1.0;
-        } else if (Math.abs(timeDiff) > 0.15) {
-          audioPlayer.playbackRate = Math.max(
-            0.8,
-            Math.min(1.2, 1.0 + timeDiff * 0.05),
-          );
-        } else {
-          audioPlayer.playbackRate = 1.0;
-        }
-        break;
-      case "loading":
-        if (data.reason === "playlist_end") {
-          silentPlayer.pause();
-          audioPlayer.pause();
-          audioPlayer.src = "";
-          updateCarouselUI("none");
-          clientState.currentLoadId = null;
-          clientState.currentSongId = null;
-        }
-        break;
-      case "reaction_display":
-        showReaction(data.emoji);
-        break;
+          const estimatedHostTime = data.pos + (Date.now() - data.at) / 1000;
+          const timeDiff = estimatedHostTime - audioPlayer.currentTime;
+          if (Math.abs(timeDiff) > 1.2) {
+            audioPlayer.currentTime = estimatedHostTime;
+            audioPlayer.playbackRate = 1.0;
+          } else if (Math.abs(timeDiff) > 0.15) {
+            audioPlayer.playbackRate = Math.max(
+              0.8,
+              Math.min(1.2, 1.0 + timeDiff * 0.05),
+            );
+          } else {
+            audioPlayer.playbackRate = 1.0;
+          }
+          break;
+        case "loading":
+          if (data.reason === "playlist_end") {
+            silentPlayer.pause();
+            audioPlayer.pause();
+            audioPlayer.src = "";
+            updateCarouselUI("none");
+            clientState.currentLoadId = null;
+            clientState.currentSongId = null;
+          }
+          break;
+      }
     }
   }
 
   function seekTo(time, fromMediaSession = false) {
-    if (isLiveMode || isClient || isHostSeeking) return;
+    if (isClient || isHostSeeking) return;
+    if (isLiveMode && !isBattleMode) return;
     isHostSeeking = true;
     const newTime = Math.max(
       0,
@@ -3815,12 +4715,18 @@ document.addEventListener("DOMContentLoaded", () => {
       !isHost ||
       !conn ||
       !conn.open ||
-      currentTrackIndex < 0 ||
+      (currentTrackIndex < 0 && !isBattleMode) ||
       !audioPlayer.src
     )
       return;
-    const playbackList = isShuffle ? shuffledPlaylist : currentPlaylist;
-    const songId = playbackList[currentTrackIndex];
+    const playbackList = isBattleMode
+      ? battlePlaylist
+      : isShuffle
+        ? shuffledPlaylist
+        : currentPlaylist;
+    const index = isBattleMode ? currentBattleIndex : currentTrackIndex;
+    const songId = isBattleMode ? playbackList[index]?.id : playbackList[index];
+
     broadcastMessage({
       t: "state_update",
       isPlaying: isPlaying,
@@ -4589,6 +5495,7 @@ document.addEventListener("DOMContentLoaded", () => {
   audioPlayer.addEventListener("ended", handleSongEnd);
   audioPlayer.addEventListener("playing", () => {
     isChangingTrack = false;
+    updatePlayPauseUI(true);
     updateMediaSessionPositionState();
   });
   audioPlayer.addEventListener("pause", () => {
@@ -4599,13 +5506,8 @@ document.addEventListener("DOMContentLoaded", () => {
       !audioPlayer.ended &&
       audioPlayer.currentTime < audioPlayer.duration - 0.5
     ) {
-      isPlaying = false;
-      playPauseIcon.textContent = "play_circle";
-      spinningLogo.classList.remove("playing");
+      updatePlayPauseUI(false);
       silentPlayer.pause();
-      if ("mediaSession" in navigator) {
-        navigator.mediaSession.playbackState = "paused";
-      }
     }
   });
   audioPlayer.addEventListener("seeked", updateMediaSessionPositionState);
@@ -4631,25 +5533,83 @@ document.addEventListener("DOMContentLoaded", () => {
       : formatTime(audioPlayer.duration);
     updateMediaSessionPositionState();
   });
-  progressContainer.addEventListener("click", setProgress);
+
+  openBattleModalBtn.addEventListener("click", () => {
+    moreActionsMenu.classList.remove("is-open");
+    startBattleSession();
+  });
+  battleRoundsInput.addEventListener("input", () => {
+    battleRoundsDisplay.textContent = battleRoundsInput.value;
+    updateVolumeSliderFill(battleRoundsInput);
+  });
+  createBattleBtn.addEventListener("click", handleCreateBattle);
+  copyBattleLinkBtn.addEventListener("click", () => {
+    navigator.clipboard.writeText(battleShareLink.value);
+    showNotification("Bağlantı kopyalandı!", "success");
+  });
+  battleSelectionSearch.addEventListener("input", () => {
+    renderBattleSelectionList(battleSelectionSearch.value);
+  });
+  battleConfirmSelectionBtn.addEventListener("click", finishBattleSelection);
+
+  battleStarsContainer.addEventListener("click", (e) => {
+    if (hasMyRated) return;
+    const starBtn = e.target.closest(".star-btn");
+    if (!starBtn) return;
+    const rating = parseInt(starBtn.dataset.star, 10);
+    currentBattleRating = rating;
+    const starIcons = battleStarsContainer.querySelectorAll(
+      ".material-symbols-rounded",
+    );
+    starIcons.forEach((icon, idx) => {
+      if (idx < rating) {
+        icon.classList.remove("text-white/20");
+        icon.classList.add("text-yellow-400");
+      } else {
+        icon.classList.remove("text-yellow-400");
+        icon.classList.add("text-white/20");
+      }
+    });
+    battleSubmitRatingBtn.disabled = false;
+  });
+
+  battleSubmitRatingBtn.addEventListener("click", () => {
+    if (currentBattleRating > 0 && !hasMyRated) {
+      submitBattleRating(currentBattleRating);
+    }
+  });
+
+  progressContainer.addEventListener("click", (e) => {
+    if (isBattleMode) {
+      const rect = progressContainer.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const percent = x / rect.width;
+      const targetTime = percent * audioPlayer.duration;
+      const offset = targetTime - audioPlayer.currentTime;
+
+      voteBattleSeek(Math.round(offset));
+      return;
+    }
+    setProgress(e);
+  });
   loopBtn.addEventListener("click", updateLoopState);
   volumeSlider.addEventListener("input", (e) =>
     setVolume(e.target.value / 100),
   );
   volumeIconBtn.addEventListener("click", toggleMute);
   goToPlaylistMakerBtn.addEventListener("click", () =>
-    window.open("https://lunetune.xmeroriginals.com/maker", "_blank"),
+    window.open("https://lunetune.xmeroriginals.com/maker/", "_blank"),
   );
   goToLunelightsBtn.addEventListener("click", () =>
     window.open(
-      "https://lunetune.xmeroriginals.com/first-lunelights",
+      "https://lunetune.xmeroriginals.com/firstlunelights/",
       "_blank",
     ),
   );
   if (goToLunelightsBtnSmall) {
     goToLunelightsBtnSmall.addEventListener("click", (e) =>
       window.open(
-        "https://lunetune.xmeroriginals.com/first-lunelights",
+        "https://lunetune.xmeroriginals.com/firstlunelights/",
         "_blank",
       ),
     );
