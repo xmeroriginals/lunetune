@@ -20,14 +20,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const songCountEl = document.getElementById("song-count");
   const exportPlaylistBtn = document.getElementById("export-playlist-btn");
   const directTransferPlaylistBtn = document.getElementById(
-    "direct-lunetune-transfer-playlist-btn"
+    "direct-lunetune-transfer-playlist-btn",
   );
   const notificationContainer = document.getElementById(
-    "notification-container"
+    "notification-container",
   );
   const playlistCoverInput = document.getElementById("playlist-cover-input");
   const playlistCoverPreview = document.getElementById(
-    "playlist-cover-preview"
+    "playlist-cover-preview",
   );
   const importPlaylistInput = document.getElementById("import-playlist-input");
   const pasteCoverUrlBtn = document.getElementById("paste-cover-url-btn");
@@ -49,7 +49,8 @@ document.addEventListener("DOMContentLoaded", () => {
       success: "icon-success",
       error: "icon-error",
     };
-    toast.innerHTML = `<span class="material-symbols-rounded notranslate icon ${iconColors[type]}">${icons[type]}</span><div class="toast-content"><div class="toast-message-wrapper"><p class="toast-message">${message}</p></div></div><button class="toast-close-btn"><span class="material-symbols-rounded notranslate">close</span></button>`;
+    toast.innerHTML = `<span class="material-symbols-rounded notranslate icon ${iconColors[type]}">${icons[type]}</span><div class="toast-content"><div class="toast-message-wrapper"><p class="toast-message"></p></div></div><button class="toast-close-btn"><span class="material-symbols-rounded notranslate">close</span></button>`;
+    toast.querySelector(".toast-message").textContent = message;
 
     notificationContainer.appendChild(toast);
     requestAnimationFrame(() => {
@@ -76,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
       window.history.replaceState({}, document.title, window.location.pathname);
       showNotification(
         "Lunetune'dan liste düzenlenmek üzere alınıyor...",
-        "info"
+        "info",
       );
       try {
         const importData = await getDataFromDB(MAKER_KEY);
@@ -118,7 +119,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const request = store.get(key);
         request.onsuccess = () => resolve(request.result || null);
         request.onerror = (event) =>
-          reject("Error reading from DB: " + (event.target.error?.message || event.target.error));
+          reject(
+            "Error reading from DB: " +
+              (event.target.error?.message || event.target.error),
+          );
       });
     });
   }
@@ -225,8 +229,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   importPlaylistInput.addEventListener("change", handleImportPlaylist);
 
-  const jukehostImportJsonBtn = document.getElementById("jukehost-import-json-btn");
-  const jukehostImportFileBtn = document.getElementById("jukehost-import-file-btn");
+  const jukehostImportJsonBtn = document.getElementById(
+    "jukehost-import-json-btn",
+  );
+  const jukehostImportFileBtn = document.getElementById(
+    "jukehost-import-file-btn",
+  );
   const jukehostFileInput = document.getElementById("jukehost-file-input");
 
   jukehostImportJsonBtn.addEventListener("click", async () => {
@@ -248,7 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   jukehostImportFileBtn.addEventListener("click", () =>
-    jukehostFileInput.click()
+    jukehostFileInput.click(),
   );
 
   jukehostFileInput.addEventListener("change", async (e) => {
@@ -272,7 +280,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!json.tracks || !Array.isArray(json.tracks)) {
       showNotification(
         "Geçersiz JukeHost JSON formatı (tracks dizisi yok).",
-        "error"
+        "error",
       );
       return;
     }
@@ -286,7 +294,7 @@ document.addEventListener("DOMContentLoaded", () => {
     showNotification(
       `${totalTracks} şarkı bulundu. JukeHost'tan işleniyor...`,
       "info",
-      5000
+      5000,
     );
 
     let processedCount = 0;
@@ -317,7 +325,9 @@ document.addEventListener("DOMContentLoaded", () => {
           if (metadata.title) title = metadata.title;
           if (metadata.artist) artist = metadata.artist;
           if (metadata.coverBlob) {
-            const coverFile = new File([metadata.coverBlob], "cover.jpg", { type: metadata.coverBlob.type });
+            const coverFile = new File([metadata.coverBlob], "cover.jpg", {
+              type: metadata.coverBlob.type,
+            });
             coverImageUrl = await processImage(coverFile);
           }
         }
@@ -338,7 +348,10 @@ document.addEventListener("DOMContentLoaded", () => {
       processedCount++;
     }
 
-    showNotification(`${processedCount} JukeHost şarkısı başarıyla eklendi!`, "success");
+    showNotification(
+      `${processedCount} JukeHost şarkısı başarıyla eklendi!`,
+      "success",
+    );
   }
 
   async function streamParseArray(file, startIndex, onItemFound, onProgress) {
@@ -422,7 +435,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (songsToProcess.length > 0) {
       if (
         confirm(
-          "Mevcut listesi temizlemek ister misiniz?\n\nTamam: Temizle ve Yükle\nİptal: Üzerine Ekle"
+          "Mevcut listesi temizlemek ister misiniz?\n\nTamam: Temizle ve Yükle\nİptal: Üzerine Ekle",
         )
       ) {
         songsToProcess = [];
@@ -463,7 +476,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
           const playlistStr = headerText.substring(
             headerText.indexOf("{"),
-            headerText.indexOf('"songs"')
+            headerText.indexOf('"songs"'),
           );
           const cleanStr = playlistStr.trim().replace(/,$/, "") + "}";
           const partial = JSON.parse(cleanStr);
@@ -474,7 +487,10 @@ document.addEventListener("DOMContentLoaded", () => {
           metadata = { name: nameMatch ? nameMatch[1] : "İçe Aktarılan Liste" };
         }
 
-        if (i === 0 && (!playlistNameInput.value || songsToProcess.length === 0)) {
+        if (
+          i === 0 &&
+          (!playlistNameInput.value || songsToProcess.length === 0)
+        ) {
           let name = metadata?.name || "";
           const partMatch = name.match(/^(.*?) \(Bölüm \d+\)$/);
           if (partMatch) name = partMatch[1];
@@ -488,7 +504,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const listStartIndex = songsMatch.index + songsMatch[0].length;
 
-        const tempMsg = document.createElement('div');
+        const tempMsg = document.createElement("div");
         tempMsg.className = "text-center text-white/50 py-2 text-sm";
         tempMsg.innerText = `${file.name} yükleniyor...`;
         songList.appendChild(tempMsg);
@@ -503,7 +519,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (songData.fileBase64) {
               const blob = await base64ToBlob(
                 songData.fileBase64,
-                songData.mimeType
+                songData.mimeType,
               );
               const extension = songData.mimeType?.split("/")[1] || "mp3";
               const fileName = `${songData.title || "track"}.${extension}`;
@@ -544,9 +560,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 try {
                   const metadata = await fetchMetadataFromUrl(newSong.url);
                   if (metadata && metadata.coverBlob) {
-                    const coverFile = new File([metadata.coverBlob], "cover.jpg", {
-                      type: metadata.coverBlob.type,
-                    });
+                    const coverFile = new File(
+                      [metadata.coverBlob],
+                      "cover.jpg",
+                      {
+                        type: metadata.coverBlob.type,
+                      },
+                    );
                     newSong.coverImageUrl = await processImage(coverFile);
                   }
                 } catch (e) {
@@ -564,29 +584,29 @@ document.addEventListener("DOMContentLoaded", () => {
             totalProcessedAcrossFiles++;
           },
           (processed, total) => {
-            const percent = Math.min(100, Math.round((processed / total) * 100));
+            const percent = Math.min(
+              100,
+              Math.round((processed / total) * 100),
+            );
             tempMsg.innerText = `${file.name}: %${percent} bitti`;
-          }
+          },
         );
 
         tempMsg.remove();
-
       } catch (err) {
         console.error("Çalma listesi içe aktarma hatası:", err);
-        showNotification(
-          `${file.name} okunamadı: ` + err.message,
-          "error"
-        );
+        showNotification(`${file.name} okunamadı: ` + err.message, "error");
       }
     }
 
     if (totalProcessedAcrossFiles === 0 && songsToProcess.length === 0) {
-      songList.innerHTML = '<p class="text-center text-white/50 py-8">Henüz şarkı eklenmedi.</p>';
+      songList.innerHTML =
+        '<p class="text-center text-white/50 py-8">Henüz şarkı eklenmedi.</p>';
     }
 
     showNotification(
       `${totalProcessedAcrossFiles} şarkı başarıyla yüklendi!`,
-      "success"
+      "success",
     );
     importPlaylistInput.value = "";
     updateUIState();
@@ -594,7 +614,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function handleFiles(files) {
     const audioFiles = Array.from(files).filter((file) =>
-      file.type.startsWith("audio/")
+      file.type.startsWith("audio/"),
     );
     if (audioFiles.length === 0) {
       showNotification("Lütfen geçerli ses dosyaları seçin.", "error");
@@ -742,22 +762,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const nextFrameOffset = contentOffset + frameSize;
 
         if (nextFrameOffset > arrayBuffer.byteLength) {
-          console.warn(`Frame ${frameId} truncated. Needed ${nextFrameOffset}, had ${arrayBuffer.byteLength}`);
+          console.warn(
+            `Frame ${frameId} truncated. Needed ${nextFrameOffset}, had ${arrayBuffer.byteLength}`,
+          );
           break;
         }
 
         try {
           if (frameId === "TIT2") {
-            metadata.title = parseTextFrame(
-              dataView,
-              contentOffset,
-              frameSize
-            );
+            metadata.title = parseTextFrame(dataView, contentOffset, frameSize);
           } else if (frameId === "TPE1") {
             metadata.artist = parseTextFrame(
               dataView,
               contentOffset,
-              frameSize
+              frameSize,
             );
           } else if (frameId === "APIC") {
             if (!metadata.coverBlob) {
@@ -782,7 +800,10 @@ document.addEventListener("DOMContentLoaded", () => {
               } else if (encoding === 1 || encoding === 2) {
                 while (
                   ptr < nextFrameOffset - 1 &&
-                  !(dataView.getUint8(ptr) === 0 && dataView.getUint8(ptr + 1) === 0)
+                  !(
+                    dataView.getUint8(ptr) === 0 &&
+                    dataView.getUint8(ptr + 1) === 0
+                  )
                 ) {
                   ptr += 2;
                 }
@@ -794,7 +815,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const imgData = new Uint8Array(
                   dataView.buffer,
                   dataView.byteOffset + ptr,
-                  imgDataSize
+                  imgDataSize,
                 );
                 metadata.coverBlob = new Blob([imgData], { type: mimeType });
               }
@@ -819,19 +840,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const content = new Uint8Array(
       dataView.buffer,
       dataView.byteOffset + offset + 1,
-      length - 1
+      length - 1,
     );
 
     try {
       if (encoding === 0 || encoding === 3) {
         const decoder = new TextDecoder(
-          encoding === 0 ? "iso-8859-1" : "utf-8"
+          encoding === 0 ? "iso-8859-1" : "utf-8",
         );
         return decoder.decode(content).replace(/\0/g, "");
       } else if (encoding === 1 || encoding === 2) {
-        const decoder = new TextDecoder(
-          encoding === 1 ? "utf-16" : "utf-16be"
-        );
+        const decoder = new TextDecoder(encoding === 1 ? "utf-16" : "utf-16be");
         return decoder.decode(content).replace(/\0/g, "");
       }
     } catch (e) {
@@ -841,7 +860,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function addSongToList(songData) {
-    if (songList.querySelector('p')?.textContent.includes('Henüz şarkı eklenmedi')) {
+    if (
+      songList.querySelector("p")?.textContent.includes("Henüz şarkı eklenmedi")
+    ) {
       songList.innerHTML = "";
     }
     songsToProcess.push(songData);
@@ -875,21 +896,28 @@ document.addEventListener("DOMContentLoaded", () => {
     const detailsSectionHTML =
       song.type === "url"
         ? `
-             <input type="text" value="${song.coverImageUrl}" class="w-full bg-[#1c1f3a] p-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-400 text-sm cover-url-input" placeholder="Kapak Resmi URL'i (isteğe bağlı)">
+             <input type="text" class="w-full bg-[#1c1f3a] p-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-400 text-sm cover-url-input" placeholder="Kapak Resmi URL'i (isteğe bağlı)">
         `
         : "";
 
     item.innerHTML = `
             ${coverSectionHTML}
             <div class="flex-grow w-full space-y-2">
-                <input type="text" value="${song.title}" class="w-full bg-[#1c1f3a] text-white p-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-400 title-input" placeholder="Şarkı Adı">
-                <input type="text" value="${song.artist}" class="w-full bg-[#1c1f3a] text-white p-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-400 artist-input" placeholder="Sanatçı Adı">
+                <input type="text" class="w-full bg-[#1c1f3a] text-white p-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-400 title-input" placeholder="Şarkı Adı">
+                <input type="text" class="w-full bg-[#1c1f3a] text-white p-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-purple-400 artist-input" placeholder="Sanatçı Adı">
                 ${detailsSectionHTML}
             </div>
             <button class="remove-btn text-red-400 hover:text-red-600 px-3 py-2 rounded-full hover:bg-red-500/10 transition-colors">
                 <span class="material-symbols-rounded notranslate">delete</span>
             </button>
         `;
+
+    item.querySelector(".title-input").value = song.title || "";
+    item.querySelector(".artist-input").value = song.artist || "";
+    if (song.type === "url") {
+      const coverUrlInput = item.querySelector(".cover-url-input");
+      if (coverUrlInput) coverUrlInput.value = song.coverImageUrl || "";
+    }
     songList.appendChild(item);
 
     item.querySelector(".title-input").addEventListener("input", (e) => {
@@ -925,7 +953,7 @@ document.addEventListener("DOMContentLoaded", () => {
             showNotification(
               "Büyük kapak resmi optimize edildi.",
               "info",
-              2000
+              2000,
             );
           } catch (err) {
             console.error("Data URL işlenirken hata:", err);
@@ -972,8 +1000,8 @@ document.addEventListener("DOMContentLoaded", () => {
     exportPlaylistBtn.disabled = songsToProcess.length === 0;
 
     let totalSize = 0;
-    songsToProcess.forEach(song => {
-      if (song.type === 'file') {
+    songsToProcess.forEach((song) => {
+      if (song.type === "file") {
         totalSize += song.file.size;
       }
     });
@@ -1058,14 +1086,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const song = songsToProcess[i];
         let songSize = 0;
 
-        if (song.type === 'file') {
+        if (song.type === "file") {
           songSize = song.file.size;
           songSize += songSize * 0.35;
         } else {
           songSize = 500;
         }
 
-        if (currentChunkSize + songSize > SIZE_LIMIT && currentChunkSongs.length > 0) {
+        if (
+          currentChunkSize + songSize > SIZE_LIMIT &&
+          currentChunkSongs.length > 0
+        ) {
           chunks.push(currentChunkSongs);
           currentChunkSongs = [];
           currentChunkSize = 0;
@@ -1152,7 +1183,7 @@ document.addEventListener("DOMContentLoaded", () => {
         totalChunks > 1
           ? "Çalma listesi boyut nedeniyle parçalar halinde dışa aktarıldı!"
           : "Çalma listesi başarıyla dışa aktarıldı!",
-        "success"
+        "success",
       );
     } catch (error) {
       console.error("Dışa aktarma hatası:", error);
@@ -1178,14 +1209,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     let totalSize = 0;
-    songsToProcess.forEach(s => {
-      if (s.type === 'file') totalSize += s.file.size;
+    songsToProcess.forEach((s) => {
+      if (s.type === "file") totalSize += s.file.size;
     });
 
     if (totalSize > 400 * 1024 * 1024) {
       showNotification(
         "Playlist çok büyük (>400MB). Lütfen dışa aktararak parçalara bölün.",
-        "error"
+        "error",
       );
       return;
     }
@@ -1203,21 +1234,15 @@ document.addEventListener("DOMContentLoaded", () => {
           };
 
           if (song.type === "file") {
-            const [audioBase64, imageBase64] = await Promise.all([
-              fileToBase64(song.file),
-              song.coverFile
-                ? fileToBase64(song.coverFile)
-                : Promise.resolve(null),
-            ]);
-            songExportData.fileBase64 = audioBase64.split(",")[1];
+            songExportData.audioBlob = song.file;
             songExportData.mimeType = song.file.type;
-            songExportData.image = imageBase64;
+            songExportData.imageBlob = song.coverFile || null;
           } else {
             songExportData.url = song.url;
             songExportData.image = song.coverImageUrl || null;
           }
           return songExportData;
-        })
+        }),
       );
 
       const exportData = {
@@ -1232,7 +1257,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       showNotification(
         "Liste aktarıma hazırlandı, Lunetune açılıyor...",
-        "success"
+        "success",
       );
 
       setTimeout(() => {
@@ -1269,7 +1294,10 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       request.onerror = (event) =>
-        reject("Database error: " + (event.target.error?.message || event.target.error));
+        reject(
+          "Database error: " +
+            (event.target.error?.message || event.target.error),
+        );
       request.onsuccess = (event) => resolve(event.target.result);
     });
   }

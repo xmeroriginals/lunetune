@@ -7,9 +7,11 @@ const ASSETS_TO_CACHE = [
     "./src/main.js",
     "./src/manifest.json",
     "./resources/Lunetune.png",
+    "./resources/lunetune192x192.png",
+    "./resources/lunetune512x512.png",
     "./resources/lunetune-thumb.png",
     "./resources/lunetune-circle-playing.png",
-    "./maker.html",
+    "./maker/index.html",
     "./src/maker.js",
     "./lib/tailwind.js"
 ];
@@ -103,8 +105,8 @@ self.addEventListener("fetch", (event) => {
         event.respondWith(
             fetch(event.request).catch(async () => {
                 const path = new URL(event.request.url).pathname;
-                if (path.includes("maker.html")) {
-                    return (await caches.match("./maker.html")) || (await caches.match("./index.html"));
+                if (path.includes("/maker/")) {
+                    return (await caches.match("./maker/index.html")) || (await caches.match("./index.html"));
                 }
                 return caches.match("./index.html");
             }).then(response => {

@@ -1070,7 +1070,36 @@ document.addEventListener("DOMContentLoaded", () => {
       titleSize = isCurrent ? "text-3xl" : "text-xl",
       artistSize = isCurrent ? "text-lg" : "text-md",
       marginTop = isCurrent ? "mt-8" : "mt-4";
-    card.innerHTML = `<img src="${coverArt}" alt="${title}" class="rounded-lg shadow-2xl ${imgClasses} object-cover mx-auto" onerror="this.onerror=null; this.src='${fallbackErrorImage}';"><div class="${marginTop} flex items-center justify-center gap-4"><h2 class="${titleSize} font-bold text-white tracking-wide truncate max-w-xs">${title}</h2>${actionButtonHTML}</div><p class="${artistSize} text-[#b9b9c9] mt-1 truncate max-w-xs">${artist}</p>`;
+    const img = document.createElement("img");
+    img.src = coverArt;
+    img.alt = title;
+    img.className = `rounded-lg shadow-2xl ${imgClasses} object-cover mx-auto`;
+    img.onerror = () => {
+      img.onerror = null;
+      img.src = fallbackErrorImage;
+    };
+
+    const titleRow = document.createElement("div");
+    titleRow.className = `${marginTop} flex items-center justify-center gap-4`;
+
+    const h2 = document.createElement("h2");
+    h2.className = `${titleSize} font-bold text-white tracking-wide truncate max-w-xs`;
+    h2.textContent = title;
+    titleRow.appendChild(h2);
+
+    if (actionButtonHTML) {
+      const tmpDiv = document.createElement("div");
+      tmpDiv.innerHTML = actionButtonHTML;
+      Array.from(tmpDiv.childNodes).forEach((n) => titleRow.appendChild(n));
+    }
+
+    const artistEl = document.createElement("p");
+    artistEl.className = `${artistSize} text-[#b9b9c9] mt-1 truncate max-w-xs`;
+    artistEl.textContent = artist;
+
+    card.appendChild(img);
+    card.appendChild(titleRow);
+    card.appendChild(artistEl);
     if (initialStyle) {
       Object.assign(card.style, initialStyle);
     } else {
@@ -3177,26 +3206,43 @@ document.addEventListener("DOMContentLoaded", () => {
         .toString(36)
         .substr(2, 9)}`;
       let newSong;
-      if (songData.fileBase64) {
-        const blob = await base64ToBlob(songData.fileBase64, songData.mimeType);
-        if (songData.image && songData.image.startsWith("data:image")) {
+      if (songData.fileBase64 || songData.audioBlob) {
+        const blob =
+          songData.audioBlob ||
+          (await base64ToBlob(songData.fileBase64, songData.mimeType));
+
+        let songImage = songData.image;
+        if (songData.imageBlob) {
           try {
-            const imgBlob = await (await fetch(songData.image)).blob();
+            songImage = await new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = () => resolve(reader.result);
+              reader.onerror = reject;
+              reader.readAsDataURL(songData.imageBlob);
+            });
+          } catch (e) {
+            console.warn("Failed to process imageBlob during import", e);
+          }
+        }
+
+        if (songImage && songImage.startsWith("data:image")) {
+          try {
+            const imgBlob = await (await fetch(songImage)).blob();
             if (imgBlob.size > 512 * 1024) {
               const imgFile = new File([imgBlob], "cover.jpg", {
                 type: imgBlob.type,
               });
-              songData.image = await processImage(imgFile, 64, 64);
+              songImage = await processImage(imgFile, 64, 64);
             }
           } catch (err) {
-            songData.image = null;
+            songImage = null;
           }
         }
         newSong = {
           id: newSongId,
           title: songData.title,
           artist: songData.artist,
-          image: songData.image,
+          image: songImage,
           fileBlob: blob,
           url: null,
           isLocal: true,
@@ -4586,13 +4632,29 @@ document.addEventListener("DOMContentLoaded", () => {
             const myPos = audioPlayer.currentTime;
             const latency = (Date.now() - data.at) / 1000;
             const diff = Math.abs(hostPos + latency - myPos);
-            if (diff > 5) {
+            const currentTrack = masterSongLibrary[clientState.currentSongId];
+            let mySrcHash = "";
+            if (currentTrack) {
+              if (currentTrack.url) mySrcHash = currentTrack.url;
+              else if (currentTrack.isLocal && currentTrack.fileBlob)
+                mySrcHash = `local_${currentTrack.fileBlob.size}`;
+              else if (currentTrack.fileBlob)
+                mySrcHash = `blob_${currentTrack.fileBlob.size}`;
+            }
+
+            if (
+              diff > 5 ||
+              (data.srcHash && mySrcHash && data.srcHash !== mySrcHash)
+            ) {
               broadcastMessage({
                 t: "battle_cheat_detected",
-                reason: "Unauthorized Seek",
+                reason:
+                  diff > 5 ? "Unauthorized Seek" : "Track Content Mismatch",
               });
               showNotification(
-                "Hile algılandı: Senkronizasyon bozuldu!",
+                diff > 5
+                  ? "Hile algılandı: Senkronizasyon bozuldu!"
+                  : "Hile algılandı: Farklı ses dosyası!",
                 "error",
               );
               finishBattle();
@@ -4725,7 +4787,18 @@ document.addEventListener("DOMContentLoaded", () => {
         ? shuffledPlaylist
         : currentPlaylist;
     const index = isBattleMode ? currentBattleIndex : currentTrackIndex;
-    const songId = isBattleMode ? playbackList[index]?.id : playbackList[index];
+    const track = isBattleMode
+      ? playbackList[index]
+      : masterSongLibrary[playbackList[index]];
+    const songId = isBattleMode ? track?.id : playbackList[index];
+
+    let srcHash = "";
+    if (track) {
+      if (track.url) srcHash = track.url;
+      else if (track.isLocal && track.fileBlob)
+        srcHash = `local_${track.fileBlob.size}`;
+      else if (track.fileBlob) srcHash = `blob_${track.fileBlob.size}`;
+    }
 
     broadcastMessage({
       t: "state_update",
@@ -4733,6 +4806,7 @@ document.addEventListener("DOMContentLoaded", () => {
       pos: audioPlayer.currentTime,
       at: Date.now(),
       songId: songId,
+      srcHash: srcHash,
     });
   }
 
@@ -4816,7 +4890,72 @@ document.addEventListener("DOMContentLoaded", () => {
     return Math.floor(100000000 + Math.random() * 900000000).toString();
   }
 
-  function tryInitializeTransferPeer(attempt = 1) {
+  const jumpCryptoHelpers = {
+    _keyPair: null,
+    async getKeyPair() {
+      if (!this._keyPair) {
+        this._keyPair = await crypto.subtle.generateKey(
+          { name: "ECDH", namedCurve: "P-256" },
+          false,
+          ["deriveKey", "deriveBits"],
+        );
+      }
+      return this._keyPair;
+    },
+    async exportPublicKey() {
+      const kp = await this.getKeyPair();
+      return await crypto.subtle.exportKey("jwk", kp.publicKey);
+    },
+    async deriveSharedHex(remoteJwk) {
+      const kp = await this.getKeyPair();
+      const remoteKey = await crypto.subtle.importKey(
+        "jwk",
+        remoteJwk,
+        { name: "ECDH", namedCurve: "P-256" },
+        false,
+        [],
+      );
+      const bits = await crypto.subtle.deriveBits(
+        { name: "ECDH", public: remoteKey },
+        kp.privateKey,
+        256,
+      );
+      return Array.from(new Uint8Array(bits))
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("");
+    },
+    async generateDiscoveryId(shortCode) {
+      const timeStep = Math.floor(Date.now() / 60000);
+      const buf = await crypto.subtle.digest(
+        "SHA-256",
+        new TextEncoder().encode(shortCode + "_" + timeStep),
+      );
+      return (
+        "ld-" +
+        Array.from(new Uint8Array(buf))
+          .map((b) => b.toString(16).padStart(2, "0"))
+          .join("")
+          .substring(0, 20)
+      );
+    },
+    async generateJumpId(sharedHex) {
+      const buf = await crypto.subtle.digest(
+        "SHA-256",
+        new TextEncoder().encode(sharedHex + "_jump"),
+      );
+      return (
+        "lj-" +
+        Array.from(new Uint8Array(buf))
+          .map((b) => b.toString(16).padStart(2, "0"))
+          .join("")
+      );
+    },
+    reset() {
+      this._keyPair = null;
+    },
+  };
+
+  async function tryInitializeTransferPeer(attempt = 1) {
     if (attempt > 10) {
       showNotification(
         "Uygun bir bağlantı kodu bulunamadı. Lütfen tekrar deneyin.",
@@ -4825,25 +4964,29 @@ document.addEventListener("DOMContentLoaded", () => {
       resetTransferState();
       return;
     }
+    jumpCryptoHelpers.reset();
     const shortCode = generateShortCode();
+    transferState.shortCode = shortCode;
+    const discoveryId = await jumpCryptoHelpers.generateDiscoveryId(shortCode);
     if (transferPeer) transferPeer.destroy();
-    transferPeer = new Peer(shortCode);
-    transferPeer.on("open", (id) => {
-      const formattedCode = id.replace(/(\d{3})(\d{3})(\d{3})/, "$1-$2-$3");
+    transferPeer = new Peer(discoveryId);
+    transferPeer.on("open", () => {
+      const formattedCode = shortCode.replace(
+        /(\d{3})(\d{3})(\d{3})/,
+        "$1-$2-$3",
+      );
       transferPeerIdEl.textContent = formattedCode;
       transferSenderStatusEl.textContent = "Bağlantı bekleniyor...";
       transferQrCodeEl.innerHTML = "";
       new QRCode(transferQrCodeEl, {
-        text: `${window.location.origin}${window.location.pathname}?transfer=${id}`,
+        text: `${window.location.origin}${window.location.pathname}?transfer=${shortCode}`,
         width: 192,
         height: 192,
       });
       transferPeer.on("connection", (newConn) => {
-        if (newConn.metadata && newConn.metadata.type === "data-transfer") {
-          if (transferConn && transferConn.open) {
-            newConn.close();
-            return;
-          }
+        if (newConn.metadata && newConn.metadata.type === "dt-discovery") {
+          setupDiscoveryConnection(newConn);
+        } else if (newConn.metadata && newConn.metadata.type === "dt-jump") {
           transferConn = newConn;
           setupTransferConnection(transferConn);
         }
@@ -4859,6 +5002,72 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  function setupDiscoveryConnection(conn) {
+    conn.on("open", async () => {
+      if (transferState.role === "sender") {
+        transferSenderStatusEl.textContent = "Anahtar değişimi yapılıyor...";
+        const myPub = await jumpCryptoHelpers.exportPublicKey();
+        conn.send({ type: "ecdh_offer", pubKey: myPub });
+      } else {
+        showNotification(
+          "Gönderici ile bağlantı kuruldu, el sıkışma...",
+          "info",
+        );
+        const myPub = await jumpCryptoHelpers.exportPublicKey();
+        conn.send({ type: "ecdh_answer", pubKey: myPub });
+      }
+    });
+    conn.on("data", async (data) => {
+      if (data.type === "ecdh_offer") {
+        const sharedHex = await jumpCryptoHelpers.deriveSharedHex(data.pubKey);
+        const jumpId = await jumpCryptoHelpers.generateJumpId(sharedHex);
+        const myPub = await jumpCryptoHelpers.exportPublicKey();
+        conn.send({ type: "ecdh_answer", pubKey: myPub });
+        setTimeout(async () => {
+          if (transferPeer) transferPeer.destroy();
+          transferPeer = new Peer();
+          transferPeer.on("open", () => {
+            transferConn = transferPeer.connect(jumpId, {
+              metadata: { type: "dt-jump" },
+              reliable: true,
+            });
+            setupTransferConnection(transferConn);
+          });
+          transferPeer.on("error", () => {
+            showNotification("Gizli kanal bağlantısı başarısız.", "error");
+            resetTransferState();
+          });
+        }, 800);
+      } else if (data.type === "ecdh_answer") {
+        const sharedHex = await jumpCryptoHelpers.deriveSharedHex(data.pubKey);
+        const jumpId = await jumpCryptoHelpers.generateJumpId(sharedHex);
+        transferSenderStatusEl.textContent = "Gizli kanal açılıyor...";
+        if (transferPeer) transferPeer.destroy();
+        transferPeer = new Peer(jumpId);
+        transferPeer.on("open", () => {
+          transferSenderStatusEl.textContent =
+            "Güvenli kanal hazır, bağlantı bekleniyor...";
+          transferPeer.on("connection", (jumpConn) => {
+            if (jumpConn.metadata && jumpConn.metadata.type === "dt-jump") {
+              transferConn = jumpConn;
+              setupTransferConnection(transferConn);
+            }
+          });
+        });
+        transferPeer.on("error", (err) => {
+          if (err.type === "unavailable-id") {
+            showNotification("Kanal çakışması, tekrar deneniyor...", "info");
+            setTimeout(() => tryInitializeTransferPeer(), 300);
+          } else {
+            showNotification(`Gizli kanal hatası: ${err.type}`, "error");
+            resetTransferState();
+          }
+        });
+      }
+    });
+    conn.on("error", () => resetTransferState());
+  }
+
   function startDirectTransfer() {
     if (peer) peer.destroy();
     resetTransferState();
@@ -4871,20 +5080,22 @@ document.addEventListener("DOMContentLoaded", () => {
     tryInitializeTransferPeer();
   }
 
-  function connectForTransfer(shortCode) {
+  async function connectForTransfer(shortCode) {
     if (peer) peer.destroy();
+    jumpCryptoHelpers.reset();
     resetTransferState();
     transferState.role = "receiver";
+    const discoveryId = await jumpCryptoHelpers.generateDiscoveryId(shortCode);
     if (transferPeer) transferPeer.destroy();
     transferPeer = new Peer();
     transferPeer.on("open", () => {
-      transferConn = transferPeer.connect(shortCode, {
-        metadata: { type: "data-transfer" },
+      const discoveryConn = transferPeer.connect(discoveryId, {
+        metadata: { type: "dt-discovery" },
         reliable: true,
       });
-      setupTransferConnection(transferConn);
+      setupDiscoveryConnection(discoveryConn);
     });
-    transferPeer.on("error", (err) => {
+    transferPeer.on("error", () => {
       showNotification(
         "Bağlantı kurulamadı. Kodun doğruluğunu veya internet bağlantınızı kontrol edin.",
         "error",
@@ -4898,8 +5109,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (transferState.role === "receiver") {
         showNotification("Bağlantı başarılı. Onay bekleniyor.", "success");
         confirmModalTitle.textContent = "Verileri Al";
-        confirmModalMessage.innerHTML =
-          "Mevcut tüm verileriniz (listeler, şarkılar) göndericinin verileriyle <b class='text-red-400'>değiştirilecektir</b>. Bu işlem geri alınamaz. Onaylıyor musunuz?";
+        confirmModalMessage.textContent =
+          "Mevcut tüm verileriniz (listeler, şarkılar) göndericinin verileriyle değiştirilecektir. Bu işlem geri alınamaz. Onaylıyor musunuz?";
         confirmAction = () => {
           transferConn.send({ type: "receiver_ready" });
         };
@@ -4931,42 +5142,46 @@ document.addEventListener("DOMContentLoaded", () => {
           transferProgressTitle.textContent = "Veriler Alınıyor...";
           transferProgressDetails.textContent = `${data.playlistCount} liste, ${data.songCount} şarkı alınıyor.`;
           openModal("transfer-progress-modal");
-
-          const clearPlaylists = DBHelper.db
-            .transaction("playlists", "readwrite")
-            .objectStore("playlists")
-            .clear();
-          const clearSongs = DBHelper.db
-            .transaction("userSongs", "readwrite")
-            .objectStore("userSongs")
-            .clear();
-          const clearOfflineSongs = DBHelper.db
-            .transaction("OfflineSongs", "readwrite")
-            .objectStore("OfflineSongs")
-            .clear();
-          await Promise.all([
-            new Promise((r) => (clearPlaylists.onsuccess = r)),
-            new Promise((r) => (clearSongs.onsuccess = r)),
-            new Promise((r) => (clearOfflineSongs.onsuccess = r)),
-          ]);
+          transferState.incomingPlaylists = [];
+          transferState.incomingSongs = [];
+          transferState.currentSongChunks = [];
           break;
 
         case "playlist_data":
-          for (const playlist of data.playlists) {
-            await DBHelper.put("playlists", playlist);
+          transferState.incomingPlaylists = data.playlists || [];
+          break;
+
+        case "song_data_start":
+          transferState.currentSong = data.song;
+          transferState.currentSongChunks = [];
+          break;
+
+        case "song_chunk":
+          transferState.currentSongChunks.push(data.data);
+          break;
+
+        case "song_data_end":
+          let completedSong = transferState.currentSong;
+          if (transferState.currentSongChunks.length > 0) {
+            completedSong.fileBlob = new Blob(transferState.currentSongChunks, {
+              type: completedSong.mimeType || "audio/mpeg",
+            });
+          }
+          transferState.incomingSongs.push(completedSong);
+          transferState.currentSong = null;
+          transferState.currentSongChunks = null;
+          transferState.receivedChunks = data.index + 1;
+          updateTransferProgressUI();
+          if (transferConn && transferConn.open) {
+            transferConn.send({
+              type: "request_next_song",
+              index: data.index + 1,
+            });
           }
           break;
 
-        case "song_data":
-          let songToSave = data.song;
-          if (songToSave.fileBase64) {
-            songToSave.fileBlob = await base64ToBlob(
-              songToSave.fileBase64,
-              songToSave.mimeType || "audio/mpeg",
-            );
-            delete songToSave.fileBase64;
-          }
-          await DBHelper.put("userSongs", songToSave);
+        case "song_data_complete":
+          transferState.incomingSongs.push(data.song);
           transferState.receivedChunks = data.index + 1;
           updateTransferProgressUI();
           if (transferConn && transferConn.open) {
@@ -4984,6 +5199,32 @@ document.addEventListener("DOMContentLoaded", () => {
           break;
 
         case "transfer_complete":
+          transferProgressTitle.textContent = "Veriler Kaydediliyor...";
+          if (transferState.incomingPlaylists && transferState.incomingSongs) {
+            const clearPlaylists = DBHelper.db
+              .transaction("playlists", "readwrite")
+              .objectStore("playlists")
+              .clear();
+            const clearSongs = DBHelper.db
+              .transaction("userSongs", "readwrite")
+              .objectStore("userSongs")
+              .clear();
+            const clearOfflineSongs = DBHelper.db
+              .transaction("OfflineSongs", "readwrite")
+              .objectStore("OfflineSongs")
+              .clear();
+            await Promise.all([
+              new Promise((r) => (clearPlaylists.onsuccess = r)),
+              new Promise((r) => (clearSongs.onsuccess = r)),
+              new Promise((r) => (clearOfflineSongs.onsuccess = r)),
+            ]);
+            for (const playlist of transferState.incomingPlaylists) {
+              await DBHelper.put("playlists", playlist);
+            }
+            for (const songToSave of transferState.incomingSongs) {
+              await DBHelper.put("userSongs", songToSave);
+            }
+          }
           transferProgressTitle.textContent = "İşlem Tamamlandı!";
           showNotification(
             "Veriler başarıyla alındı. Uygulama yeniden başlatılıyor...",
@@ -5049,17 +5290,37 @@ document.addEventListener("DOMContentLoaded", () => {
         let songForExport = { ...song };
 
         if (song.fileBlob) {
-          const base64 = await blobToBase64(song.fileBlob);
-          songForExport.fileBase64 = base64;
+          const buffer = await song.fileBlob.arrayBuffer();
+          const uint8 = new Uint8Array(buffer);
+          songForExport.fileSize = uint8.length;
           delete songForExport.fileBlob;
-        }
+          delete songForExport.fileBase64;
 
-        if (transferConn && transferConn.open) {
-          transferConn.send({
-            type: "song_data",
-            song: songForExport,
-            index: index,
-          });
+          const chunkSize = 64 * 1024;
+          const totalSongChunks = Math.ceil(uint8.length / chunkSize);
+
+          if (transferConn && transferConn.open) {
+            transferConn.send({
+              type: "song_data_start",
+              song: songForExport,
+              index: index,
+              totalSongChunks: totalSongChunks,
+            });
+
+            for (let c = 0; c < totalSongChunks; c++) {
+              const chunk = uint8.slice(c * chunkSize, (c + 1) * chunkSize);
+              transferConn.send({ type: "song_chunk", data: chunk });
+            }
+            transferConn.send({ type: "song_data_end", index: index });
+          }
+        } else {
+          if (transferConn && transferConn.open) {
+            transferConn.send({
+              type: "song_data_complete",
+              song: songForExport,
+              index: index,
+            });
+          }
         }
 
         sentSongs = index + 1;
@@ -5302,17 +5563,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const exportData = await DBHelper.get("data", MAKER_KEY);
         if (exportData) {
           await importPlaylistData(exportData);
+          await DBHelper.delete("data", MAKER_KEY);
         } else {
           showNotification("Maker'dan aktarılacak veri bulunamadı.", "error");
         }
       } catch (error) {
         console.error("Maker verisi işlenirken hata:", error);
         showNotification(
-          "Maker listesi aktarılırken bir hata oluştu.",
+          "Maker listesi aktarılırken bir hata oluştu. Lütfen tekrar deneyin.",
           "error",
         );
-      } finally {
-        await DBHelper.delete("data", MAKER_KEY);
       }
     }
 
@@ -5330,6 +5590,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const exportData = await DBHelper.get("data", MAKER_KEY);
             if (exportData) {
               await importPlaylistData(exportData);
+              await DBHelper.delete("data", MAKER_KEY);
             } else {
               showNotification(
                 "Maker'dan aktarılacak veri bulunamadı.",
@@ -5339,11 +5600,9 @@ document.addEventListener("DOMContentLoaded", () => {
           } catch (error) {
             console.error("Maker verisi işlenirken hata:", error);
             showNotification(
-              "Maker listesi aktarılırken bir hata oluştu.",
+              "Maker listesi aktarılırken bir hata oluştu. Lütfen tekrar deneyin.",
               "error",
             );
-          } finally {
-            await DBHelper.delete("data", MAKER_KEY);
           }
         }
       }
@@ -6300,7 +6559,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const song = masterSongLibrary[playbackList[currentTrackIndex]];
     if (song) {
       confirmModalTitle.textContent = "Şarkıyı Sil";
-      confirmModalMessage.innerHTML = `<span class="font-bold text-white">${song.title}</span> adlı şarkıyı kalıcı olarak silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.`;
+      const msg6462 = document.createElement("span");
+      msg6462.className = "text-center";
+      const bold6462 = document.createElement("span");
+      bold6462.className = "font-bold text-white";
+      bold6462.textContent = song.title;
+      msg6462.appendChild(bold6462);
+      msg6462.appendChild(
+        document.createTextNode(
+          " adlı şarkıyı kalıcı olarak silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+        ),
+      );
+      confirmModalMessage.textContent = "";
+      confirmModalMessage.appendChild(msg6462);
       confirmAction = () => handleDeleteSong();
       openModal("confirm-modal");
     }
@@ -6312,7 +6583,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const playlist = playlists.find((p) => p.id === playlistIdToDelete);
     if (playlist) {
       confirmModalTitle.textContent = "Listeyi Sil";
-      confirmModalMessage.innerHTML = `<span class="font-bold text-white">${playlist.name}</span> adlı çalma listesini silmek istediğinizden emin misiniz?`;
+      const msg6474 = document.createElement("span");
+      msg6474.className = "text-center";
+      const bold6474 = document.createElement("span");
+      bold6474.className = "font-bold text-white";
+      bold6474.textContent = playlist.name;
+      msg6474.appendChild(bold6474);
+      msg6474.appendChild(
+        document.createTextNode(
+          " adlı çalma listesini silmek istediğinizden emin misiniz?",
+        ),
+      );
+      confirmModalMessage.textContent = "";
+      confirmModalMessage.appendChild(msg6474);
       confirmAction = () => handleDeletePlaylist(playlistIdToDelete);
       openModal("confirm-modal");
     }
@@ -6519,9 +6802,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (info.type === "maker") {
         confirmModalTitle.textContent = "Çalma Listesi İçe Aktar";
-        confirmModalMessage.innerHTML = `<b class='text-violet-400'>${
-          info.metadata?.name || "Çalma Listesi"
-        }</b> ve içerikler kütüphanenize eklenecek.`;
+        const importMsg = document.createElement("span");
+        const boldPl = document.createElement("b");
+        boldPl.className = "text-violet-400";
+        boldPl.textContent = info.metadata?.name || "Çalma Listesi";
+        importMsg.appendChild(boldPl);
+        importMsg.appendChild(
+          document.createTextNode(" ve içerikler kütüphanenize eklenecek."),
+        );
+        confirmModalMessage.textContent = "";
+        confirmModalMessage.appendChild(importMsg);
 
         processImport = async () => {
           openModal("transfer-progress-modal");
@@ -6603,7 +6893,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
       } else if (info.type === "backup") {
         confirmModalTitle.textContent = "Tam Yedekleme Yükle";
-        confirmModalMessage.innerHTML =
+        confirmModalMessage.textContent =
           "Tüm mevcut veriler silinecek ve yedekleme yüklenecektir. Onaylıyor musunuz?";
 
         processImport = async () => {
@@ -7103,14 +7393,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (s1.isLocal && s2.isLocal && s1.fileBlob && s2.fileBlob) {
               if (s1.fileBlob.size === s2.fileBlob.size) {
+                const size = s1.fileBlob.size;
                 const head1 = await s1.fileBlob.slice(0, 20480).arrayBuffer();
                 const head2 = await s2.fileBlob.slice(0, 20480).arrayBuffer();
-                const view1 = new Uint8Array(head1);
-                const view2 = new Uint8Array(head2);
+                const tail1 = await s1.fileBlob
+                  .slice(Math.max(0, size - 20480))
+                  .arrayBuffer();
+                const tail2 = await s2.fileBlob
+                  .slice(Math.max(0, size - 20480))
+                  .arrayBuffer();
 
-                isMatch =
-                  view1.length === view2.length &&
-                  view1.every((val, idx) => val === view2[idx]);
+                const viewH1 = new Uint8Array(head1);
+                const viewH2 = new Uint8Array(head2);
+                const viewT1 = new Uint8Array(tail1);
+                const viewT2 = new Uint8Array(tail2);
+
+                const headMatch =
+                  viewH1.length === viewH2.length &&
+                  viewH1.every((val, idx) => val === viewH2[idx]);
+                const tailMatch =
+                  viewT1.length === viewT2.length &&
+                  viewT1.every((val, idx) => val === viewT2[idx]);
+
+                isMatch = headMatch && tailMatch;
               }
             } else if (!s1.isLocal && !s2.isLocal) {
               isMatch = s1.url === s2.url;
@@ -7475,7 +7780,19 @@ document.addEventListener("DOMContentLoaded", () => {
       const song = masterSongLibrary[songId];
       if (song) {
         confirmModalTitle.textContent = "Şarkıyı Kalıcı Sil";
-        confirmModalMessage.innerHTML = `<span class="font-bold text-white">${song.title}</span> adlı şarkıyı kütüphaneden ve tüm listelerden kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz.`;
+        const msg7652 = document.createElement("span");
+        msg7652.className = "text-center";
+        const bold7652 = document.createElement("span");
+        bold7652.className = "font-bold text-white";
+        bold7652.textContent = song.title;
+        msg7652.appendChild(bold7652);
+        msg7652.appendChild(
+          document.createTextNode(
+            " adlı şarkıyı kütüphaneden ve tüm listelerden kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
+          ),
+        );
+        confirmModalMessage.textContent = "";
+        confirmModalMessage.appendChild(msg7652);
         confirmAction = () => handlePermanentDelete(songId);
         openModal("confirm-modal");
       }
