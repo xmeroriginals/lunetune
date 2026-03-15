@@ -269,7 +269,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   });
-  const APP_VERSION = "1.1.5";
+  const APP_VERSION = "1.1.6";
   const JAMENDO_CLIENT_ID = "d63aca13";
   let activeMusicStoreTab = "lunetune";
   let isClientPlaybackUnlocked = false;
@@ -642,24 +642,29 @@ document.addEventListener("DOMContentLoaded", () => {
     db: null,
     _initPromise: null,
     init() {
-      return new Promise((resolve, reject) => {
-        const request = indexedDB.open("LunetuneDB", 3);
+      if (this._initPromise) return this._initPromise;
+      this._initPromise = new Promise((resolve, reject) => {
+        if (this.db) {
+          resolve(this.db);
+          return;
+        }
+        const request = indexedDB.open("LunetuneDB", 4);
         request.onupgradeneeded = (event) => {
-          this.db = event.target.result;
-          if (!this.db.objectStoreNames.contains("playlists")) {
-            this.db.createObjectStore("playlists", { keyPath: "id" });
+          const db = event.target.result;
+          if (!db.objectStoreNames.contains("playlists")) {
+            db.createObjectStore("playlists", { keyPath: "id" });
           }
-          if (!this.db.objectStoreNames.contains("userSongs")) {
-            this.db.createObjectStore("userSongs", { keyPath: "id" });
+          if (!db.objectStoreNames.contains("userSongs")) {
+            db.createObjectStore("userSongs", { keyPath: "id" });
           }
-          if (!this.db.objectStoreNames.contains("settings")) {
-            this.db.createObjectStore("settings", { keyPath: "id" });
+          if (!db.objectStoreNames.contains("settings")) {
+            db.createObjectStore("settings", { keyPath: "id" });
           }
-          if (!this.db.objectStoreNames.contains("data")) {
-            this.db.createObjectStore("data");
+          if (!db.objectStoreNames.contains("data")) {
+            db.createObjectStore("data");
           }
-          if (!this.db.objectStoreNames.contains("OfflineSongs")) {
-            this.db.createObjectStore("OfflineSongs", { keyPath: "id" });
+          if (!db.objectStoreNames.contains("OfflineSongs")) {
+            db.createObjectStore("OfflineSongs", { keyPath: "id" });
           }
         };
         request.onsuccess = (event) => {
@@ -668,9 +673,11 @@ document.addEventListener("DOMContentLoaded", () => {
         };
         request.onerror = (event) => {
           console.error("IndexedDB hatası:", event.target.error);
+          this._initPromise = null;
           reject(event.target.error);
         };
       });
+      return this._initPromise;
     },
     async put(storeName, key, data) {
       const db = await this.init();
@@ -685,7 +692,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async get(storeName, key) {
       const db = await this.init();
       return new Promise((resolve, reject) => {
-        const transaction = this.db.transaction(storeName, "readonly");
+        const transaction = db.transaction(storeName, "readonly");
         const store = transaction.objectStore(storeName);
         const request = store.get(key);
         request.onsuccess = () => resolve(request.result);
@@ -695,7 +702,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async getAll(storeName) {
       const db = await this.init();
       return new Promise((resolve, reject) => {
-        const transaction = this.db.transaction(storeName, "readonly");
+        const transaction = db.transaction(storeName, "readonly");
         const store = transaction.objectStore(storeName);
         const request = store.getAll();
         request.onsuccess = () => resolve(request.result);
@@ -5577,37 +5584,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (transferId) {
-      async function processMakerExport() {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has("lunetunemakerexport")) {
-          window.history.replaceState(
-            {},
-            document.title,
-            window.location.pathname,
-          );
-          const MAKER_KEY = "lunetuneMaker";
-          try {
-            const exportData = await DBHelper.get("data", MAKER_KEY);
-            if (exportData) {
-              await importPlaylistData(exportData);
-              await DBHelper.delete("data", MAKER_KEY);
-            } else {
-              showNotification(
-                "Maker'dan aktarılacak veri bulunamadı.",
-                "error",
-              );
-            }
-          } catch (error) {
-            console.error("Maker verisi işlenirken hata:", error);
-            showNotification(
-              "Maker listesi aktarılırken bir hata oluştu. Lütfen tekrar deneyin.",
-              "error",
-            );
-          }
-        }
-      }
-
-      await processMakerExport();
       window.history.replaceState({}, document.title, window.location.pathname);
       connectForTransfer(transferId);
     } else if (songShareCode) {

@@ -1261,7 +1261,7 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
       setTimeout(() => {
-        window.location.href = "./?lunetunemakerexport=true";
+        window.location.href = "../?lunetunemakerexport=true";
       }, 1500);
     } catch (error) {
       console.error("Direkt aktarma hatası:", error);
@@ -1273,7 +1273,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function openDB() {
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open(DB_NAME, 3);
+      const request = indexedDB.open(DB_NAME, 4);
       request.onupgradeneeded = (event) => {
         const db = event.target.result;
         if (!db.objectStoreNames.contains("playlists")) {
