@@ -6227,7 +6227,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const MAKER_KEY = "lunetuneMaker";
       await DBHelper.put("data", MAKER_KEY, exportData);
-      window.open("./maker.html?lunetunemakerimport=true", "_blank");
+      window.open("./maker/?lunetunemakerimport=true", "_blank");
     } catch (error) {
       console.error("Maker'a aktarım hatası:", error);
       showNotification("Liste Maker'a aktarılırken bir hata oluştu.", "error");
