@@ -1717,6 +1717,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       newIndex = currentTrackIndex + 1;
     }
+
     const direction =
       playbackList.length < 4 || isLoopingAround ? "fade" : "next";
     loadTrack(newIndex, direction, isPlaying || audioPlayer.paused === false);
@@ -1748,11 +1749,13 @@ document.addEventListener("DOMContentLoaded", () => {
       let newIndex;
       let isLoopingAround = false;
 
-      if (currentTrackIndex > 0) {
-        newIndex = currentTrackIndex - 1;
+      if (currentTrackIndex === 0) {
+        newIndex = playbackList.length - 1;
+        isLoopingAround = true;
       } else {
-        return;
+        newIndex = currentTrackIndex - 1;
       }
+
       const direction =
         playbackList.length < 4 || isLoopingAround ? "fade" : "prev";
       loadTrack(newIndex, direction, isPlaying);
@@ -1794,11 +1797,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function setProgress(e) {
     if (isLiveMode || isClient) return;
-    const rect = this.getBoundingClientRect();
+    const target = e.currentTarget;
+    const rect = target.getBoundingClientRect();
     const offsetX = e.clientX - rect.left;
     const duration = audioPlayer.duration;
     if (duration) {
-      const newTime = (offsetX / this.clientWidth) * duration;
+      const newTime = (offsetX / target.clientWidth) * duration;
       seekTo(newTime);
     }
   }
@@ -2072,12 +2076,21 @@ document.addEventListener("DOMContentLoaded", () => {
       isLiveMode
     )
       return;
+
     const playbackList = isShuffle ? shuffledPlaylist : currentPlaylist;
+
     const newIndex =
-      direction === "next" ? currentTrackIndex + 1 : currentTrackIndex - 1;
-    if (newIndex < 0 || newIndex >= playbackList.length) return;
+      direction === "next" && currentTrackIndex >= playbackList.length - 1
+        ? 0
+        : direction === "prev" && currentTrackIndex === 0
+          ? playbackList.length - 1
+          : direction === "next"
+            ? currentTrackIndex + 1
+            : currentTrackIndex - 1;
+
+    isLoopingAround = true;
     isMediaSessionActionLocked = true;
-    loadTrack(newIndex, direction);
+    loadTrack(newIndex, "fade", direction);
     setTimeout(() => {
       isMediaSessionActionLocked = false;
     }, 700);
@@ -3331,20 +3344,20 @@ document.addEventListener("DOMContentLoaded", () => {
       shuffledPlaylist = [...currentPlaylist];
       return;
     }
+
+    let pool = [...currentPlaylist];
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    shuffledPlaylist = pool;
+
     const currentSongId =
       currentTrackIndex > -1 ? currentPlaylist[currentTrackIndex] : null;
-    let restOfPlaylist = currentPlaylist.filter((id) => id !== currentSongId);
-    for (let i = restOfPlaylist.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [restOfPlaylist[i], restOfPlaylist[j]] = [
-        restOfPlaylist[j],
-        restOfPlaylist[i],
-      ];
-    }
-    shuffledPlaylist = currentSongId
-      ? [currentSongId, ...restOfPlaylist]
-      : restOfPlaylist;
-    currentTrackIndex = 0;
+    currentTrackIndex = currentSongId
+      ? shuffledPlaylist.indexOf(currentSongId)
+      : 0;
+
     if (animate) {
       carouselContainer.classList.add("fading-out");
       setTimeout(() => {
