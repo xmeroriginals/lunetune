@@ -1,1 +1,1 @@
-# Lunetune - Free Web Player | PWA Support | Static
+# Lunetune - Free Web Music Player | PWA Support | Static
